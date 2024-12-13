@@ -30,6 +30,7 @@ class Dpi(models.Model):
     mutuelle_name = models.CharField(max_length=255)
     mutuelle_policy_number = models.CharField(max_length=100)
     medical_history = models.TextField()
+    hospital = models.TextField()
     admission_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -42,7 +43,8 @@ class Staff(models.Model):
         ('Nurse', 'Nurse'),
         ('Pharmacist', 'Pharmacist'),
         ('LabTechnician', 'Lab Technician'),
-        ('Radiologist', 'Radiologist')
+        ('Radiologist', 'Radiologist'),
+        ('Admin', 'Admin')
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     email = models.EmailField(max_length=100, unique=True)
@@ -74,6 +76,7 @@ class Consultation(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     consultation_summary = models.TextField()
     examination_required = models.TextField()
+    hospital = models.TextField()
     consultation_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -143,7 +146,6 @@ class RadiologicalExam(models.Model):
 
 class NursingRecord(models.Model):
     id = models.AutoField(primary_key=True)
-    dpi = models.ForeignKey(Dpi, on_delete=models.CASCADE)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
     nurse = models.ForeignKey(Staff, on_delete=models.CASCADE)
     care_name = models.TextField()
