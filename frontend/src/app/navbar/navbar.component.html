@@ -1,0 +1,16 @@
+<nav class="flex justify-between w-full  px-6 py-4 bg-white shadow-md">
+    <!-- Logo à gauche -->
+    <div class="logo">
+      <img src="assets/dpi.svg" alt="Logo" class="h-6 w-auto" />
+    </div>
+  
+    <!-- Log Out à droite -->
+    <button 
+      class="flex items-center gap-2 text-gray-700 hover:text-[#16C2D5] transition"
+      (click)="onLogout()"
+    >
+      <span class="font-medium">Log Out</span>
+      <img src="assets/logout.svg" alt="Logout Icon" class="h-5 w-5" />
+    </button>
+  </nav>
+  <router-outlet />  
