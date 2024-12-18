@@ -17,9 +17,9 @@ class NursingRecordSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ConsultationSerializer(serializers.ModelSerializer):
-    biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set')
-    radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set')
-    nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set')
+    biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
+    radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
+    nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
 
     class Meta:
         model = Consultation

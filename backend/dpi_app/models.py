@@ -1,12 +1,24 @@
 from django.db import models
 from django.utils import timezone
 
-class Admin(models.Model):
+
+class Staff(models.Model):
+    ROLE_CHOICES = [
+        ('Doctor', 'Doctor'),
+        ('Nurse', 'Nurse'),
+        ('Pharmacist', 'Pharmacist'),
+        ('LabTechnician', 'Lab Technician'),
+        ('Radiologist', 'Radiologist'),
+        ('SuperAdmin', 'Super Admin'),
+        ('Admin', 'Admin'),
+    ]
     id = models.AutoField(primary_key=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=255)
     name = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
+    created_at = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -21,7 +33,7 @@ class Dpi(models.Model):
     birthdate = models.DateField()
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
-    doctor = models.ForeignKey('Doctor', on_delete=models.SET_NULL, null=True)
+    doctor = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True)
     emergency_contact_name = models.CharField(max_length=100)
     emergency_contact_phone = models.CharField(max_length=20)
     emergency_contact_relationship = models.CharField(max_length=30)
@@ -29,32 +41,12 @@ class Dpi(models.Model):
     blood_type = models.CharField(max_length=3)
     mutuelle_name = models.CharField(max_length=255)
     mutuelle_policy_number = models.CharField(max_length=100)
-    medical_history = models.TextField()
+    medical_history = models.TextField(blank=True, null=True)
     hospital = models.TextField()
     admission_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
-
-
-class Staff(models.Model):
-    id = models.AutoField(primary_key=True)
-    ROLE_CHOICES = [
-        ('Nurse', 'Nurse'),
-        ('Pharmacist', 'Pharmacist'),
-        ('LabTechnician', 'Lab Technician'),
-        ('Radiologist', 'Radiologist'),
-        ('Admin', 'Admin')
-    ]
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=255)
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20)
-    created_at = models.DateField(default=timezone.now)
-
-    def __str__(self):
-        return self.name
 
 
 class Doctor(models.Model):
@@ -73,7 +65,7 @@ class Doctor(models.Model):
 class Consultation(models.Model):
     id = models.AutoField(primary_key=True)
     dpi = models.ForeignKey(Dpi, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "Doctor"})
     consultation_summary = models.TextField()
     examination_required = models.TextField()
     hospital = models.TextField()
@@ -86,9 +78,8 @@ class Consultation(models.Model):
 class Prescription(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    prescription_date = models.DateField(default=timezone.now)
     validated = models.BooleanField(default=False)
-    created_at = models.DateField(default=timezone.now)
+    prescription_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return f'Prescription for {self.consultation}'
@@ -109,11 +100,11 @@ class Medicine(models.Model):
 class BiologicalExam(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "LabTechnician"})
     exam_name = models.CharField(max_length=100)
     result = models.TextField()
     has_graph = models.BooleanField(default=False)
-    exam_date = models.DateTimeField(default=timezone.now)
+    exam_date = models.DateField()
 
     def __str__(self):
         return self.exam_name
@@ -134,11 +125,11 @@ class BiologicalExamParam(models.Model):
 class RadiologicalExam(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    radiologist = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    radiologist = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "Radiologist"})
     exam_name = models.TextField()
     image_url = models.TextField()
     result = models.TextField()
-    exam_date = models.DateTimeField(default=timezone.now)
+    exam_date = models.DateField()
 
     def __str__(self):
         return self.exam_name
@@ -147,10 +138,10 @@ class RadiologicalExam(models.Model):
 class NursingRecord(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "Nurse"})
     care_name = models.TextField()
     patient_observation = models.TextField()
     record_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f'Nursing record for DPI {self.dpi}'
+        return f'Nursing record for DPI {self.consultation.dpi.id}'
