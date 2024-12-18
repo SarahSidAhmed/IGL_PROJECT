@@ -18,6 +18,7 @@ class Staff(models.Model):
     password = models.CharField(max_length=255)
     name = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
+    speciality = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateField(default=timezone.now)
 
     def __str__(self):
