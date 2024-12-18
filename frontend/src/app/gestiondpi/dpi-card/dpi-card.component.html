@@ -1,0 +1,101 @@
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  rel="stylesheet"
+/>
+<div
+  class="flex flex-col md:flex-row justify-between bg-white shadow-md rounded-lg p-4 mb-4 border-l-4"
+>
+  <div class="flex flex-col">
+    <h2 class="text-3xl font-bold font-poppins text-primaryBlue">
+      KAZAR Ayoub
+    </h2>
+    <div class="flex flex-row w-full">
+      <div
+        class="w-20 h-20 mt-7 ml-2 flex items-center justify-center rounded-md overflow-hidden"
+      >
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=TestQRCode&color=10217D&bgcolor=FFFFFF"
+          alt="QR Code"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <div class="border-l-2 border-primaryBlue mx-7 mt-4"></div>
+      <div class="flex flex-col justify-evenly">
+        <div class="flex flex-row justify-start space-x-20 mt-4">
+          <div class="flex flex-col justify-start">
+            <p class="text-base font-bold font-poppins text-primaryBlue">
+              Full Name:
+            </p>
+            <p>{{ patientName }} assia</p>
+          </div>
+          <div class="flex flex-col justify-start">
+            <p class="text-base font-bold font-poppins text-primaryBlue">
+              Gender:
+            </p>
+            <p>{{ gender }}Male</p>
+          </div>
+          <div class="flex flex-col justify-start">
+            <p class="text-base font-bold font-poppins text-primaryBlue">
+              Age:
+            </p>
+            <p>{{ age }} 20</p>
+          </div>
+          <div class="flex flex-col justify-start">
+            <p class="text-base font-bold font-poppins text-primaryBlue">
+              Patient Id:
+            </p>
+            <p>{{ patientId }}230</p>
+          </div>
+        </div>
+        <div class="flex flex-grow space-x-12 justify-between mt-4">
+          <div class="flex flex-row">
+            <i class="fas fa-id-card mr-3 mt-4 text-primaryBlue"></i>
+
+            <div class="flex flex-col justify-start">
+              <p class="text-base font-bold font-poppins text-primaryBlue">
+                Social Security Number:
+              </p>
+              <p>{{ patientName }} 02903893873983</p>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <i class="fas fa-phone-alt mr-3 mt-4 text-primaryBlue"></i>
+            <div class="flex flex-col justify-start">
+              <p class="text-base font-bold font-poppins text-primaryBlue">
+                Numéro de téléphone:
+              </p>
+              <p>{{ contactNumber }}077234654</p>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <i class="fas fa-envelope mr-3 mt-4 text-primaryBlue"></i>
+            <div class="flex flex-col justify-start">
+              <p class="text-base font-bold font-poppins text-primaryBlue">
+                E-mail:
+              </p>
+              <p>{{ email }} ma_kheddiagmail.dz</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-row justify-evenly space-x-7 mt-3">
+        <button
+          class="text-primaryBlue rounded-lg  hover:bg-blue-700 border border-primaryBlue"
+        >
+          Consulter DPI
+        </button>
+        <button
+          class="text-primaryBlue rounded-lg hover:bg-blue-700 border border-primaryBlue"
+        >
+          <i class="fas fa-edit"></i>
+          <!-- Edit icon -->
+        </button>
+        <button
+          class="text-primaryBlue rounded-lg hover:bg-blue-700 border border-primaryBlue"
+        >
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
