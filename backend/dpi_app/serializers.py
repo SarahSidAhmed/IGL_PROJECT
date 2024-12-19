@@ -4,8 +4,8 @@ from django.contrib.auth.hashers import check_password
 
 
 class StaffLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(write_only=True, required=True)
     role = serializers.CharField(read_only=True)
 
     def validate(self, data):
