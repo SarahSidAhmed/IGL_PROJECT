@@ -5,10 +5,11 @@ import { ConsultationCardComponent } from '../consultation-card/consultation-car
 import { InfoCardComponent } from '../info-card/info-card.component';
 import { TestCardComponent } from '../test-card/test-card.component';
 import { DpiPatientComponent } from '../dpi-patient/dpi-patient.component';
+import { ConsultationDetailComponent } from '../consultation-detail/consultation-detail.component';
 
 @Component({
   selector: 'app-signin',
-  imports: [RouterOutlet,DpiPatientComponent],
+  imports: [RouterOutlet,ConsultationDetailComponent],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })
