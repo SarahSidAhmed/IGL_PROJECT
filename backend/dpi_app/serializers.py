@@ -1,5 +1,27 @@
 from rest_framework import serializers
-from .models import Dpi, Consultation, BiologicalExam, RadiologicalExam, NursingRecord
+from .models import Dpi, Consultation, BiologicalExam, RadiologicalExam, NursingRecord, Staff
+from django.contrib.auth.hashers import check_password
+
+
+class StaffLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    role = serializers.CharField(read_only=True)
+
+    def validate(self, data):
+        email = data.get("email")
+        password = data.get("password")
+
+        try:
+            staff = Staff.objects.get(email=email)
+        except Staff.DoesNotExist:
+            raise serializers.ValidationError("No Staff with that email. Check again!")
+
+        if not check_password(password, staff.password):
+            raise serializers.ValidationError(check_password(password, staff.password))
+
+        data["role"] = staff.role
+        return data
 
 class BiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
