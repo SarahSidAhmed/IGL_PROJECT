@@ -1,6 +1,6 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Dpi, Staff
-from .serializers import DpiSerializer, StaffLoginSerializer, StaffSerializer
+from .serializers import DpiSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -18,6 +18,15 @@ class GetAllDoctorsStaffAPIView(ListCreateAPIView):
     queryset = Staff.objects.filter(role="Doctor")
     serializer_class = StaffSerializer
 
+#this will be used for the radioligists
+class GetAllRadiologistsStaffAPIView(ListCreateAPIView):
+    queryset = Staff.objects.filter(role="Radiologist")
+    serializer_class = StaffSerializer
+
+#this will be used for the nurses
+class GetAllNursesStaffAPIView(ListCreateAPIView):
+    queryset = Staff.objects.filter(role="Nurse")
+    serializer_class = StaffSerializer
     
 #this is for the login of the staff
 class StaffLoginAPIView(APIView):
@@ -38,6 +47,43 @@ class StaffLoginAPIView(APIView):
             }, status=status.HTTP_200_OK)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#this is for the login of the patient
+class PatientSSNLoginAPIView(APIView):
+    @swagger_auto_schema(request_body=PatientSSNLoginSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer_class = PatientSSNLoginSerializer(data=request.data)
+        if serializer_class.is_valid():
+            patient = Dpi.objects.get(social_security_number=serializer_class.validated_data["SSN"])
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(patient)
+            patient_serialized = DpiSerializer(patient)
+
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "dpi": patient_serialized.data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#this is for the login of the patient with the QR code
+class PatientQRLoginAPIView(APIView):
+    @swagger_auto_schema(request_body=PatientQRLoginSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer_class = PatientQRLoginSerializer(data=request.data)
+        if serializer_class.is_valid():
+            patient = Dpi.objects.get(id=serializer_class.validated_data["id"])
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(patient)
+            patient_serialized = DpiSerializer(patient)
+
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "dpi": patient_serialized.data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 class DpiListCreateView(ListCreateAPIView):
     queryset = Dpi.objects.all()
     serializer_class = DpiSerializer

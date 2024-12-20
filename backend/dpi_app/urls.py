@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView
+from .views import DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView
 
 urlpatterns = [
+    path('loginPatientSSN/', PatientSSNLoginAPIView.as_view(), name='patient-login-ssn'),
+    path('loginPatientQR/', PatientQRLoginAPIView.as_view(), name='patient-login-qr'),
+    path('doctors/', GetAllDoctorsStaffAPIView.as_view(), name='get-all-doctors'),
     path('staff/<int:id>/', GetStaffByIdAPIView.as_view(), name='get_staff_by_id'),
     path('login/', StaffLoginAPIView.as_view(), name='staff-login'), #for login
     path('dpis/', DpiListCreateView.as_view(), name='dpi-list-create'),

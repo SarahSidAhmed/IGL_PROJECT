@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Dpi, Consultation, BiologicalExam, RadiologicalExam, NursingRecord, Staff
 from django.contrib.auth.hashers import check_password
 
-
+#login for staff
 class StaffLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, required=True)
@@ -24,12 +24,53 @@ class StaffLoginSerializer(serializers.Serializer):
         data["id"] = staff.id
         return data
 
+#login for patient with SSN
+class PatientSSNLoginSerializer(serializers.Serializer):
+    SSN = serializers.IntegerField()
+    password = serializers.CharField(write_only=True, required=True)
+    id = serializers.IntegerField(read_only=True)
+
+    def validate(self, data):
+        SSN = data.get("email")
+        password = data.get("password")
+
+        try:
+            patient = Dpi.objects.get(social_security_number=SSN)
+        except patient.DoesNotExist:
+            raise serializers.ValidationError("No DPI with that SSN. Check again!")
+
+        if not check_password(password, patient.password):
+            raise serializers.ValidationError("Incorrect password. Check again!")
+
+        data["id"] = patient.id
+        return data
+
+#login for patient with QR Code = ID
+class PatientQRLoginSerializer(serializers.Serializer):
+    id = serializers.IntegerField() #you should get it from the QR Scan
+    password = serializers.CharField(write_only=True, required=True)
+
+    def validate(self, data):
+        id = data.get("id")
+        password = data.get("password")
+
+        try:
+            patient = Dpi.objects.get(id=id)
+        except patient.DoesNotExist:
+            raise serializers.ValidationError("No DPI with that ID. Check again!")
+
+        if not check_password(password, patient.password):
+            raise serializers.ValidationError("Incorrect password. Check again!")
+
+        data["id"] = patient.id
+        return data
 
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = '__all__'
-        read_only_fields = ['__all__'] 
+        read_only_fields = ['email', 'name', 'phone', 'role', 'speciality']
+        write_only_fields = ['password']
 
 class BiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
