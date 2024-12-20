@@ -10,17 +10,10 @@ class Command(BaseCommand):
         doctor = Staff.objects.create(
             role="Doctor",
             email="staff@example.com",
-            password=make_password("password123"),
+            password=("password123"),
             name="Dr. John Doe",
             phone="1234567890",
             speciality="Cardiologist",
-        )
-        Doctor.objects.create(
-            email = "staff@example.com",
-            password = make_password("password123"),
-            name = "Dr. John Doe",
-            phone = "1234567890",
-            speciality = "Cardiologist",
         )
         self.stdout.write(f"Doctor created with ID: {doctor.id}")
  

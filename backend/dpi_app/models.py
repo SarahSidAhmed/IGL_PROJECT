@@ -56,19 +56,6 @@ class Dpi(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 
-class Doctor(models.Model):
-    id = models.AutoField(primary_key=True)
-    email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=255)
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20)
-    speciality = models.CharField(max_length=100)
-    created_at = models.DateField(default=timezone.now)
-
-    def __str__(self):
-        return self.name
-
-
 class Consultation(models.Model):
     id = models.AutoField(primary_key=True)
     dpi = models.ForeignKey(Dpi, on_delete=models.CASCADE)
