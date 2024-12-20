@@ -1,8 +1,42 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .models import Dpi
-from .serializers import DpiSerializer
+from .models import Dpi, Staff
+from .serializers import DpiSerializer, StaffLoginSerializer, StaffSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
+from drf_yasg.utils import swagger_auto_schema
+
+#this will be used so that when the backend needs to retrived the infos of the person
+class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Staff.objects.all()
+    serializer_class = StaffSerializer
+    lookup_field = 'id'
+
+#this will be used in the dropdown to assign a doctor
+class GetAllDoctorsStaffAPIView(ListCreateAPIView):
+    queryset = Staff.objects.filter(role="Doctor")
+    serializer_class = StaffSerializer
+
+    
+#this is for the login of the staff
+class StaffLoginAPIView(APIView):
+    @swagger_auto_schema(request_body=StaffLoginSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer_class = StaffLoginSerializer(data=request.data)
+        if serializer_class.is_valid():
+            staff = Staff.objects.get(email=serializer_class.validated_data["email"])
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(staff)
+            staff_serialized = StaffSerializer(staff)
+
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "staff": staff_serialized.data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DpiListCreateView(ListCreateAPIView):
     queryset = Dpi.objects.all()
