@@ -1,0 +1,97 @@
+<div class=" bg-teal-50 rounded-lg">
+    <header class="flex justify-between bg-white p-4 rounded-md drop-shadow">
+        <img class="h-10 w-15" src="./assets/logo.png" alt="" />
+    
+        <button
+          class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
+          (click)="onLogout()"
+        >
+          <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
+          <span>Se déconnecter</span>
+        </button>
+      </header>
+    <h2 class="text-2xl font-bold text-primaryBlue mb-4">Ajouter un Employé</h2>
+    <form #staffForm="ngForm" (ngSubmit)="onSubmit(staffForm)">
+      <!-- Staff Name -->
+      <div class="mb-4">
+        <label for="staffName" class="block text-primaryBlue font-poppins font-semibold mb-2">Nom Complet</label>
+        <input
+          id="staffName"
+          name="staffName"
+          type="text"
+          [(ngModel)]="staff.staffName"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primaryBlue"
+        />
+      </div>
+  
+      <!-- Gender -->
+      <div class="mb-4">
+        <label for="gender" class="block text-primaryBlue font-poppins font-semibold mb-2">Genre</label>
+        <select
+          id="gender"
+          name="gender"
+          [(ngModel)]="staff.gender"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primaryBlue"
+        >
+          <option value="" disabled selected>Sélectionner le genre</option>
+          <option value="Male">Homme</option>
+          <option value="Female">Femme</option>
+          <option value="Other">Autre</option>
+        </select>
+      </div>
+  
+      <!-- Age -->
+      <div class="mb-4">
+        <label for="age" class="block text-primaryBlue font-poppins font-semibold mb-2">Âge</label>
+        <input
+          id="age"
+          name="age"
+          type="number"
+          [(ngModel)]="staff.age"
+          required
+          min="18"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primaryBlue"
+        />
+      </div>
+  
+      <!-- Contact Number -->
+      <div class="mb-4">
+        <label for="contactNumber" class="block text-primaryBlue font-poppins font-semibold mb-2">Numéro de Téléphone</label>
+        <input
+          id="contactNumber"
+          name="contactNumber"
+          type="text"
+          [(ngModel)]="staff.contactNumber"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primaryBlue"
+        />
+      </div>
+  
+      <!-- Email -->
+      <div class="mb-4">
+        <label for="email" class="block text-primaryBlue font-poppins font-semibold mb-2">E-mail</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          [(ngModel)]="staff.email"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primaryBlue"
+        />
+      </div>
+  
+      <!-- Submit Button -->
+      <div class="flex justify-center">
+        <button
+          type="submit"
+          [disabled]="!staffForm.valid"
+          class="bg-primaryBlue text-white font-semibold py-2 px-6 rounded-md hover:bg-blue-600 focus:outline-none"
+        >
+          Ajouter l'Employé
+        </button>
+      </div>
+    </form>
+  </div>
+  

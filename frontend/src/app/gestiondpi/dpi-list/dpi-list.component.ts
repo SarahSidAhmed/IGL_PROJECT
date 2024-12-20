@@ -3,6 +3,7 @@ import { DpiCardComponent } from '../dpi-card/dpi-card.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface Patient {
   patientName: string;
@@ -21,6 +22,11 @@ interface Patient {
   imports: [DpiCardComponent, CommonModule, FormsModule],
 })
 export class DpiListComponent {
+  constructor(private router: Router) {}  // Inject Router
+
+  onAddStaff() {
+    this.router.navigate(['/add-staff']); 
+  }
 
 scanQrCode() {
 throw new Error('Method not implemented.');
