@@ -34,7 +34,7 @@ class Staff(models.Model):
 class Dpi(models.Model):
     id = models.AutoField(primary_key=True)
     social_security_number = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=50)
+    password = models.CharField(max_length=128, null=False)    
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birthdate = models.DateField()
@@ -51,6 +51,11 @@ class Dpi(models.Model):
     medical_history = models.TextField(blank=True, null=True)
     hospital = models.TextField()
     admission_date = models.DateTimeField(default=timezone.now)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
