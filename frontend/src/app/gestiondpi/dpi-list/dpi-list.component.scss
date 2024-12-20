@@ -1,0 +1,21 @@
+/* Minimalistic custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;  /* Width of the scrollbar */
+    height: 6px; /* Height of the horizontal scrollbar (if needed) */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2); /* Color of the thumb */
+    border-radius: 4px; /* Rounded corners for the thumb */
+    border: 2px solid rgba(0, 0, 0, 0.1); /* Optional: adds a border around the thumb */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1); /* Color of the track */
+    border-radius: 4px; /* Rounded corners for the track */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent; /* No corner styles */
+  }
+  

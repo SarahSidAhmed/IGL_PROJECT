@@ -1,1 +1,72 @@
-<p>dpi-list works!</p>
+<div class="flex flex-col h-screen bg-teal-50">
+  <header class="flex justify-between bg-white p-4 rounded-md">
+    <img class="h-10 w-15" src="./assets/logo.png" alt="" />
+
+    <button
+      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
+      (click)="onLogout()"
+    >
+      <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
+      <span>Se déconnecter</span>
+    </button>
+  </header>
+  <div class="flex justify-center mt-4 mb-4">
+    <h1 class="text-primaryBlue font-poppins text-2xl font-bold">
+      GESTION DPI
+    </h1>
+  </div>
+  <div class="flex flex-row justify-center">
+    <div
+      class="flex flex-row justify-between h-24 w-2/3 bg-white shadow-sm items-center rounded-lg mr-8"
+    >
+      <div class="flex-grow relative p-5">
+        <input
+          type="text"
+          placeholder="Rechercher..."
+          [(ngModel)]="searchQuery"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2"
+        />
+      </div>
+      <button
+        class="text-white px-2 py-1 rounded-md focus:outline-none"
+        (click)="scanQrCode()"
+      >
+        <img class="h-10 w-10" src="./assets/icons/scanQr.png" />
+      </button>
+      <button
+        class="ml-4 bg-primaryBlue text-white font-poppins px-4 py-2 rounded-md flex items-center focus:outline-none h-10 mr-5"
+        (click)="onSearch()"
+      >
+        <i class="fas fa-search mr-2"></i>
+        Search
+      </button>
+    </div>
+    <div class="flex justify-evenly space-x-4">
+      <button
+        class="ml-4 bg-[#16c2d5] text-white font-poppins px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-36"
+      >
+        <img class="size-7 mr-3" src="./assets/icons/newStaff.png" />
+        <span class="flex">Ajouter un employé</span>
+      </button>
+      <button
+        class="ml-4 bg-[#16c2d5] text-white font-poppins px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-36 "
+      >
+        <img class="size-7 mr-3" src="./assets/icons/creerDpi.png" />
+        <span class="flex">Créer un nouveau DPI</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="m-7 overflow-y-auto custom-scrollbar">
+    <app-dpi-card
+      *ngFor="let patient of filteredDpiList"
+      [patientName]="patient.patientName"
+      [gender]="patient.gender"
+      [age]="patient.age"
+      [patientId]="patient.patientId"
+      [socialSecurityNumber]="patient.socialSecurityNumber"
+      [contactNumber]="patient.contactNumber"
+      [email]="patient.email"
+    ></app-dpi-card>
+  </div>
+</div>
