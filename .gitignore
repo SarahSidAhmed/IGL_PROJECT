@@ -21,6 +21,8 @@ dist/
 db.sqlite3
 media/
 staticfiles/
+Lib/
+Scripts/
 
 # IDEs
 .idea/
