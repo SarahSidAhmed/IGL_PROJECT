@@ -17,17 +17,7 @@ class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
 class GetAllDoctorsStaffAPIView(ListCreateAPIView):
     queryset = Staff.objects.filter(role="Doctor")
     serializer_class = StaffSerializer
-
-#this will be used for the radioligists
-class GetAllRadiologistsStaffAPIView(ListCreateAPIView):
-    queryset = Staff.objects.filter(role="Radiologist")
-    serializer_class = StaffSerializer
-
-#this will be used for the nurses
-class GetAllNursesStaffAPIView(ListCreateAPIView):
-    queryset = Staff.objects.filter(role="Nurse")
-    serializer_class = StaffSerializer
-    
+  
 #this is for the login of the staff
 class StaffLoginAPIView(APIView):
     @swagger_auto_schema(request_body=StaffLoginSerializer)
@@ -84,6 +74,7 @@ class PatientQRLoginAPIView(APIView):
                 "dpi": patient_serialized.data
             }, status=status.HTTP_200_OK)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class DpiListCreateView(ListCreateAPIView):
     queryset = Dpi.objects.all()
     serializer_class = DpiSerializer
