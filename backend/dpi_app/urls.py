@@ -1,9 +1,12 @@
 from django.urls import path
-from .views import DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView
+from .views import AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView
 
 urlpatterns = [
-    path('loginPatientSSN/', PatientSSNLoginAPIView.as_view(), name='patient-login-ssn'),
-    path('loginPatientQR/', PatientQRLoginAPIView.as_view(), name='patient-login-qr'),
+    path('add-medicine/', AddMedicineAPIView.as_view(), name='add-medicine'),
+    path('create-consultation/', CreateConsultationAPIView.as_view(), name='create-consultation'),
+    path('create-prescription/', CreatePrescriptionAPIView.as_view(), name='create-prescription'),
+    path('patient/login_ssn/', PatientSSNLoginAPIView.as_view(), name='patient-login-ssn'),
+    path('patient/login_qr/', PatientQRLoginAPIView.as_view(), name='patient-login-qr'),
     path('doctors/', GetAllDoctorsStaffAPIView.as_view(), name='get-all-doctors'),
     path('staff/<int:id>/', GetStaffByIdAPIView.as_view(), name='get_staff_by_id'),
     path('login/', StaffLoginAPIView.as_view(), name='staff-login'), #for login

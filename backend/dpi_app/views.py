@@ -1,6 +1,6 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .models import Dpi, Staff
-from .serializers import DpiSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer
+from .models import Dpi, Staff, Prescription, Consultation, Medicine
+from .serializers import MedicineSerializer, ConsultationSerializer, DpiSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -74,6 +74,40 @@ class PatientQRLoginAPIView(APIView):
                 "dpi": patient_serialized.data
             }, status=status.HTTP_200_OK)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CreatePrescriptionAPIView(ListCreateAPIView):
+    queryset = Prescription.objects.all()
+    serializer_class = PrescriptionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CreateConsultationAPIView(ListCreateAPIView):
+    queryset = Consultation.objects.all()
+    serializer_class = ConsultationSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AddMedicineAPIView(ListCreateAPIView):
+    queryset = Medicine.objects.all()
+    serializer_class = MedicineSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            medicine = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 class DpiListCreateView(ListCreateAPIView):
     queryset = Dpi.objects.all()

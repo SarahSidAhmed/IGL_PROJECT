@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Dpi, Consultation, BiologicalExam, RadiologicalExam, NursingRecord, Staff
+from .models import Dpi, Consultation, BiologicalExam, RadiologicalExam, NursingRecord, Staff, Medicine, Prescription
 from django.contrib.auth.hashers import check_password
 
 #login for staff
@@ -64,6 +64,48 @@ class PatientQRLoginSerializer(serializers.Serializer):
 
         data["id"] = patient.id
         return data
+
+class ConsultationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Consultation
+        fields = ['id', 'dpi', 'doctor', 'consultation_summary', 'examination_required', 'hospital', 'consultation_date']
+
+    #only doctors can add consultations
+    def validate_doctor(self, value):
+        if value.role != "Doctor":
+            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
+        return value
+#this api is for adding just one medicine at a time
+class MedicineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medicine
+        fields = ['id', 'prescription', 'medication_name', 'dosage', 'duration', 'frequency']
+    #only doctors can add medicines
+    def validate_doctor(self, value):
+        if value.role != "Doctor":
+            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
+        return value
+
+
+class PrescriptionSerializer(serializers.ModelSerializer):
+    medicines = MedicineSerializer(many=True)
+
+    class Meta:
+        model = Prescription
+        fields = ['id', 'consultation', 'validated', 'prescription_date', 'medicines']
+
+    #only doctors can put an ordonnance
+    def validate_doctor(self, value):
+        if value.role != "Doctor":
+            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
+        return value
+    #add many medines at time for the ordonnance
+    def create(self, validated_data):
+        medicines_data = validated_data.pop('medicines')
+        prescription = Prescription.objects.create(**validated_data)
+        for medicine_data in medicines_data:
+            Medicine.objects.create(prescription=prescription, **medicine_data)
+        return prescription
 
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
