@@ -26,7 +26,7 @@ class StaffLoginSerializer(serializers.Serializer):
 
 #login for patient with SSN
 class PatientSSNLoginSerializer(serializers.Serializer):
-    SSN = serializers.IntegerField()
+    SSN = serializers.CharField()
     password = serializers.CharField(write_only=True, required=True)
     id = serializers.IntegerField(read_only=True)
 
