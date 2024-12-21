@@ -54,6 +54,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultation
         fields = '__all__'
+        read_only_fields = ['consultation_date']
 
 class DpiSerializer(serializers.ModelSerializer):
     consultations = ConsultationSerializer(many=True, source='consultation_set', read_only=True)
@@ -61,4 +62,5 @@ class DpiSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dpi
-        exclude  = ['admission_date']
+        fields = '__all__'
+        read_only_fields = ['admission_date']
