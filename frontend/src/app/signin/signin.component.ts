@@ -7,10 +7,11 @@ import { TestCardComponent } from '../test-card/test-card.component';
 import { DpiPatientComponent } from '../dpi-patient/dpi-patient.component';
 import { ConsultationDetailComponent } from '../consultation-detail/consultation-detail.component';
 import { QrCardComponent } from '../qr-card/qr-card.component';
+import { DpiDoctorComponent } from '../dpi-doctor/dpi-doctor.component';
 
 @Component({
   selector: 'app-signin',
-  imports: [RouterOutlet,QrCardComponent],
+  imports: [RouterOutlet,DpiDoctorComponent],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })
