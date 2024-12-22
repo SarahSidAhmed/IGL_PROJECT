@@ -79,35 +79,20 @@ class CreatePrescriptionAPIView(ListCreateAPIView):
     queryset = Prescription.objects.all()
     serializer_class = PrescriptionSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class CreateConsultationAPIView(ListCreateAPIView):
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AddMedicineAPIView(ListCreateAPIView):
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            medicine = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class DeleteMedicineAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Medicine.objects.all()
+    serializer_class = MedicineSerializer
+    lookup_field = 'id'
+
 
 class DpiListCreateView(ListCreateAPIView):
     queryset = Dpi.objects.all()

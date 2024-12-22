@@ -63,18 +63,8 @@ class PatientQRLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Incorrect password. Check again!")
 
         data["id"] = patient.id
-        return data
-
-class ConsultationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Consultation
-        fields = ['id', 'dpi', 'doctor', 'consultation_summary', 'examination_required', 'hospital', 'consultation_date']
-
-    #only doctors can add consultations
-    def validate_doctor(self, value):
-        if value.role != "Doctor":
-            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
-        return value
+        return data  
+    
 #this api is for adding just one medicine at a time
 class MedicineSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,7 +78,7 @@ class MedicineSerializer(serializers.ModelSerializer):
 
 
 class PrescriptionSerializer(serializers.ModelSerializer):
-    medicines = MedicineSerializer(many=True)
+    medicines = MedicineSerializer(many=True, read_only=True)
 
     class Meta:
         model = Prescription
@@ -99,13 +89,6 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         if value.role != "Doctor":
             raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
         return value
-    #add many medines at time for the ordonnance
-    def create(self, validated_data):
-        medicines_data = validated_data.pop('medicines')
-        prescription = Prescription.objects.create(**validated_data)
-        for medicine_data in medicines_data:
-            Medicine.objects.create(prescription=prescription, **medicine_data)
-        return prescription
 
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
@@ -133,6 +116,12 @@ class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
+
+    #only doctors can add consultations
+    def validate_doctor(self, value):
+        if value.role != "Doctor":
+            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
+        return value
 
     class Meta:
         model = Consultation
