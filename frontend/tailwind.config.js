@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 module.exports = {
   content: [
     "./src/**/*.{html,ts}",
@@ -14,3 +15,14 @@ module.exports = {
   },
   plugins: [],
 }
+=======
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{html,ts}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+>>>>>>> yasmine
