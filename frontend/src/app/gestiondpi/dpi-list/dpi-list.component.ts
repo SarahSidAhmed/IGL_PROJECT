@@ -24,8 +24,8 @@ interface Patient {
 export class DpiListComponent {
   constructor(private router: Router) {}  // Inject Router
 
-  onAddStaff() {
-    this.router.navigate(['/add-staff']); 
+  onCreateDpi() {
+    this.router.navigate(['/create-dpi']); 
   }
 
 scanQrCode() {

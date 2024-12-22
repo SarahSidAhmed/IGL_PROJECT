@@ -1,0 +1,308 @@
+<div class="flex flex-col h-full w-full bg-teal-50">
+  <header class="flex justify-between bg-white p-4 rounded-md shadow-sm">
+    <img class="h-10 w-15" src="./assets/logo.png" alt="" />
+
+    <button
+      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
+      (click)="onLogout()"
+    >
+      <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
+      <span>Se déconnecter</span>
+    </button>
+  </header>
+  <div class="flex flex-row max-h-screen-sm max-w-screen justify-center items-start space-x-3 p-8 ">
+    <div
+      class="flex-grow p-6 mx-auto max-w-xl px-6 py-12 bg-white border-0 shadow-lg sm:rounded-lg"
+    >
+      <h1
+        class="text-2xl text-center font-poppins text-primaryBlue font-bold mb-8"
+      >
+        Créer un nouveau DPI
+      </h1>
+      <form id="form"  novalidate>
+        <div class="flex flex-row items-center mb-5 mt-3 space-x-2">
+            <h1 class="font-poppins font-semibold text-xl text-primaryBlue">
+              Informations generales
+            </h1>
+            <div class="flex-grow border-t-2 border-primaryBlue"></div>
+          </div>
+        <div class="flex flex-row space-x-6">
+          <div class="relative z-0 w-full mb-5">
+            <h1 class="font-semibold font-poppins text-primaryBlue pl-3">
+              Nom:
+            </h1>
+            <input
+              type="text"
+              name="nom"
+              placeholder="Nom"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Le champ nom est réquis</span
+            >
+          </div>
+          <div class="relative z-0 w-full">
+            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+              Prénom:
+            </h1>
+            <input
+              type="text"
+              name="prénom"
+              placeholder="Prénom"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Le champ prénom est réquis</span
+            >
+          </div>
+        </div>
+        <div class="flex flex-row space-x-6">
+          <div class="relative z-0 w-full mb-5">
+            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+              Date de naissance:
+            </h1>
+            <input
+              type="text"
+              name="datenaissance"
+              placeholder="Date de naissance"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-lg border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              onclick="this.setAttribute('type', 'date');"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Date de naissance est réquis</span
+            >
+          </div>
+
+          <div class="relative z-0 w-full">
+            <h1 class="font-semibold font-poppins text-primaryBlue pl-3">
+              Sexe:
+            </h1>
+            <select
+              name="sexe"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border border-2 rounded-md focus:outline-none focus:ring-0 border-primaryBlue focus:bg-gray-100 bg-white-100"
+            >
+              <option
+                class="text-gray-200 font-poppins"
+                value=""
+                selected
+                disabled
+                hidden
+              ></option>
+              <option value="male">Masculin</option>
+              <option value="female">Féminin</option>
+              <option value="other">Autre</option>
+            </select>
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Le sexe est requis</span
+            >
+          </div>
+        </div>
+        <div class="relative z-0 w-full mb-5">
+          <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+            Numéro de sécurité sociale:
+          </h1>
+          <input
+            type="text"
+            name="nss"
+            placeholder="Numéro de sécurite sociale"
+            class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+          />
+
+          <span class="text-sm text-red-600 hidden" id="error"
+            >le NSS est réquis</span
+          >
+        </div>
+        <div class="flex flex-row space-x-6">
+          <div class="relative z-0 w-full mb-5">
+            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+              Nom de l'hopital:
+            </h1>
+            <input
+              type="text"
+              name="nom-hopital"
+              placeholder="Nom de l'hopital"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error"
+              >champ réquis</span
+            >
+          </div>
+
+          <div class="relative z-0 w-full">
+            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+              Type sanguin :
+            </h1>
+            <select
+              name="blood-type"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border-2 border-primaryBlue rounded-md focus:outline-none focus:ring-0 focus:bg-gray-100 bg-white"
+            >
+              <option value="" selected disabled hidden>
+                Choisissez un type sanguin
+              </option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+            <span class="text-sm text-red-600 hidden" id="error">
+              Le type sanguin est requis.
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-row items-center mb-5 mt-3 space-x-2">
+          <h1 class="font-poppins font-semibold text-xl text-primaryBlue">
+            Contact et connexion
+          </h1>
+          <div class="flex-grow border-t-2 border-primaryBlue"></div>
+        </div>
+        <div class="flex flex-row space-x-6">
+          <div class="relative z-0 w-full mb-5">
+            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+              Adresse:
+            </h1>
+            <input
+              type="text"
+              name="adresse"
+              placeholder="Adresse"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Champ Adresse réquis</span
+            >
+          </div>
+
+          <div class="relative z-0 w-full">
+            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+              Docteur administré:
+            </h1>
+            <select
+              name="doctor"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border-2 border-primaryBlue rounded-md focus:outline-none focus:ring-0 focus:bg-gray-100 bg-white-100"
+            >
+              <option value="" selected disabled hidden>Sélectionner</option>
+              <option value="male">Masculin</option>
+              <option value="female">Féminin</option>
+              <option value="other">Autre</option>
+            </select>
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Champ réquis</span
+            >
+          </div>
+        </div>
+        <div class="flex flex-row space-x-6">
+          <div class="relative z-0 w-full mb-5">
+            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+              Numéro de téléphone:
+            </h1>
+            <input
+              type="text"
+              name="num-tel"
+              placeholder="Numéro de téléphone"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error"
+              >numero de tel réquis</span
+            >
+          </div>
+          <div class="relative z-0 w-full">
+            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+              E-mail:
+            </h1>
+            <input
+              type="text"
+              name="email"
+              placeholder="E-mail"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error">required</span>
+          </div>
+        </div>
+        <div class="flex flex-row space-x-6">
+          <div class="relative z-0 w-full mb-5">
+            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+              Mot de passe:
+            </h1>
+            <input
+              type="password"
+              name="mdp"
+              placeholder="Mot de passe"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error">required</span>
+          </div>
+          <div class="relative z-0 w-full">
+            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+              Confirmer le mot de passe:
+            </h1>
+            <input
+              type="password"
+              name="date"
+              placeholder="Confirmer:"
+              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            />
+
+            <span class="text-sm text-red-600 hidden" id="error">required</span>
+          </div>
+        </div>
+
+        <button
+          id="button"
+          type="button"
+          class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-pink-500 hover:bg-pink-600 hover:shadow-lg focus:outline-none"
+        >
+          Toggle Error
+        </button>
+      </form>
+    </div>
+    <div class="flex-1 bg-white shadow-lg sm:rounded-lg p-6 max-w-md ">
+      <form id="form-2" novalidate>
+        <div class="relative z-0 w-full mb-5">
+          <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+            Adresse secondaire:
+          </h1>
+          <input
+            type="text"
+            name="secondary-address"
+            placeholder="Adresse secondaire"
+            class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+          />
+          <span class="text-sm text-red-600 hidden" id="error"
+            >Champ requis</span
+          >
+        </div>
+        <div class="relative z-0 w-full mb-5">
+          <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+            Numéro de fax:
+          </h1>
+          <input
+            type="text"
+            name="fax"
+            placeholder="Numéro de fax"
+            class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+          />
+          <span class="text-sm text-red-600 hidden" id="error"
+            >Champ requis</span
+          >
+        </div>
+        <button
+          type="submit"
+          class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-teal-500 hover:bg-teal-600 hover:shadow-lg focus:outline-none"
+        >
+          Soumettre
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
