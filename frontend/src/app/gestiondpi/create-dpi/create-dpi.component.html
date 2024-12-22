@@ -1,56 +1,58 @@
-<div class="flex flex-col h-full w-full bg-teal-50">
+<div class="bg-teal-50">
   <header class="flex justify-between bg-white p-4 rounded-md shadow-sm">
     <img class="h-10 w-15" src="./assets/logo.png" alt="" />
 
     <button
-      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
+      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200  flex items-center"
       (click)="onLogout()"
     >
       <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
       <span>Se déconnecter</span>
     </button>
   </header>
-  <div class="flex flex-row max-h-screen-sm max-w-screen justify-center items-start space-x-3 p-8 ">
-    <div
-      class="flex-grow p-6 mx-auto max-w-xl px-6 py-12 bg-white border-0 shadow-lg sm:rounded-lg"
-    >
+  <div class="flex flex-col md:flex-col lg:flex-row gap-7 px-20 sm:px-32 py-10">
+    <div class="sm:flex-1 lg:w-100 relative bg-white p-10 rounded-lg shadow-lg">
       <h1
-        class="text-2xl text-center font-poppins text-primaryBlue font-bold mb-8"
+        class="text-lg text-center font-poppins text-primaryBlue font-bold mb-3"
       >
         Créer un nouveau DPI
       </h1>
-      <form id="form"  novalidate>
-        <div class="flex flex-row items-center mb-5 mt-3 space-x-2">
-            <h1 class="font-poppins font-semibold text-xl text-primaryBlue">
-              Informations generales
-            </h1>
-            <div class="flex-grow border-t-2 border-primaryBlue"></div>
-          </div>
-        <div class="flex flex-row space-x-6">
-          <div class="relative z-0 w-full mb-5">
-            <h1 class="font-semibold font-poppins text-primaryBlue pl-3">
+      <form id="form" novalidate>
+        <div class="flex flex-row items-center mb-3 space-x-2">
+          <h1 class="font-poppins font-bold text-sm text-primaryBlue">
+            Informations generales
+          </h1>
+          <div class="flex-grow border-t-2 border-primaryBlue"></div>
+        </div>
+        <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
+          <div class="relative z-0 w-full">
+            <h1
+              class="font-semibold text-xs font-poppins text-primaryBlue pl-3"
+            >
               Nom:
             </h1>
             <input
               type="text"
               name="nom"
               placeholder="Nom"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span class="text-xs font-poppins text-red-600 hidden" id="error"
               >Le champ nom est réquis</span
             >
           </div>
           <div class="relative z-0 w-full">
-            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+            <h1
+              class="font-semibold text-xs pl-3 font-poppins text-primaryBlue"
+            >
               Prénom:
             </h1>
             <input
               type="text"
               name="prénom"
               placeholder="Prénom"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
             <span class="text-sm text-red-600 hidden" id="error"
@@ -58,16 +60,18 @@
             >
           </div>
         </div>
-        <div class="flex flex-row space-x-6">
-          <div class="relative z-0 w-full mb-5">
-            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+        <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
+          <div class="relative z-0 w-full">
+            <h1
+              class="font-semibold text-xs font-poppins pl-3 text-primaryBlue"
+            >
               Date de naissance:
             </h1>
             <input
               type="text"
               name="datenaissance"
               placeholder="Date de naissance"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-lg border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
               onclick="this.setAttribute('type', 'date');"
             />
 
@@ -77,20 +81,23 @@
           </div>
 
           <div class="relative z-0 w-full">
-            <h1 class="font-semibold font-poppins text-primaryBlue pl-3">
+            <h1
+              class="font-semibold font-poppins text-primaryBlue text-xs pl-3"
+            >
               Sexe:
             </h1>
             <select
               name="sexe"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border border-2 rounded-md focus:outline-none focus:ring-0 border-primaryBlue focus:bg-gray-100 bg-white-100"
+              placeholder="Sexe"
+              class="py-1 pb-1.5 w-full pl-3 mt-0 rounded h-fit focus:outline-none focus:ring-0 border-2 border-primaryBlue text-gray-400 text-xs focus:bg-gray-100 bg-white placeholder:text-xs placeholder:font-poppins"
             >
               <option
-                class="text-gray-200 font-poppins"
+               
                 value=""
                 selected
                 disabled
                 hidden
-              ></option>
+              >Sélectionner</option>
               <option value="male">Masculin</option>
               <option value="female">Féminin</option>
               <option value="other">Autre</option>
@@ -100,31 +107,33 @@
             >
           </div>
         </div>
-        <div class="relative z-0 w-full mb-5">
-          <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+        <div class="relative z-0 w-full mb-3">
+          <h1 class="font-semibold text-xs pl-3 font-poppins text-primaryBlue">
             Numéro de sécurité sociale:
           </h1>
           <input
             type="text"
             name="nss"
             placeholder="Numéro de sécurite sociale"
-            class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+            class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
           />
 
           <span class="text-sm text-red-600 hidden" id="error"
             >le NSS est réquis</span
           >
         </div>
-        <div class="flex flex-row space-x-6">
-          <div class="relative z-0 w-full mb-5">
-            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+        <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
+          <div class="relative z-0 w-full">
+            <h1
+              class="font-semibold text-xs font-poppins pl-3 text-primaryBlue"
+            >
               Nom de l'hopital:
             </h1>
             <input
               type="text"
               name="nom-hopital"
               placeholder="Nom de l'hopital"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
             <span class="text-sm text-red-600 hidden" id="error"
@@ -133,14 +142,22 @@
           </div>
 
           <div class="relative z-0 w-full">
-            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+            <h1
+              class="font-semibold text-xs font-poppins pl-3 text-primaryBlue"
+            >
               Type sanguin :
             </h1>
             <select
               name="blood-type"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border-2 border-primaryBlue rounded-md focus:outline-none focus:ring-0 focus:bg-gray-100 bg-white"
+              class="py-1 pb-1.5 w-full pl-3 mt-0 rounded h-fit focus:outline-none focus:ring-0 border-2 border-primaryBlue text-gray-400 text-xs focus:bg-gray-100 bg-white placeholder:text-xs placeholder:font-poppins"
             >
-              <option value="" selected disabled hidden>
+              <option
+                value=""
+                class="text-xs font-poppins text-gray-400"
+                selected
+                disabled
+                hidden
+              >
                 Choisissez un type sanguin
               </option>
               <option value="O+">O+</option>
@@ -157,22 +174,24 @@
             </span>
           </div>
         </div>
-        <div class="flex flex-row items-center mb-5 mt-3 space-x-2">
-          <h1 class="font-poppins font-semibold text-xl text-primaryBlue">
+        <div class="flex flex-row items-center mb-3 mt-4 space-x-2">
+          <h1 class="font-poppins font-bold text-sm text-primaryBlue">
             Contact et connexion
           </h1>
           <div class="flex-grow border-t-2 border-primaryBlue"></div>
         </div>
-        <div class="flex flex-row space-x-6">
-          <div class="relative z-0 w-full mb-5">
-            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+        <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
+          <div class="relative z-0 w-full">
+            <h1
+              class="font-semibold pl-3 text-xs font-poppins text-primaryBlue"
+            >
               Adresse:
             </h1>
             <input
               type="text"
               name="adresse"
               placeholder="Adresse"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
             <span class="text-sm text-red-600 hidden" id="error"
@@ -181,12 +200,14 @@
           </div>
 
           <div class="relative z-0 w-full">
-            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+            <h1
+              class="font-semibold pl-3 font-poppins text-primaryBlue text-xs"
+            >
               Docteur administré:
             </h1>
             <select
               name="doctor"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border-2 border-primaryBlue rounded-md focus:outline-none focus:ring-0 focus:bg-gray-100 bg-white-100"
+              class="py-1 pb-1.5 w-full pl-3 mt-0 rounded focus:outline-none focus:ring-0 border-primaryBlue border-2 focus:bg-gray-100 bg-white text-xs text-gray-400 placeholder:text-xs placeholder:font-poppins"
             >
               <option value="" selected disabled hidden>Sélectionner</option>
               <option value="male">Masculin</option>
@@ -198,16 +219,18 @@
             >
           </div>
         </div>
-        <div class="flex flex-row space-x-6">
-          <div class="relative z-0 w-full mb-5">
-            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+        <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
+          <div class="relative z-0 w-full">
+            <h1
+              class="font-semibold pl-3 font-poppins text-primaryBlue text-xs"
+            >
               Numéro de téléphone:
             </h1>
             <input
               type="text"
               name="num-tel"
               placeholder="Numéro de téléphone"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
             <span class="text-sm text-red-600 hidden" id="error"
@@ -215,94 +238,188 @@
             >
           </div>
           <div class="relative z-0 w-full">
-            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+            <h1
+              class="font-semibold pl-3 font-poppins text-primaryBlue text-xs"
+            >
               E-mail:
             </h1>
             <input
               type="text"
               name="email"
               placeholder="E-mail"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
             <span class="text-sm text-red-600 hidden" id="error">required</span>
           </div>
         </div>
-        <div class="flex flex-row space-x-6">
-          <div class="relative z-0 w-full mb-5">
-            <h1 class="font-semibold pl-3 font-poppins text-primaryBlue">
+        <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
+          <div class="relative z-0 w-full">
+            <h1
+              class="font-semibold pl-3 text-xs font-poppins text-primaryBlue"
+            >
               Mot de passe:
             </h1>
             <input
               type="password"
               name="mdp"
               placeholder="Mot de passe"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
             <span class="text-sm text-red-600 hidden" id="error">required</span>
           </div>
           <div class="relative z-0 w-full">
-            <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
+            <h1
+              class="font-semibold font-poppins pl-3 text-primaryBlue text-xs"
+            >
               Confirmer le mot de passe:
             </h1>
             <input
               type="password"
               name="date"
               placeholder="Confirmer:"
-              class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
+              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
             <span class="text-sm text-red-600 hidden" id="error">required</span>
           </div>
         </div>
-
-        <button
-          id="button"
-          type="button"
-          class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-pink-500 hover:bg-pink-600 hover:shadow-lg focus:outline-none"
-        >
-          Toggle Error
-        </button>
       </form>
     </div>
-    <div class="flex-1 bg-white shadow-lg sm:rounded-lg p-6 max-w-md ">
-      <form id="form-2" novalidate>
-        <div class="relative z-0 w-full mb-5">
-          <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
-            Adresse secondaire:
-          </h1>
-          <input
-            type="text"
-            name="secondary-address"
-            placeholder="Adresse secondaire"
-            class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
-          />
-          <span class="text-sm text-red-600 hidden" id="error"
-            >Champ requis</span
-          >
-        </div>
-        <div class="relative z-0 w-full mb-5">
-          <h1 class="font-semibold font-poppins pl-3 text-primaryBlue">
-            Numéro de fax:
-          </h1>
-          <input
-            type="text"
-            name="fax"
-            placeholder="Numéro de fax"
-            class="pt-3 pb-2 w-full pl-3 mt-0 border rounded-md border-b-2 appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-gray-200"
-          />
-          <span class="text-sm text-red-600 hidden" id="error"
-            >Champ requis</span
-          >
-        </div>
+    <div class="flex flex-col">
+      <div class="w-50 sm:w-full h-fit bg-white p-6 rounded-lg shadow-sm">
+        <form id="form-2" novalidate>
+          <div class="flex flex-row items-center mb-3 mt-3 space-x-2">
+            <h1 class="font-poppins font-bold text-sm text-primaryBlue">
+              Informations d'urgence
+            </h1>
+            <div class="flex-grow border-t-2 border-primaryBlue"></div>
+          </div>
+          <div class="relative z-0 w-full mb-3">
+            <h1
+              class="font-semibold font-poppins pl-3 text-primaryBlue text-xs"
+            >
+              Nom du contact:
+            </h1>
+            <input
+              type="text"
+              name="contact-urgence"
+              placeholder="Nom complet"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
+            />
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Champ requis</span
+            >
+          </div>
+          <div class="relative z-0 w-full mb-3">
+            <h1
+              class="font-semibold text-xs font-poppins pl-3 text-primaryBlue"
+            >
+              Numéro de télephone:
+            </h1>
+            <input
+              type="text"
+              name="numtel-urgence"
+              placeholder="Numéro de téléphone"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
+            />
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Champ requis</span
+            >
+          </div>
+          <div class="relative z-0 w-full mb-4">
+            <h1
+              class="font-semibold text-xs font-poppins pl-3 text-primaryBlue"
+            >
+              Relation:
+            </h1>
+            <input
+              type="text"
+              name="relation"
+              placeholder="Relation"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
+            />
+            <span class="text-sm text-red-600 hidden" id="error"
+              >Champ requis</span
+            >
+          </div>
+          <div class="flex flex-row items-center mb-3 space-x-2">
+            <h1 class="font-poppins font-bold text-sm text-primaryBlue">
+              Informations mutuelles
+            </h1>
+            <div class="flex-grow border-t-2 border-primaryBlue"></div>
+          </div>
+          <div class="relative z-0 w-full mb-3">
+            <h1
+              class="font-semibold text-xs font-poppins text-primaryBlue pl-3"
+            >
+              Nom:
+            </h1>
+            <input
+              type="text"
+              name="nom"
+              placeholder="Nom"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
+            />
+
+            <span class="text-xs font-poppins text-red-600 hidden" id="error"
+              >Le champ nom est réquis</span
+            >
+          </div>
+          <div class="relative z-0 w-full mb-3">
+            <h1
+              class="font-semibold text-xs font-poppins text-primaryBlue pl-3"
+            >
+              Numéro de contrat:
+            </h1>
+            <input
+              type="text"
+              name="policy-number"
+              placeholder="Numéro de contrat"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
+            />
+
+            <span class="text-xs font-poppins text-red-600 hidden" id="error"
+              >Le champ nom est réquis</span
+            >
+          </div>
+          <div class="relative z-0 w-full mb-3">
+            <h1
+              class="font-semibold text-xs font-poppins text-primaryBlue pl-3"
+            >
+              Antécédants médicaux:
+            </h1>
+            <input
+              type="text"
+              name="medical-history"
+              placeholder="Antécédants médicaux"
+              class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
+            />
+
+            <span class="text-xs font-poppins text-red-600 hidden" id="error"
+              >Le champ nom est réquis</span
+            >
+          </div>
+        </form>
+      </div>
+      <div class="flex flex-row sm:justify-center gap-6 mt-7 -space-x-4">
         <button
+          class=" sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#0F766E] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#0F766E] items-center flex rounded-md hover:bg-primaryBlue-dark focus:outline-none focus:ring-0"
           type="submit"
-          class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-teal-500 hover:bg-teal-600 hover:shadow-lg focus:outline-none"
         >
-          Soumettre
+        <img class="sm:h-5 sm:w-6 size-3 mr-3" src="./assets/icons/save.png" />
+          <span>Confirmer et ajouter</span>
         </button>
-      </form>
+        <button
+          class=" sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#F87171] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#F87171] rounded-md hover:bg-primaryBlue-dark items-center flex focus:outline-none focus:ring-0"
+          type="reset"
+        >
+       
+        <img class="sm:h-5 sm:w-5 size-3 mr-3" src="./assets/icons/cancel.png" />
+          Annuler
+        </button>
+      </div>
     </div>
   </div>
 </div>
