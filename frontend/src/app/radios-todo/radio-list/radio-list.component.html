@@ -10,9 +10,9 @@
       <span>Se déconnecter</span>
     </button>
   </header>
-  <div class="flex justify-center mt-4 mb-4">
+  <div class="flex justify-center mt-4 mb-3">
     <h1 class="text-primaryBlue font-poppins text-xl font-bold">
-      GESTION DPI
+      Liste des radios à soumettre
     </h1>
   </div>
   <div class="flex flex-row justify-center">
@@ -41,27 +41,15 @@
         Search
       </button>
     </div>
-    <div class="flex justify-evenly space-x-4">
-    
-      <button
-        class="ml-2 bg-[#16c2d5] text-white font-poppins px-1 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-24 text-xs font-semibold" (click)="onCreateDpi()"
-      >
-        <img class="size-5 mr-1" src="./assets/icons/creerDpi.png" />
-        <span class="flex">Créer un nouveau DPI</span>
-      </button>
-    </div>
   </div>
-
-  <div class="m-7 mb-0 mt-2 overflow-y-auto custom-scrollbar">
-    <app-dpi-card
-      *ngFor="let patient of filteredDpiList"
-      [patientName]="patient.patientName"
-      [gender]="patient.gender"
-      [age]="patient.age"
-      [patientId]="patient.patientId"
-      [socialSecurityNumber]="patient.socialSecurityNumber"
-      [contactNumber]="patient.contactNumber"
-      [email]="patient.email"
-    ></app-dpi-card>
+  <div class="m-7 mb-0 mt-3 overflow-y-auto custom-scrollbar">
+    <app-radio-card
+      *ngFor="let radio of filteredRadioList"
+      [patientName]="radio.patientName"
+      [gender]="radio.gender"
+      [age]="radio.age"
+      [patientId]="radio.patientId"
+      [radioNeeded]="radio.radioNeeded"
+    ></app-radio-card>
   </div>
 </div>
