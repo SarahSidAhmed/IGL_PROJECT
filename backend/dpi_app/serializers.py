@@ -95,7 +95,7 @@ class StaffSerializer(serializers.ModelSerializer):
         model = Staff
         fields = '__all__'
         read_only_fields = ['email', 'name', 'phone', 'role', 'speciality']
-        write_only_fields = ['password']
+        password = serializers.CharField(write_only=True)
 
 class BiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
