@@ -1,5 +1,5 @@
 <div class="flex flex-col h-screen bg-teal-50">
-  <header class="flex justify-between bg-white p-4 rounded-md">
+  <header class="flex justify-between bg-white shadow-sm p-4 rounded-md">
     <img class="h-10 w-15" src="./assets/logo.png" alt="" />
 
     <button
@@ -11,30 +11,30 @@
     </button>
   </header>
   <div class="flex justify-center mt-4 mb-4">
-    <h1 class="text-primaryBlue font-poppins text-2xl font-bold">
+    <h1 class="text-primaryBlue font-poppins text-xl font-bold">
       GESTION DPI
     </h1>
   </div>
   <div class="flex flex-row justify-center">
     <div
-      class="flex flex-row justify-between h-24 w-2/3 bg-white shadow-sm items-center rounded-lg mr-8"
+      class="flex flex-row justify-between h-16 w-2/3 bg-white shadow-sm items-center rounded-lg mr-8"
     >
-      <div class="flex-grow relative p-5">
+      <div class="flex-grow relative p-4">
         <input
           type="text"
           placeholder="Rechercher..."
           [(ngModel)]="searchQuery"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2"
+          class="w-full p-1 bg-slate-100 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 placeholder:font-poppins placeholder:text-xs placeholder:pl-4"
         />
       </div>
       <button
-        class="text-white px-2 py-1 rounded-md focus:outline-none"
+        class="text-white p-1 rounded-md focus:outline-none"
         (click)="scanQrCode()"
       >
-        <img class="h-10 w-10" src="./assets/icons/scanQr.png" />
+        <img class="size-7" src="./assets/icons/scanQr.png" />
       </button>
       <button
-        class="ml-4 bg-primaryBlue text-white font-poppins px-4 py-2 rounded-md flex items-center focus:outline-none h-10 mr-5"
+        class="ml-4 bg-primaryBlue text-white text-xs font-poppins px-2 py-1 rounded-md flex items-center focus:outline-none h-8 mr-5"
         (click)="onSearch()"
       >
         <i class="fas fa-search mr-2"></i>
@@ -44,15 +44,15 @@
     <div class="flex justify-evenly space-x-4">
     
       <button
-        class="ml-4 bg-[#16c2d5] text-white font-poppins px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-36 " (click)="onCreateDpi()"
+        class="ml-2 bg-[#16c2d5] text-white font-poppins px-1 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-24 text-xs font-semibold" (click)="onCreateDpi()"
       >
-        <img class="size-7 mr-3" src="./assets/icons/creerDpi.png" />
+        <img class="size-5 mr-1" src="./assets/icons/creerDpi.png" />
         <span class="flex">Créer un nouveau DPI</span>
       </button>
     </div>
   </div>
 
-  <div class="m-7 overflow-y-auto custom-scrollbar">
+  <div class="m-7 mb-0 mt-2 overflow-y-auto custom-scrollbar">
     <app-dpi-card
       *ngFor="let patient of filteredDpiList"
       [patientName]="patient.patientName"
