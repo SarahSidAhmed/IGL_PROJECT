@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from dpi_app.views import StaffLoginAPIView,GetStaffByIdAPIView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -34,7 +35,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('staff/<int:id>/', GetStaffByIdAPIView.as_view(), name='get_staff_by_id'),
+    path('login/', StaffLoginAPIView.as_view(), name='staff-login'),
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger'),
+    path('swagger.json/', schema_view.without_ui(cache_timeout=0), name='swagger-json'),  #swagger json
     path('api/', include('dpi_app.urls')),
 ]
