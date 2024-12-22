@@ -64,3 +64,6 @@ class DpiSerializer(serializers.ModelSerializer):
         model = Dpi
         fields = '__all__'
         read_only_fields = ['admission_date']
+        
+class PrescriptionValidationSerializer(serializers.Serializer):
+    prescription = serializers.IntegerField(required=True)

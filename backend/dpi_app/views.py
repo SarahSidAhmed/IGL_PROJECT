@@ -1,6 +1,6 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .models import Dpi, Staff
-from .serializers import DpiSerializer, StaffLoginSerializer, StaffSerializer
+from .models import Dpi, Staff, Prescription
+from .serializers import DpiSerializer, StaffLoginSerializer, StaffSerializer, PrescriptionValidationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -61,3 +61,21 @@ class DpiDetailByIdView(RetrieveUpdateDestroyAPIView):
     ).select_related('doctor')
     serializer_class = DpiSerializer
     lookup_field = 'id'
+
+
+class ValidatePrescriptionView(APIView):
+    @swagger_auto_schema(request_body=PrescriptionValidationSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer = PrescriptionValidationSerializer(data=request.data)
+        if serializer.is_valid():
+            prescription_id = serializer.validated_data["prescription"]
+            try:
+                prescription = Prescription.objects.get(id=prescription_id)
+                if (prescription.validated):
+                    return Response({"error": "Prescription already validated."}, status=status.HTTP_400_BAD_REQUEST)
+                prescription.validated = True
+                prescription.save()
+                return Response({"message": "Prescription Validated"}, status=status.HTTP_200_OK)
+            except Prescription.DoesNotExist:
+                return Response({"error": "Prescription not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
