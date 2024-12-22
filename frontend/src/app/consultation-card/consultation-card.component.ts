@@ -27,7 +27,6 @@ export class ConsultationCardComponent {
 
   seeMore(): void {
     console.log('Navigating to more details...');
-    // Logique de navigation ignorée pour l'instant
   }
 
 }

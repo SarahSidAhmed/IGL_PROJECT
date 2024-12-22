@@ -8,10 +8,11 @@ import { DpiPatientComponent } from '../dpi-patient/dpi-patient.component';
 import { ConsultationDetailComponent } from '../consultation-detail/consultation-detail.component';
 import { QrCardComponent } from '../qr-card/qr-card.component';
 import { DpiDoctorComponent } from '../dpi-doctor/dpi-doctor.component';
+import { ConsultationDetailDoctorComponent } from '../consultation-detail-doctor/consultation-detail-doctor.component';
 
 @Component({
   selector: 'app-signin',
-  imports: [RouterOutlet,DpiDoctorComponent],
+  imports: [RouterOutlet],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })

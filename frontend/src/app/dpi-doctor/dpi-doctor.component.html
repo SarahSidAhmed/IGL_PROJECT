@@ -1,11 +1,24 @@
 <div class="bg-[#F1FFFC] lg:flex lg:flex-col">
+    <div
+  *ngIf="showNotification"
+  class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg flex items-center gap-4 z-50"
+  [ngClass]="{
+    'bg-white text-[#1BA9B5] font-bold': notificationType === 'success',
+    'bg-white text-[#FF7373] font-bold': notificationType === 'error'
+  }"
+>
+  <img
+    [src]="notificationType === 'success' ? 'assets/valid.svg' : 'assets/error.svg'"
+    alt="Notification Icon"
+    class="h-6 w-6"
+  />
+  <span>{{ notificationMessage }}</span>
+</div>
     <app-navbar></app-navbar>
     <div class="lg:flex lg:flex-1 p-4 gap-4">
-      <!-- Consultations Section -->
       <div class="flex-1 overflow-y-auto rounded-lg px-4">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-[#10217D]">Consultations</h2>
-          <!-- Ajouter Consultation Button -->
           <button
             class="bg-[#008080] text-sm text-white font-bold px-4 py-2 rounded-md flex items-center gap-2"
             (click)="toggleAddConsultationPopup()"
@@ -18,8 +31,6 @@
           <app-consultation-card></app-consultation-card>
         </div>
       </div>
-  
-      <!-- Right Section -->
       <div class="lg:w-1/3 lg:flex lg:flex-col gap-4 md:flex md:flex-row">
         <div class="rounded-lg px-4 py-2 lg:flex-none md:flex-1">
           <app-info-card></app-info-card>
@@ -29,14 +40,12 @@
         </div>
       </div>
     </div>
-  
-    <!-- Add Consultation Popup -->
     <div
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
       *ngIf="showAddConsultation"
     >
       <div class="bg-white w-[90%] max-w-lg rounded-lg p-6">
-        <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Add Consultation</h2>
+        <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Ajouter Consultation</h2>
         <div class="flex items-center justify-between mb-4">
             <hr class="flex-1 border-t-[1.5px] border-[#10217D]" />
             <h3 class="ml-4 text-[#10217D] font-medium">Résumé</h3>
@@ -49,14 +58,14 @@
         </div>
         <div class="flex gap-4 mb-4">
           <div class="flex-1">
-            <label class="block text-sm font-medium text-[#10217D] mb-1">Responsible doctor:</label>
+            <label class="block text-sm font-medium text-[#10217D] mb-1">Médecin responsable:</label>
             <input
               type="text"
               class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
             />
           </div>
           <div class="flex-1">
-            <label class="block text-sm font-medium text-[#10217D] mb-1">Hopital:</label>
+            <label class="block text-sm font-medium text-[#10217D] mb-1">Hôpital:</label>
             <input
               type="text"
               class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"

@@ -15,6 +15,9 @@ import { CommonModule } from '@angular/common';
 })
 export class DpiDoctorComponent {
   showAddConsultation = false;
+  showNotification: boolean = false;
+  notificationType: 'success' | 'error' = 'success'; 
+  notificationMessage: string = '';
 
   consultations = [
     { id: 1, title: 'Consultation 1', details: 'Details about consultation 1' },
@@ -29,7 +32,21 @@ export class DpiDoctorComponent {
   }
 
   addConsultation() {
-    this.consultations.push({ id: 4, title: 'Consultation 4', details: 'Details about consultation 4' });
+    try{
+      this.consultations.push({ id: 4, title: 'Consultation 4', details: 'Details about consultation 4' });
+      this.showNotification = true;
+        this.notificationType = 'success';
+        this.notificationMessage = 'Consultation ajoutée avec succès !';
+  
+
+    }catch(error){
+      this.showNotification = true;
+      this.notificationType = 'error';
+      this.notificationMessage = 'Une erreur est survenue!';
+    }
+    setTimeout(() => {
+      this.showNotification = false;
+    }, 3000);
     this.showAddConsultation=false;
     
   }

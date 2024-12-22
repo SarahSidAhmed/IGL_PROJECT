@@ -22,12 +22,6 @@ export class ConsultationDetailComponent {
     'paracetamol 1g'
   ];
 
-  listItemsord = [
-    'Paracetamol',
-    'anti virus',
-    'anti virus',
-    'anti virus',
-    'anti virus'
-  ];
+  listItemsord: { nom: string; dosage: string; duree: string; frequence: string }[] = [{ nom: 'Paracetamol', dosage: '2 cachets', duree: '5 jours', frequence: '2 fois ' },{ nom: 'AntiVirus', dosage: '1 cachet', duree: '4 jours', frequence: '1 '  }];
 
 }
