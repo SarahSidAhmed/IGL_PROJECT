@@ -102,7 +102,7 @@ class BiologicalExam(models.Model):
     lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "LabTechnician"})
     exam_name = models.CharField(max_length=100)
     result = models.TextField()
-    has_graph = models.BooleanField(default=False)
+    has_graph = models.BooleanField(default=False)  
     exam_date = models.DateField()
 
     def __str__(self):

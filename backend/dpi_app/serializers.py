@@ -96,21 +96,18 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = '__all__'
-        #read_only_fields = ['email', 'name', 'phone', 'role', 'speciality']
         
 
 class BiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalExam
         fields = '__all__'
-        #read_only_fields = ['result', 'has_graph', 'exam_date', 'lab_technician']
 
 
 class RadiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
         fields = '__all__'
-        #read_only_fields = ['result', 'has_graph', 'exam_date', 'radiologist']
 
 class NursingRecordSerializer(serializers.ModelSerializer):
     class Meta:
