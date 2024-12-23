@@ -82,7 +82,8 @@ class PrescriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Prescription
-        fields = ['id', 'consultation', 'validated', 'prescription_date', 'medicines']
+        fields = '__all__'
+        read_only_fields = ['prescription_date', 'validated']
 
     #only doctors can put an ordonnance
     def validate_doctor(self, value):
@@ -96,29 +97,57 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = '__all__'
-        
 
 class BiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalExam
         fields = '__all__'
-
-
+        
 class RadiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
         fields = '__all__'
-
+        
 class NursingRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
         fields = '__all__'
 
+class BiologicalExamCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BiologicalExam
+        fields = ['consultation', 'exam_name']
+
+class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BiologicalExam
+        fields = ['result', 'has_graph', 'exam_date', 'lab_technician']
+
+class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RadiologicalExam
+        fields = ['consultation', 'exam_name']
+
+class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RadiologicalExam
+        fields = ['result', 'has_graph', 'exam_date', 'radiologist']
+
+class NursingRecordCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NursingRecord
+        fields = ['consultation', 'care_name']
+
+class NursingRecordUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NursingRecord
+        fields = ['record_date', 'nurse', 'patient_observation']
+
 class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
-    prescriptions = PrescriptionSerializer(many=True, source='prescription_set', read_only=True)
+    prescription = PrescriptionSerializer(source='prescription', read_only=True)
 
     #only doctors can add consultations
     def validate_doctor(self, value):
