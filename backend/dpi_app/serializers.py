@@ -147,7 +147,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
-    prescription = PrescriptionSerializer(source='prescription', read_only=True)
+    prescription = PrescriptionSerializer(read_only=True)
 
     #only doctors can add consultations
     def validate_doctor(self, value):
