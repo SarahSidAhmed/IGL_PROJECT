@@ -64,7 +64,7 @@ class Dpi(models.Model):
 class Consultation(models.Model):
     id = models.AutoField(primary_key=True)
     dpi = models.ForeignKey(Dpi, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "Doctor"})
+    doctor = models.ForeignKey(Staff, on_delete=models.CASCADE)
     consultation_summary = models.TextField()
     examination_required = models.TextField()
     hospital = models.TextField()
@@ -99,7 +99,7 @@ class Medicine(models.Model):
 class BiologicalExam(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "LabTechnician"})
+    lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE)
     exam_name = models.CharField(max_length=100)
     result = models.TextField()
     has_graph = models.BooleanField(default=False)  
@@ -124,7 +124,7 @@ class BiologicalExamParam(models.Model):
 class RadiologicalExam(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    radiologist = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "Radiologist"})
+    radiologist = models.ForeignKey(Staff, on_delete=models.CASCADE)
     exam_name = models.TextField()
     image_url = models.TextField()
     result = models.TextField()
@@ -137,7 +137,7 @@ class RadiologicalExam(models.Model):
 class NursingRecord(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE, limit_choices_to={"role": "Nurse"})
+    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE)
     care_name = models.TextField()
     patient_observation = models.TextField()
     record_date = models.DateTimeField(default=timezone.now)

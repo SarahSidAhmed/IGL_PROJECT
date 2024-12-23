@@ -28,7 +28,17 @@
             "assets": [
               {
                 "glob": "**/*",
+<<<<<<< HEAD
+                "input": "src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
                 "input": "public"
+=======
+                "input": "src/assets",
+                "output": "assets"
+>>>>>>> yasmine
               }
             ],
             "styles": [
@@ -92,7 +102,17 @@
             "assets": [
               {
                 "glob": "**/*",
+<<<<<<< HEAD
+                "input": "src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
                 "input": "public"
+=======
+                "input": "src/assets",
+                "output": "assets"
+>>>>>>> yasmine
               }
             ],
             "styles": [
@@ -103,5 +123,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "7b2d454b-de47-4578-875b-004bd6822e5a"
   }
 }
