@@ -91,21 +91,26 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         return value
 
 class StaffSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = Staff
         fields = '__all__'
-        read_only_fields = ['email', 'name', 'phone', 'role', 'speciality']
-        password = serializers.CharField(write_only=True)
+        #read_only_fields = ['email', 'name', 'phone', 'role', 'speciality']
+        
 
 class BiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalExam
         fields = '__all__'
+        #read_only_fields = ['result', 'has_graph', 'exam_date', 'lab_technician']
+
 
 class RadiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
         fields = '__all__'
+        #read_only_fields = ['result', 'has_graph', 'exam_date', 'radiologist']
 
 class NursingRecordSerializer(serializers.ModelSerializer):
     class Meta:
@@ -116,6 +121,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
+    prescriptions = PrescriptionSerializer(many=True, source='prescription_set', read_only=True)
 
     #only doctors can add consultations
     def validate_doctor(self, value):

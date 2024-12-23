@@ -1,9 +1,13 @@
 from django.urls import path
-from .views import AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView
+from .views import GetAllMedicinesByPrescriptionId, GetAllConsultationsByDpiId, AddRadiologicalExamAPIView, AddBiologicalExamAPIView, AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView
 
 urlpatterns = [
-    path('add-medicine/', AddMedicineAPIView.as_view(), name='add-medicine'),
-    path('create-consultation/', CreateConsultationAPIView.as_view(), name='create-consultation'),
+    path('exam/biological/add', AddBiologicalExamAPIView.as_view(), name='add-biological-exam'),
+    path('exam/radiological/add', AddRadiologicalExamAPIView.as_view(), name='add-radiological-exam'),
+    path('medicine/add', AddMedicineAPIView.as_view(), name='add-medicine'),
+    path('medicine/all/<int:prescription_id>', GetAllMedicinesByPrescriptionId.as_view(), name='get-all-medicines'),
+    path('consultation/create', CreateConsultationAPIView.as_view(), name='create-consultation'),
+    path('consultation/all/<int:dpi_id>', GetAllConsultationsByDpiId.as_view(), name='get-all-consultations'),
     path('create-prescription/', CreatePrescriptionAPIView.as_view(), name='create-prescription'),
     path('patient/login_ssn/', PatientSSNLoginAPIView.as_view(), name='patient-login-ssn'),
     path('patient/login_qr/', PatientQRLoginAPIView.as_view(), name='patient-login-qr'),
