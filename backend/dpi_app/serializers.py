@@ -159,11 +159,22 @@ class ConsultationSerializer(serializers.ModelSerializer):
         model = Consultation
         fields = '__all__'
         read_only_fields = ['consultation_date']
-
+   
+class StaffReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Staff
+        fields = ['id', 'name']
+    
 class DpiSerializer(serializers.ModelSerializer):
-    consultations = ConsultationSerializer(many=True, source='consultation_set', read_only=True)
     password = serializers.CharField(write_only=True)
+    doctor = StaffReadSerializer(read_only=True)
 
+    class Meta:
+        model = Dpi
+        fields = '__all__'
+        read_only_fields = ['admission_date']
+
+class DpiCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dpi
         fields = '__all__'

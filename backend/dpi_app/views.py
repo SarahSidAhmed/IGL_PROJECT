@@ -1,11 +1,12 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from .models import Dpi, Staff, Prescription, Consultation, Medicine, BiologicalExam, RadiologicalExam
-from .serializers import BiologicalExamSerializer, MedicineSerializer, ConsultationSerializer, DpiSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer, RadiologicalExamSerializer, BiologicalExamCreateSerializer, RadiologicalExamCreateSerializer, PrescriptionValidationSerializer
+from .serializers import BiologicalExamSerializer, MedicineSerializer, ConsultationSerializer, DpiSerializer,  DpiCreateSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer, RadiologicalExamSerializer, BiologicalExamCreateSerializer, RadiologicalExamCreateSerializer, PrescriptionValidationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.pagination import PageNumberPagination
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -130,28 +131,31 @@ class GetAllConsultationsByDpiId(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class DpiListCreateView(ListCreateAPIView):
-    queryset = Dpi.objects.all()
-    serializer_class = DpiSerializer
+class DpiCreateView(CreateAPIView):
+    serializer_class = DpiCreateSerializer
+    
+class FixedPageNumberPagination(PageNumberPagination):
+    page_size = 10
 
+    def get_paginated_response(self, data):
+        return Response({
+            'total': self.page.paginator.count,
+            'page': self.page.number,
+            'pages': self.page.paginator.num_pages,
+            'results': data,
+        })
 
-class DpiDetailBySSNView(RetrieveUpdateDestroyAPIView):
-    queryset = Dpi.objects.prefetch_related(
-        'consultation_set__biologicalexam_set',
-        'consultation_set__radiologicalexam_set',
-        'consultation_set__nursingrecord_set'
-    ).select_related('doctor')
+class DpiSearchBySSNView(ListAPIView):
     serializer_class = DpiSerializer
-    lookup_field = 'social_security_number'
+    pagination_class = FixedPageNumberPagination
+
+    def get_queryset(self):
+        ssn_prefix = self.kwargs.get('ssn_prefix', '')
+        return Dpi.objects.filter(social_security_number__startswith=ssn_prefix).select_related('doctor')
 
 
 class DpiDetailByIdView(RetrieveUpdateDestroyAPIView):
-    queryset = Dpi.objects.prefetch_related(
-        'consultation_set__biologicalexam_set',
-        'consultation_set__radiologicalexam_set',
-        'consultation_set__nursingrecord_set'
-    ).select_related('doctor')
-    serializer_class = DpiSerializer
+    serializer_class = DpiCreateSerializer
     lookup_field = 'id'
 
 
