@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.pagination import PageNumberPagination
+from .pagination import DpiPagination
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -133,21 +133,10 @@ class GetAllConsultationsByDpiId(APIView):
 
 class DpiCreateView(CreateAPIView):
     serializer_class = DpiCreateSerializer
-    
-class FixedPageNumberPagination(PageNumberPagination):
-    page_size = 10
-
-    def get_paginated_response(self, data):
-        return Response({
-            'total': self.page.paginator.count,
-            'page': self.page.number,
-            'pages': self.page.paginator.num_pages,
-            'results': data,
-        })
 
 class DpiSearchBySSNView(ListAPIView):
     serializer_class = DpiSerializer
-    pagination_class = FixedPageNumberPagination
+    pagination_class = DpiPagination
 
     def get_queryset(self):
         ssn_prefix = self.kwargs.get('ssn_prefix', '')
