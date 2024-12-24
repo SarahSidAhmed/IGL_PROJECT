@@ -2,7 +2,8 @@ from django.urls import path
 from .views import GetAllConsultationsByDpiId, AddRadiologicalExamAPIView, AddBiologicalExamAPIView, AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView, ValidatePrescriptionView
 
 urlpatterns = [
-    path('exam/biological/add', AddBiologicalExamAPIView.as_view(), name='add-biological-exam'),
+    path('biological-exam/create/', BiologicalExamCreateView.as_view(), name='biological-exam-create'),
+    path('biological-exam/update/<int:pk>/', BiologicalExamUpdateView.as_view(), name='biological-exam-update'),
     path('exam/radiological/add', AddRadiologicalExamAPIView.as_view(), name='add-radiological-exam'),
     path('medicine/add', AddMedicineAPIView.as_view(), name='add-medicine'),
     path('consultation/create', CreateConsultationAPIView.as_view(), name='create-consultation'),

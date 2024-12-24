@@ -102,7 +102,7 @@ class BiologicalExam(models.Model):
     lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE)
     exam_name = models.CharField(max_length=100)
     result = models.TextField()
-    has_graph = models.BooleanField(default=False)
+    #has_graph = models.BooleanField(default=False)
     exam_date = models.DateField(default=timezone.now().date)
 
     def __str__(self):
@@ -113,8 +113,8 @@ class BiologicalExamParam(models.Model):
     id = models.AutoField(primary_key=True)
     biological_exam = models.ForeignKey(BiologicalExam, on_delete=models.CASCADE)
     param_name = models.CharField(max_length=100)
-    before_treatment_value = models.FloatField()
-    after_treatment_value = models.FloatField()
+    value = models.FloatField()
+    #after_treatment_value = models.FloatField()
     unit = models.CharField(max_length=20)
 
     def __str__(self):
