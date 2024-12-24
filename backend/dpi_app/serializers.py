@@ -111,7 +111,7 @@ class BiologicalExamCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BiologicalExam
-        fields = ['id', 'consultation', 'exam_name', 'exam_date', 'parameters']
+        fields = ['id', 'consultation', 'exam_name', 'parameters']
 
     def create(self, validated_data):
         parameters_data = validated_data.pop('parameters', [])
@@ -156,7 +156,15 @@ class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
 class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
-        fields = ['result', 'has_graph', 'exam_date', 'radiologist']
+        fields = ['image', 'result']
+        read_only_fields = ['radiologist', 'exam_date']
+
+    def update(self, instance, validated_data):
+    
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            instance.radiologist = request.user
+        return super().update(instance, validated_data)
 
 class NursingRecordCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -166,7 +174,44 @@ class NursingRecordCreateSerializer(serializers.ModelSerializer):
 class NursingRecordUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
-        fields = ['record_date', 'nurse', 'patient_observation']
+        fields = ['patient_observation', 'record_date', 'nurse']
+        read_only_fields = ['record_date', 'nurse']
+
+    def validate(self, data):
+        # Validate that the user updating this is a nurse
+        request = self.context.get('request')
+        if not request or not request.user.role == "Nurse":
+            raise serializers.ValidationError("Only nurses can update nursing records.")
+        return data
+
+    def update(self, instance, validated_data):
+        # Set the nurse as the current authenticated user
+        request = self.context.get('request')
+        if request and request.user.role == "Nurse":
+            instance.nurse = request.user
+        return super().update(instance, validated_data)
+
+
+
+# Serializer for Biological Exam
+class BiologicalExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BiologicalExam
+        fields = ['id','consultation','lab_technician', 'exam_name', 'result']
+
+
+# Serializer for Radiological Exam
+class RadiologicalExamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RadiologicalExam
+        fields = ['id', 'consultation','image','result']
+
+
+# Serializer for Nursing Record
+class NursingRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NursingRecord
+        fields = ['id', 'consultation', 'care_name', 'patient_observation'] 
 
 class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)

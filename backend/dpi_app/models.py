@@ -78,7 +78,7 @@ class Prescription(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
     validated = models.BooleanField(default=False)
-    prescription_date = models.DateField(default=timezone.now().date)
+    prescription_date = models.DateField(default=timezone.now())
 
     def __str__(self):
         return f'Prescription for {self.consultation}'
@@ -102,8 +102,7 @@ class BiologicalExam(models.Model):
     lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE)
     exam_name = models.CharField(max_length=100)
     result = models.TextField()
-    #has_graph = models.BooleanField(default=False)
-    exam_date = models.DateField(default=timezone.now().date)
+    exam_date = models.DateField(default=timezone.now())
 
     def __str__(self):
         return self.exam_name
@@ -114,7 +113,6 @@ class BiologicalExamParam(models.Model):
     biological_exam = models.ForeignKey(BiologicalExam, on_delete=models.CASCADE)
     param_name = models.CharField(max_length=100)
     value = models.FloatField()
-    #after_treatment_value = models.FloatField()
     unit = models.CharField(max_length=20)
 
     def __str__(self):
@@ -126,9 +124,9 @@ class RadiologicalExam(models.Model):
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
     radiologist = models.ForeignKey(Staff, on_delete=models.CASCADE)
     exam_name = models.TextField()
-    image_url = models.TextField()
-    result = models.TextField()
-    exam_date = models.DateField(default=timezone.now().date)
+    image = models.ImageField(upload_to='radiological_exam_images/', null=True, blank=True)  # Handle images
+    result = models.TextField() #initially empty 
+    exam_date = models.DateField(default=timezone.now())
 
     def __str__(self):
         return self.exam_name
