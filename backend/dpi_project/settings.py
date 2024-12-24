@@ -154,27 +154,3 @@ SWAGGER_SETTINGS = {
         }
     },
 }
-
-#this is just to show only error logs of the messages I put in the terminal
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'ERROR',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'ERROR',  # Show only error-level logs from Django
-            'propagate': False,
-        },
-        'dpi_app.tests': {
-            'handlers': ['console'],
-            'level': 'ERROR',  # Show only error-level logs from your tests
-            'propagate': False,
-        },
-    },
-}
