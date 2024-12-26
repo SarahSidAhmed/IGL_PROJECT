@@ -157,7 +157,7 @@ class PrescriptionValidationSerializer(serializers.Serializer):
 class BiologicalExamParamSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalExamParam
-        fields = ['id', 'param_name', 'unit']
+        fields = ['id', 'param_name']
 
 
 class BiologicalExamParamUpdateSerializer(serializers.ModelSerializer):
@@ -193,12 +193,6 @@ class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         parameters_data = validated_data.pop('parameters', [])
-
-        # Automatically assign the authenticated user to `lab_technician`
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            instance.lab_technician = request.user
-
         instance.result = validated_data.get('result', instance.result)
         instance.exam_date = validated_data.get('exam_date', instance.exam_date)
         instance.save()
@@ -228,11 +222,7 @@ class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
         fields = ['image', 'exam_date', 'result']
 
     def update(self, instance, validated_data):
-        # Automatically assign the authenticated user to `radiologist`
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            instance.radiologist = request.user
-
+        
         instance.exam_date = validated_data.get('exam_date', instance.exam_date)
         instance.result = validated_data.get('result', instance.result)
         instance.image = validated_data.get('image', instance.image)
@@ -245,23 +235,11 @@ class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
 class NursingRecordCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
-        fields = ['consultation', 'care_name']
+        fields = ['consultation', 'care_name', 'record_date']
 
 
 class NursingRecordUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
-        fields = ['patient_observation', 'exam_date', 'record_date', 'nurse']
-
-    def validate(self, data):
-        # No changes here; left as it is since you requested no role verification changes
-        return data
-
-    def update(self, instance, validated_data):
-        # Set the nurse as the current authenticated user
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            instance.nurse = request.user
-
-        return super().update(instance, validated_data)
+        fields = ['patient_observation', 'record_date', 'nurse']
 

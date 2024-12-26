@@ -99,9 +99,9 @@ class Medicine(models.Model):
 class BiologicalExam(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
     exam_name = models.CharField(max_length=100)
-    result = models.TextField()
+    result = models.TextField(null=True, blank=True)
     exam_date = models.DateField(default=timezone.now)
 
     def __str__(self):
@@ -112,8 +112,7 @@ class BiologicalExamParam(models.Model):
     id = models.AutoField(primary_key=True)
     biological_exam = models.ForeignKey(BiologicalExam, on_delete=models.CASCADE)
     param_name = models.CharField(max_length=100)
-    value = models.FloatField()
-    unit = models.CharField(max_length=20)
+    value = models.FloatField(null=True)
 
     def __str__(self):
         return self.param_name
@@ -122,10 +121,10 @@ class BiologicalExamParam(models.Model):
 class RadiologicalExam(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    radiologist = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    radiologist = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
     exam_name = models.TextField()
     image = models.ImageField(upload_to='radiological_exam_images/', null=True, blank=True)  # Handle images
-    result = models.TextField()
+    result = models.TextField(null=True, blank=True)
     exam_date = models.DateField(default=timezone.now)
 
     def __str__(self):
@@ -135,9 +134,9 @@ class RadiologicalExam(models.Model):
 class NursingRecord(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
     care_name = models.TextField()
-    patient_observation = models.TextField()
+    patient_observation = models.TextField(null=True, blank=True)
     record_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
