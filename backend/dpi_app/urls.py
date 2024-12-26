@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GetAllConsultationsByDpiId, AddRadiologicalExamAPIView, AddBiologicalExamAPIView, AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView
+from .views import GetAllConsultationsByDpiId, AddRadiologicalExamAPIView, AddBiologicalExamAPIView, AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView, ValidatePrescriptionView
 
 urlpatterns = [
     path('exam/biological/add', AddBiologicalExamAPIView.as_view(), name='add-biological-exam'),
@@ -16,4 +16,5 @@ urlpatterns = [
     path('dpis/', DpiListCreateView.as_view(), name='dpi-list-create'),
     path('dpis/<str:social_security_number>/', DpiDetailBySSNView.as_view(), name='dpi-detail'),
     path('dpis/qr/<int:id>/', DpiDetailByIdView.as_view(), name='dpi-detail-by-id'),  # For QR Code
+    path('validate-prescription/', ValidatePrescriptionView.as_view(), name='validate-prescription'),
 ]

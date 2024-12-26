@@ -1,6 +1,6 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
 from .models import Dpi, Staff, Prescription, Consultation, Medicine, BiologicalExam, RadiologicalExam
-from .serializers import BiologicalExamSerializer, MedicineSerializer, ConsultationSerializer, DpiSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer, RadiologicalExamSerializer
+from .serializers import BiologicalExamSerializer, MedicineSerializer, ConsultationSerializer, DpiSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer, RadiologicalExamSerializer, BiologicalExamCreateSerializer, RadiologicalExamCreateSerializer, PrescriptionValidationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -78,32 +78,14 @@ class PatientQRLoginAPIView(APIView):
             }, status=status.HTTP_200_OK)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CreatePrescriptionAPIView(APIView):
-    @swagger_auto_schema(request_body=PrescriptionSerializer)
-    def post(self, request, *args, **kwargs):
-        serializer = PrescriptionSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CreatePrescriptionAPIView(CreateAPIView):
+    serializer_class = PrescriptionSerializer
 
-class CreateConsultationAPIView(APIView):
-    @swagger_auto_schema(request_body=ConsultationSerializer)
-    def post(self, request, *args, **kwargs):
-        serializer = ConsultationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CreateConsultationAPIView(CreateAPIView):
+    serializer_class = ConsultationSerializer
 
-class AddMedicineAPIView(APIView):
-    @swagger_auto_schema(request_body=MedicineSerializer)
-    def post(self, request, *args, **kwargs):
-        serializer = MedicineSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class AddMedicineAPIView(CreateAPIView):
+    serializer_class = MedicineSerializer
 
   
 class DeleteUpdateMedicineAPIView(RetrieveUpdateDestroyAPIView):
@@ -111,22 +93,11 @@ class DeleteUpdateMedicineAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = MedicineSerializer
     lookup_field = 'id'
 
- #not sure yet 
-class AddBiologicalExamAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = BiologicalExamSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class AddRadiologicalExamAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = RadiologicalExam(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class AddBiologicalExamAPIView(CreateAPIView):
+    serializer_class = BiologicalExamCreateSerializer
+    
+class AddRadiologicalExamAPIView(CreateAPIView):
+    serializer_class = RadiologicalExamCreateSerializer
 
 
 #not sure yet
@@ -182,3 +153,21 @@ class DpiDetailByIdView(RetrieveUpdateDestroyAPIView):
     ).select_related('doctor')
     serializer_class = DpiSerializer
     lookup_field = 'id'
+
+
+class ValidatePrescriptionView(APIView):
+    @swagger_auto_schema(request_body=PrescriptionValidationSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer = PrescriptionValidationSerializer(data=request.data)
+        if serializer.is_valid():
+            prescription_id = serializer.validated_data["prescription"]
+            try:
+                prescription = Prescription.objects.get(id=prescription_id)
+                if (prescription.validated):
+                    return Response({"error": "Prescription already validated."}, status=status.HTTP_400_BAD_REQUEST)
+                prescription.validated = True
+                prescription.save()
+                return Response({"message": "Prescription Validated"}, status=status.HTTP_200_OK)
+            except Prescription.DoesNotExist:
+                return Response({"error": "Prescription not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
