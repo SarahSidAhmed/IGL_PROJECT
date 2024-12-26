@@ -215,7 +215,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
-    prescription = PrescriptionSerializer(source='prescription', read_only=True)
+    prescription = PrescriptionSerializer(read_only=True)
 
     #only doctors can add consultations
     def validate_doctor(self, value):
@@ -227,11 +227,22 @@ class ConsultationSerializer(serializers.ModelSerializer):
         model = Consultation
         fields = '__all__'
         read_only_fields = ['consultation_date']
-
+   
+class StaffReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Staff
+        fields = ['id', 'name']
+    
 class DpiSerializer(serializers.ModelSerializer):
-    consultations = ConsultationSerializer(many=True, source='consultation_set', read_only=True)
     password = serializers.CharField(write_only=True)
+    doctor = StaffReadSerializer(read_only=True)
 
+    class Meta:
+        model = Dpi
+        fields = '__all__'
+        read_only_fields = ['admission_date']
+
+class DpiCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dpi
         fields = '__all__'

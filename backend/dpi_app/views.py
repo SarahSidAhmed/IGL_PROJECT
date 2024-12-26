@@ -135,25 +135,15 @@ class GetAllConsultationsByDpiId(APIView):
 class DpiListCreateView(ListCreateAPIView):
     queryset = Dpi.objects.all()
     serializer_class = DpiSerializer
+    pagination_class = DpiPagination
 
-
-class DpiDetailBySSNView(RetrieveUpdateDestroyAPIView):
-    queryset = Dpi.objects.prefetch_related(
-        'consultation_set__biologicalexam_set',
-        'consultation_set__radiologicalexam_set',
-        'consultation_set__nursingrecord_set'
-    ).select_related('doctor')
-    serializer_class = DpiSerializer
-    lookup_field = 'social_security_number'
+    def get_queryset(self):
+        ssn_prefix = self.kwargs.get('ssn_prefix', '')
+        return Dpi.objects.filter(social_security_number__startswith=ssn_prefix).select_related('doctor')
 
 
 class DpiDetailByIdView(RetrieveUpdateDestroyAPIView):
-    queryset = Dpi.objects.prefetch_related(
-        'consultation_set__biologicalexam_set',
-        'consultation_set__radiologicalexam_set',
-        'consultation_set__nursingrecord_set'
-    ).select_related('doctor')
-    serializer_class = DpiSerializer
+    serializer_class = DpiCreateSerializer
     lookup_field = 'id'
 
 class ValidatePrescriptionView(APIView):
