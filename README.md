@@ -37,5 +37,29 @@ This project aims to develop a web application for managing Electronic Patient R
 ## Getting Started
 1. **Clone the repository:**
    ```bash
-   git clone [https://www.linguee.fr/francais-anglais/traduction/document+non+valid%C3%A9.html](https://www.linguee.fr/francais-anglais/traduction/document+non+valid%C3%A9.html)
+   git clone [https://github.com/SarahSidAhmed/IGL_PROJECT.git]
+2. **Set up the development environment:**
+    * Install required dependencies (e.g., Node.js, Python, Docker).
+    * Configure database connection.
+    * Check Django Set Up Guide at https://github.com/SarahSidAhmed/IGL_PROJECT/tree/main/backend
+
+3. **Run the development server:**
+   ```bash
+   # For frontend
+   ng serve
+
+   # For backend
+   python manage.py runserver
+
+
+4. **Project Structure:**
+    * Frontend: Angular application.
+    * Backend: Django backend.
+    * Database: MySQL database schema.
+    * Docs: Project documentation.  /swagger
+
+5. **Testing:**
+    * Unit tests: pytest is used for unit testing the backend code.
+    * Integration tests: Selenium is used for end-to-end testing of the frontend.
+
    
