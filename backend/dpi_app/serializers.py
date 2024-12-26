@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Dpi, Consultation, BiologicalExam, RadiologicalExam, NursingRecord, Staff, Medicine, Prescription
+from .models import *
 from django.contrib.auth.hashers import check_password
 
 #login for staff
@@ -113,36 +113,6 @@ class NursingRecordSerializer(serializers.ModelSerializer):
         model = NursingRecord
         fields = '__all__'
 
-class BiologicalExamCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BiologicalExam
-        fields = ['consultation', 'exam_name']
-
-class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BiologicalExam
-        fields = ['result', 'has_graph', 'exam_date', 'lab_technician']
-
-class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RadiologicalExam
-        fields = ['consultation', 'exam_name']
-
-class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RadiologicalExam
-        fields = ['result', 'has_graph', 'exam_date', 'radiologist']
-
-class NursingRecordCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NursingRecord
-        fields = ['consultation', 'care_name']
-
-class NursingRecordUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NursingRecord
-        fields = ['record_date', 'nurse', 'patient_observation']
-
 class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
@@ -182,3 +152,102 @@ class DpiCreateSerializer(serializers.ModelSerializer):
         
 class PrescriptionValidationSerializer(serializers.Serializer):
     prescription = serializers.IntegerField(required=True)
+
+# Serializers for Biological Exam Parameters
+class BiologicalExamParamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BiologicalExamParam
+        fields = ['id', 'param_name']
+
+
+class BiologicalExamParamUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=True)
+    class Meta:
+        model = BiologicalExamParam
+        fields = ['id', 'value']
+
+
+# Serializers for Biological Exam
+class BiologicalExamCreateSerializer(serializers.ModelSerializer):
+    parameters = BiologicalExamParamSerializer(many=True, write_only=True)
+
+    class Meta:
+        model = BiologicalExam
+        fields = ['id', 'consultation', 'exam_name', 'parameters']
+
+    def create(self, validated_data):
+        parameters_data = validated_data.pop('parameters', [])
+        biological_exam = BiologicalExam.objects.create(**validated_data)
+
+        for param_data in parameters_data:
+            BiologicalExamParam.objects.create(biological_exam=biological_exam, **param_data)
+
+        return biological_exam
+
+
+class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
+    parameters = BiologicalExamParamUpdateSerializer(many=True, write_only=True, required=False)
+
+    class Meta:
+        model = BiologicalExam
+        fields = ['result', 'exam_date', 'lab_technician', 'parameters']
+
+    def update(self, instance, validated_data):
+        parameters_data = validated_data.pop('parameters', [])
+        instance.result = validated_data.get('result', instance.result)
+        instance.exam_date = validated_data.get('exam_date', instance.exam_date)
+        instance.lab_technician = validated_data.get('lab_technician', instance.lab_technician)
+
+        # Update parameter values
+        for param_data in parameters_data:
+            try:
+                param = BiologicalExamParam.objects.get(id=param_data['id'], biological_exam=instance)
+                param.value = param_data['value']
+                param.save()
+            except BiologicalExamParam.DoesNotExist:
+                raise serializers.ValidationError(f"Parameter with ID {param_data['id']} does not exist.")
+
+        return instance
+
+
+# Serializers for Radiological Exam
+class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RadiologicalExam
+        fields = ['id', 'consultation', 'exam_name']
+
+
+class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RadiologicalExam
+        fields = ['image', 'exam_date','radiologist', 'result']
+
+    def update(self, instance, validated_data):
+        
+        instance.exam_date = validated_data.get('exam_date', instance.exam_date)
+        instance.result = validated_data.get('result', instance.result)
+        instance.image = validated_data.get('image', instance.image)
+        instance.radiologist = validated_data.get('radiologist', instance.radiologist)
+        instance.save()
+
+        return instance
+
+
+# Serializers for Nursing Record
+class NursingRecordCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NursingRecord
+        fields = ['id', 'consultation', 'care_name', 'record_date']
+
+
+class NursingRecordUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NursingRecord
+        fields = ['patient_observation', 'record_date', 'nurse']
+        def update(self, instance, validated_data):
+         instance.record_date = validated_data.get('record_date', instance.record_date)
+         instance.patient_observation = validated_data.get('patient_observation', instance.patient_observation)
+         instance.nurse = validated_data.get('nurse', instance.nurse)
+         instance.save()
+         return instance
+

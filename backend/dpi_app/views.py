@@ -1,6 +1,6 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView, UpdateAPIView
 from .models import Dpi, Staff, Prescription, Consultation, Medicine, BiologicalExam, RadiologicalExam
-from .serializers import BiologicalExamSerializer, MedicineSerializer, ConsultationSerializer, DpiSerializer,  DpiCreateSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer, RadiologicalExamSerializer, BiologicalExamCreateSerializer, RadiologicalExamCreateSerializer, PrescriptionValidationSerializer
+from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -100,13 +100,6 @@ class DeleteUpdateMedicineAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = MedicineSerializer
     lookup_field = 'id'
 
-class AddBiologicalExamAPIView(CreateAPIView):
-    serializer_class = BiologicalExamCreateSerializer
-    
-class AddRadiologicalExamAPIView(CreateAPIView):
-    serializer_class = RadiologicalExamCreateSerializer
-
-
 #not sure yet
 
 class GetAllBiologicalExamsByConsultationId(ListCreateAPIView):
@@ -173,3 +166,48 @@ class ValidatePrescriptionView(APIView):
             except Prescription.DoesNotExist:
                 return Response({"error": "Prescription not found."}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BiologicalExamCreateView(CreateAPIView):
+    queryset = BiologicalExam.objects.all()
+    serializer_class = BiologicalExamCreateSerializer
+  
+
+class BiologicalExamUpdateView(UpdateAPIView):
+    queryset = BiologicalExam.objects.all()
+    serializer_class = BiologicalExamUpdateSerializer
+    
+
+class NursingRecordCreateView(CreateAPIView):
+    queryset = NursingRecord.objects.all()
+    serializer_class = NursingRecordCreateSerializer
+    
+
+class NursingRecordUpdateView(UpdateAPIView):
+    queryset = NursingRecord.objects.all()
+    serializer_class = NursingRecordUpdateSerializer
+
+class RadiologicalExamCreateView(CreateAPIView):
+    queryset = RadiologicalExam.objects.all()
+    serializer_class = RadiologicalExamCreateSerializer
+
+class RadiologicalExamUpdateView(UpdateAPIView):
+    queryset = RadiologicalExam.objects.all()
+    serializer_class = RadiologicalExamUpdateSerializer
+
+class BiologicalExamListView(ListAPIView):
+    serializer_class = BiologicalExamCreateSerializer
+    def get_queryset(self):
+        # Filter BiologicalExam records where lab_technician is NULL
+        return BiologicalExam.objects.filter(lab_technician__isnull=True)
+
+class RadiologicalExamListView(ListAPIView):
+    serializer_class = RadiologicalExamCreateSerializer
+    def get_queryset(self):
+        return RadiologicalExam.objects.filter(radiologist__isnull=True)
+
+class NursingRecordListView(ListAPIView):
+    serializer_class = NursingRecordCreateSerializer
+    def get_queryset(self):
+        return NursingRecord.objects.filter(nurse__isnull=True)
+
