@@ -195,7 +195,7 @@ class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
         parameters_data = validated_data.pop('parameters', [])
         instance.result = validated_data.get('result', instance.result)
         instance.exam_date = validated_data.get('exam_date', instance.exam_date)
-        instance.save()
+        instance.lab_technician = validated_data.get('lab_technician', instance.lab_technician)
 
         # Update parameter values
         for param_data in parameters_data:
@@ -219,13 +219,14 @@ class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
 class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
-        fields = ['image', 'exam_date', 'result']
+        fields = ['image', 'exam_date','radiologist', 'result']
 
     def update(self, instance, validated_data):
         
         instance.exam_date = validated_data.get('exam_date', instance.exam_date)
         instance.result = validated_data.get('result', instance.result)
         instance.image = validated_data.get('image', instance.image)
+        instance.radiologist = validated_data.get('radiologist', instance.radiologist)
         instance.save()
 
         return instance
@@ -242,4 +243,10 @@ class NursingRecordUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
         fields = ['patient_observation', 'record_date', 'nurse']
+        def update(self, instance, validated_data):
+         instance.record_date = validated_data.get('record_date', instance.record_date)
+         instance.patient_observation = validated_data.get('patient_observation', instance.patient_observation)
+         instance.nurse = validated_data.get('nurse', instance.nurse)
+         instance.save()
+         return instance
 

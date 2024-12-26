@@ -7,10 +7,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from .pagination import DpiPagination, ConsultationPagination
-from rest_framework.exceptions import NotFound
-from io import BytesIO
-from django.http import HttpResponse
-import matplotlib.pyplot as plt
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -103,13 +99,6 @@ class DeleteUpdateMedicineAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
     lookup_field = 'id'
-
-class AddBiologicalExamAPIView(CreateAPIView):
-    serializer_class = BiologicalExamCreateSerializer
-    
-class AddRadiologicalExamAPIView(CreateAPIView):
-    serializer_class = RadiologicalExamCreateSerializer
-
 
 #not sure yet
 
@@ -207,46 +196,18 @@ class RadiologicalExamUpdateView(UpdateAPIView):
     serializer_class = RadiologicalExamUpdateSerializer
 
 class BiologicalExamListView(ListAPIView):
-    queryset = BiologicalExam.objects.all()
     serializer_class = BiologicalExamCreateSerializer
+    def get_queryset(self):
+        # Filter BiologicalExam records where lab_technician is NULL
+        return BiologicalExam.objects.filter(lab_technician__isnull=True)
 
 class RadiologicalExamListView(ListAPIView):
-    queryset = RadiologicalExam.objects.all()
     serializer_class = RadiologicalExamCreateSerializer
+    def get_queryset(self):
+        return RadiologicalExam.objects.filter(radiologist__isnull=True)
 
 class NursingRecordListView(ListAPIView):
-    queryset = NursingRecord.objects.all()
     serializer_class = NursingRecordCreateSerializer
+    def get_queryset(self):
+        return NursingRecord.objects.filter(nurse__isnull=True)
 
-class BiologicalExamHistogramAPIView(APIView):
-    def get(self, request, exam_id):
-        # Fetch the biological exam
-        try:
-            biological_exam = BiologicalExam.objects.get(id=exam_id)
-        except BiologicalExam.DoesNotExist:
-            raise NotFound(detail="Biological exam not found.")
-
-        parameters = BiologicalExamParam.objects.filter(biological_exam=biological_exam)
-
-        if not parameters.exists():
-            raise NotFound(detail="No parameters found for this exam.")
-        # Extract data
-        param_names = [param.param_name for param in parameters]
-        values = [param.value for param in parameters]
-        # Create the histogram
-        plt.figure(figsize=(10, 6))
-        plt.bar(param_names, values, color='skyblue')
-        plt.title(f'Parameters for Exam: {biological_exam.exam_name}', fontsize=16)
-        plt.xlabel('Parameter Name', fontsize=14)
-        plt.ylabel('Value', fontsize=14)
-        plt.xticks(rotation=45, fontsize=12)
-        plt.tight_layout()
-        # Save to BytesIO
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        plt.close()
-        buffer.seek(0)
-        # DRF compatible response
-        response = HttpResponse(buffer, content_type='image/png')
-        response['Content-Disposition'] = f'inline; filename="exam_{exam_id}_histogram.png"'
-        return response
