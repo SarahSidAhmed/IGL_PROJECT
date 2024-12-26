@@ -118,6 +118,7 @@ class GetAllRadiologicalExamsByConsultationId(ListCreateAPIView):
     serializer_class = RadiologicalExamSerializer
 
 class GetAllMedicinesByPrescriptionId(APIView):
+    @swagger_auto_schema(responses={200: MedicineSerializer(many=True)})
     def get(self, request, prescription_id, *args, **kwargs):
         medicines = Medicine.objects.filter(prescription__id=prescription_id)
         if not medicines.exists():
@@ -131,7 +132,8 @@ class GetAllMedicinesByPrescriptionId(APIView):
 #getting all the consultations of a patient to display them
 class GetAllConsultationsByDpiId(APIView):
     pagination_class = ConsultationPagination
-    
+
+    @swagger_auto_schema(responses={200: ConsultationSerializer(many=True)})
     def get(self, request, dpi_id, *args, **kwargs):
         consultations = Consultation.objects.filter(dpi_id=dpi_id)
         serializer = ConsultationSerializer(consultations, many=True)
