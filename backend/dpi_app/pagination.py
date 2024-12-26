@@ -9,3 +9,13 @@ class DpiPagination(PageNumberPagination):
             'pages': self.page.paginator.num_pages,
             'results': data,
         })
+    
+
+class ConsultationPagination(PageNumberPagination):
+    page_size = 10
+
+    def get_paginated_response(self, data):
+        return Response({
+            'pages': self.page.paginator.num_pages,
+            'results': data,
+        })

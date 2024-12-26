@@ -1,5 +1,11 @@
 import pytest
 import logging
+from django.test import TestCase
+from dpi_app.models import Dpi, Staff
+from dpi_app.serializers import DpiSerializer
+from django.utils.timezone import now
+from django.contrib.auth.hashers import check_password
+
 
 # Configure logging for pytest
 logging.basicConfig(level=logging.DEBUG)
@@ -87,3 +93,85 @@ def test_update_dpi(api_client):
     # Logging statements
     logger.info("DPI record updated successfully")
     logger.debug(f"DPI ID: {dpi_id}")
+
+
+
+
+#real unitary tests are applied on the very base of the functions
+#in validating the data and the logic of the functions
+#here we're gonna test the serilizer of the DPI model
+
+class DpiModelSerializerTestCase(TestCase):
+    def setUp(self):
+        # Create a staff instance to associate with the Dpi model
+        self.staff = Staff.objects.create(
+            role="Doctor",
+            email="3abd@example.com",
+            password="password123",
+            name="Mahmoud Kho",
+            phone="0777796966",
+            speciality="General Medicine",
+        )
+        
+        # Valid data for the Dpi model
+        self.valid_data = {
+            "social_security_number": "56352441434",
+            "password": "password123",
+            "first_name": "Mahmoud",
+            "last_name": "Kho",
+            "birthdate": "2004-09-06",
+            "address": "Din Naadja, Alger",
+            "phone": "0777796966",
+            "doctor": self.staff.id,
+            "emergency_contact_name": "Sara",
+            "emergency_contact_phone": "076946321",
+            "emergency_contact_relationship": "Cousin",
+            "gender": "Male",
+            "blood_type": "O+",
+            "mutuelle_name": "Insurance Company",
+            "mutuelle_policy_number": "POL123456",
+            "medical_history": "None",
+            "hospital": "General Hospital",
+        }
+
+        self.invalid_data = {
+            "social_security_number": "",
+            "password": "123",  # invalid password
+            "phone": "invalid-phone",
+            "doctor": None, 
+            "first_name": "",
+            "last_name": "",
+            "birthdate": "",
+            "address": "",
+            "emergency_contact_name": "",
+            "emergency_contact_phone": "",
+            "emergency_contact_relationship": "",
+            "gender": "",
+            "blood_type": "",
+            "mutuelle_name": "",
+            "mutuelle_policy_number": "",
+            "hospital": "",
+        }
+
+    def test_serializer_with_valid_data(self):
+        # Test with valid data
+        serializer = DpiSerializer(data=self.valid_data)
+        serializer.is_valid(raise_exception=True)
+        self.assertTrue(
+           serializer.is_valid(),
+            "The serializer should be valid with the provided valid data."
+        ) 
+
+    def test_serializer_with_invalid_data(self):
+
+        # Create a serializer instance with invalid data
+        serializer = DpiSerializer(data=self.invalid_data)
+
+        # Assert that the serializer is invalid
+        self.assertFalse(
+            serializer.is_valid(),
+            "Serializer should be invalid with the provided invalid data."
+        )
+
+        # Log the errors for debugging
+        #logger.error(f"Validation errors: {serializer.errors}")
