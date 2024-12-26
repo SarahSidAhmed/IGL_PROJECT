@@ -28,17 +28,8 @@
             "assets": [
               {
                 "glob": "**/*",
-<<<<<<< HEAD
-                "input": "src/assets/",
-                "output": "/assets/"
-              },
-              {
-                "glob": "**/*",
-                "input": "public"
-=======
                 "input": "src/assets",
                 "output": "assets"
->>>>>>> yasmine
               }
             ],
             "styles": [
@@ -102,17 +93,8 @@
             "assets": [
               {
                 "glob": "**/*",
-<<<<<<< HEAD
-                "input": "src/assets/",
-                "output": "/assets/"
-              },
-              {
-                "glob": "**/*",
-                "input": "public"
-=======
                 "input": "src/assets",
                 "output": "assets"
->>>>>>> yasmine
               }
             ],
             "styles": [

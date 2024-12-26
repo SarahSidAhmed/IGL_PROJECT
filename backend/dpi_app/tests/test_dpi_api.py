@@ -97,6 +97,7 @@ def test_update_dpi(api_client):
 
 
 
+
 #real unitary tests are applied on the very base of the functions
 #in validating the data and the logic of the functions
 #here we're gonna test the serilizer of the DPI model
