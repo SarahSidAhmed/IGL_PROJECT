@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from .pagination import DpiPagination
+from .pagination import DpiPagination, ConsultationPagination
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -130,6 +130,7 @@ class GetAllMedicinesByPrescriptionId(APIView):
 
 #getting all the consultations of a patient to display them
 class GetAllConsultationsByDpiId(APIView):
+    pagination_class = ConsultationPagination
     
     def get(self, request, dpi_id, *args, **kwargs):
         consultations = Consultation.objects.filter(dpi_id=dpi_id)
