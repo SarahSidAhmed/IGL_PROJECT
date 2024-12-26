@@ -103,7 +103,7 @@ class StaffSerializer(serializers.ModelSerializer):
 class BiologicalExamParamSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalExamParam
-        fields = ['param_name', 'unit']
+        fields = ['id', 'param_name', 'unit']
 
 
 class BiologicalExamCreateSerializer(serializers.ModelSerializer):
@@ -125,14 +125,14 @@ class BiologicalExamCreateSerializer(serializers.ModelSerializer):
 class BiologicalExamParamUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalExamParam
-        fields = ['id', 'value']
+        fields = ['value']
 
 class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
     parameters = BiologicalExamParamSerializer(many=True, write_only=True, required=False)
 
     class Meta:
         model = BiologicalExam
-        fields = ['result', 'lab_technician', 'parameters']
+        fields = ['result', 'exam_date', 'parameters']
 
     def update(self, instance, validated_data):
         parameters_data = validated_data.pop('parameters', [])
@@ -156,8 +156,7 @@ class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
 class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
-        fields = ['image', 'result']
-        read_only_fields = ['radiologist', 'exam_date']
+        fields = ['image','exam_date' ,'result']
 
     def update(self, instance, validated_data):
     
@@ -174,8 +173,7 @@ class NursingRecordCreateSerializer(serializers.ModelSerializer):
 class NursingRecordUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
-        fields = ['patient_observation', 'record_date', 'nurse']
-        read_only_fields = ['record_date', 'nurse']
+        fields = ['patient_observation', 'exam_date', 'record_date', 'nurse']
 
     def validate(self, data):
         # Validate that the user updating this is a nurse

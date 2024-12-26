@@ -1,14 +1,14 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from .models import Dpi, Staff, Prescription, Consultation, Medicine, BiologicalExam, RadiologicalExam
-#from .serializers import BiologicalExamSerializer, MedicineSerializer, ConsultationSerializer, DpiSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer, RadiologicalExamSerializer, BiologicalExamCreateSerializer, RadiologicalExamCreateSerializer, PrescriptionValidationSerializer, BiologicalExamParamSerializer, BiologicalExamParamUpdateSerialize, BiologicalExamUpdateSerializer, NursingRecordUpdateSerializer, NursingRecordCreateSerializer, RadiologicalExamUpdateSerializer
+from rest_framework.response import Response
 from .serializers import *
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
-from .permissions import *
+
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -175,35 +175,30 @@ class ValidatePrescriptionView(APIView):
 
 
 class BiologicalExamCreateView(CreateAPIView):
-    
     #Allows doctors to create a biological exam with parameters.
     queryset = BiologicalExam.objects.all()
     serializer_class = BiologicalExamCreateSerializer
-    permission_classes = [IsAuthenticated, IsDoctor]
+  
 
 class BiologicalExamUpdateView(UpdateAPIView):
-    
     #Allows lab technicians to update results of a biological exam.
     queryset = BiologicalExam.objects.all()
     serializer_class = BiologicalExamUpdateSerializer
-    permission_classes = [IsAuthenticated, IsLabTechnician]
+    
 
 class NursingRecordCreateView(CreateAPIView):
     queryset = NursingRecord.objects.all()
     serializer_class = NursingRecordCreateSerializer
-    permission_classes = [IsAuthenticated, IsDoctor]
+    
 
 class NursingRecordUpdateView(UpdateAPIView):
     queryset = NursingRecord.objects.all()
     serializer_class = NursingRecordUpdateSerializer
-    permission_classes = [IsAuthenticated, IsNurse]
 
 class RadiologicalExamCreateView(CreateAPIView):
     queryset = RadiologicalExam.objects.all()
     serializer_class = RadiologicalExamCreateSerializer
-    permission_classes = [IsAuthenticated, IsDoctor]  # Authenticate and check if the user is a doctor
 
 class RadiologicalExamUpdateView(UpdateAPIView):
     queryset = RadiologicalExam.objects.all()
     serializer_class = RadiologicalExamUpdateSerializer
-    permission_classes = [IsAuthenticated, IsRadiologist]  # Authenticate and check if the user is a radiologist

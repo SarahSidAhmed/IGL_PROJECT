@@ -15,6 +15,7 @@ import os
 from dotenv import load_dotenv
 
 # Media configuration for file uploads (e.g., images, documents)
+BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = '/media/'  # URL path to access media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory to store uploaded media files
 

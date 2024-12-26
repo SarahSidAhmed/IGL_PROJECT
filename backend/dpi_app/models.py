@@ -78,7 +78,7 @@ class Prescription(models.Model):
     id = models.AutoField(primary_key=True)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
     validated = models.BooleanField(default=False)
-    prescription_date = models.DateField(default=timezone.now())
+    prescription_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return f'Prescription for {self.consultation}'
@@ -102,7 +102,7 @@ class BiologicalExam(models.Model):
     lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE)
     exam_name = models.CharField(max_length=100)
     result = models.TextField()
-    exam_date = models.DateField(default=timezone.now())
+    exam_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.exam_name
@@ -126,7 +126,7 @@ class RadiologicalExam(models.Model):
     exam_name = models.TextField()
     image = models.ImageField(upload_to='radiological_exam_images/', null=True, blank=True)  # Handle images
     result = models.TextField() #initially empty 
-    exam_date = models.DateField(default=timezone.now())
+    exam_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.exam_name
