@@ -161,6 +161,7 @@ class BiologicalExamParamSerializer(serializers.ModelSerializer):
 
 
 class BiologicalExamParamUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=True)
     class Meta:
         model = BiologicalExamParam
         fields = ['id', 'value']
@@ -213,7 +214,7 @@ class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
 class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
-        fields = ['consultation', 'exam_name']
+        fields = ['id', 'consultation', 'exam_name']
 
 
 class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
@@ -236,7 +237,7 @@ class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
 class NursingRecordCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
-        fields = ['consultation', 'care_name', 'record_date']
+        fields = ['id', 'consultation', 'care_name', 'record_date']
 
 
 class NursingRecordUpdateSerializer(serializers.ModelSerializer):
