@@ -1,0 +1,21 @@
+<div class="flex flex-col h-screen bg-[#F1FFFC]">
+    <app-navbar></app-navbar>
+    <div class="relative p-4">
+        <div class="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white shadow-md rounded">
+          <img src="assets/arrow.svg" alt="Back Arrow" class="h-4 w-4" />
+        </div>
+        <div class="flex justify-center">
+          <button (click)="downloadQrCode()" class="bg-[#10217D] text-white font-bold px-4 py-2 rounded-md">
+            Download My QR Code
+          </button>
+        </div>
+      </div>
+    <div class="flex flex-col items-center justify-center flex-1">
+      <div class="bg-white rounded-lg shadow-md p-10 w-80 text-center">
+        <img #qrImage src="assets/qr1.png" alt="QR Code" class="w-60 h-60 mx-auto mb-4" />
+        <h2 class="text-lg font-bold text-[#168BD9]">Patient ID:</h2>
+        <p class="text-md text-gray-600 mt-2">#1516461232156</p>
+      </div>
+    </div>
+  </div>
+  <router-outlet />   

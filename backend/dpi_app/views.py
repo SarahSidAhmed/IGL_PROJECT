@@ -1,11 +1,12 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .models import Dpi, Staff
-from .serializers import DpiSerializer, StaffLoginSerializer, StaffSerializer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
+from .models import Dpi, Staff, Prescription, Consultation, Medicine, BiologicalExam, RadiologicalExam
+from .serializers import BiologicalExamSerializer, MedicineSerializer, ConsultationSerializer, DpiSerializer,  DpiCreateSerializer, StaffLoginSerializer, StaffSerializer, PatientSSNLoginSerializer, PatientQRLoginSerializer, PrescriptionSerializer, RadiologicalExamSerializer, BiologicalExamCreateSerializer, RadiologicalExamCreateSerializer, PrescriptionValidationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
+from .pagination import DpiPagination
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -14,11 +15,13 @@ class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
 
 #this will be used in the dropdown to assign a doctor
-class GetAllDoctorsStaffAPIView(ListCreateAPIView):
-    queryset = Staff.objects.filter(role="Doctor")
-    serializer_class = StaffSerializer
-
-    
+class GetAllDoctorsStaffAPIView(APIView):
+    @swagger_auto_schema( responses={200: StaffSerializer(many=True)} )
+    def get(self, request, *args, **kwargs):
+        doctors = Staff.objects.filter(role="Doctor")
+        serializer = StaffSerializer(doctors, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+  
 #this is for the login of the staff
 class StaffLoginAPIView(APIView):
     @swagger_auto_schema(request_body=StaffLoginSerializer)
@@ -38,26 +41,126 @@ class StaffLoginAPIView(APIView):
             }, status=status.HTTP_200_OK)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DpiListCreateView(ListCreateAPIView):
-    queryset = Dpi.objects.all()
-    serializer_class = DpiSerializer
+#this is for the login of the patient
+class PatientSSNLoginAPIView(APIView):
+    @swagger_auto_schema(request_body=PatientSSNLoginSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer_class = PatientSSNLoginSerializer(data=request.data)
+        if serializer_class.is_valid():
+            patient = Dpi.objects.get(social_security_number=serializer_class.validated_data["SSN"])
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(patient)
+            patient_serialized = DpiSerializer(patient)
+
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "dpi": patient_serialized.data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#this is for the login of the patient with the QR code
+class PatientQRLoginAPIView(APIView):
+    @swagger_auto_schema(request_body=PatientQRLoginSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer_class = PatientQRLoginSerializer(data=request.data)
+        if serializer_class.is_valid():
+            patient = Dpi.objects.get(id=serializer_class.validated_data["id"])
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(patient)
+            patient_serialized = DpiSerializer(patient)
+
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "dpi": patient_serialized.data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CreatePrescriptionAPIView(CreateAPIView):
+    serializer_class = PrescriptionSerializer
+
+class CreateConsultationAPIView(CreateAPIView):
+    serializer_class = ConsultationSerializer
+
+class AddMedicineAPIView(CreateAPIView):
+    serializer_class = MedicineSerializer
+
+  
+class DeleteUpdateMedicineAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Medicine.objects.all()
+    serializer_class = MedicineSerializer
+    lookup_field = 'id'
+
+class AddBiologicalExamAPIView(CreateAPIView):
+    serializer_class = BiologicalExamCreateSerializer
+    
+class AddRadiologicalExamAPIView(CreateAPIView):
+    serializer_class = RadiologicalExamCreateSerializer
 
 
-class DpiDetailBySSNView(RetrieveUpdateDestroyAPIView):
-    queryset = Dpi.objects.prefetch_related(
-        'consultation_set__biologicalexam_set',
-        'consultation_set__radiologicalexam_set',
-        'consultation_set__nursingrecord_set'
-    ).select_related('doctor')
+#not sure yet
+
+class GetAllBiologicalExamsByConsultationId(ListCreateAPIView):
+    queryset = BiologicalExam.objects.all()
+    serializer_class = BiologicalExamSerializer
+
+class GetAllRadiologicalExamsByConsultationId(ListCreateAPIView):
+    queryset = RadiologicalExam.objects.all()
+    serializer_class = RadiologicalExamSerializer
+
+class GetAllMedicinesByPrescriptionId(APIView):
+    def get(self, request, prescription_id, *args, **kwargs):
+        medicines = Medicine.objects.filter(prescription__id=prescription_id)
+        if not medicines.exists():
+            return Response(
+                {"detail": "No medicines found for the given prescription ID."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = MedicineSerializer(medicines, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+#getting all the consultations of a patient to display them
+class GetAllConsultationsByDpiId(APIView):
+    
+    def get(self, request, dpi_id, *args, **kwargs):
+        consultations = Consultation.objects.filter(dpi_id=dpi_id)
+        serializer = ConsultationSerializer(consultations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DpiCreateView(CreateAPIView):
+    serializer_class = DpiCreateSerializer
+
+class DpiSearchBySSNView(ListAPIView):
     serializer_class = DpiSerializer
-    lookup_field = 'social_security_number'
+    pagination_class = DpiPagination
+
+    def get_queryset(self):
+        ssn_prefix = self.kwargs.get('ssn_prefix', '')
+        return Dpi.objects.filter(social_security_number__startswith=ssn_prefix).select_related('doctor')
 
 
 class DpiDetailByIdView(RetrieveUpdateDestroyAPIView):
-    queryset = Dpi.objects.prefetch_related(
-        'consultation_set__biologicalexam_set',
-        'consultation_set__radiologicalexam_set',
-        'consultation_set__nursingrecord_set'
-    ).select_related('doctor')
-    serializer_class = DpiSerializer
+    serializer_class = DpiCreateSerializer
     lookup_field = 'id'
+
+
+class ValidatePrescriptionView(APIView):
+    @swagger_auto_schema(request_body=PrescriptionValidationSerializer)
+    def post(self, request, *args, **kwargs):
+        serializer = PrescriptionValidationSerializer(data=request.data)
+        if serializer.is_valid():
+            prescription_id = serializer.validated_data["prescription"]
+            try:
+                prescription = Prescription.objects.get(id=prescription_id)
+                if (prescription.validated):
+                    return Response({"error": "Prescription already validated."}, status=status.HTTP_400_BAD_REQUEST)
+                prescription.validated = True
+                prescription.save()
+                return Response({"message": "Prescription Validated"}, status=status.HTTP_200_OK)
+            except Prescription.DoesNotExist:
+                return Response({"error": "Prescription not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
