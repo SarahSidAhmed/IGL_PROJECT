@@ -85,6 +85,12 @@ class CreatePrescriptionAPIView(CreateAPIView):
 class CreateConsultationAPIView(CreateAPIView):
     serializer_class = ConsultationSerializer
 
+class UpdateConsultationAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Consultation.objects.all()
+    serializer_class = ConsultationSerializer
+    lookup_field = 'id'
+
+
 class AddMedicineAPIView(CreateAPIView):
     serializer_class = MedicineSerializer
 
