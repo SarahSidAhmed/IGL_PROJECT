@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GetAllConsultationsByDpiId, AddRadiologicalExamAPIView, AddBiologicalExamAPIView, AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiListCreateView, DpiDetailByIdView, DpiDetailBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView, ValidatePrescriptionView
+from .views import GetAllConsultationsByDpiId, AddRadiologicalExamAPIView, AddBiologicalExamAPIView, AddMedicineAPIView, CreateConsultationAPIView, CreatePrescriptionAPIView, DpiCreateView, DpiDetailByIdView, DpiSearchBySSNView, StaffLoginAPIView, GetStaffByIdAPIView, GetAllDoctorsStaffAPIView, PatientSSNLoginAPIView, PatientQRLoginAPIView, GetAllDoctorsStaffAPIView, ValidatePrescriptionView
 
 urlpatterns = [
     path('exam/biological/add', AddBiologicalExamAPIView.as_view(), name='add-biological-exam'),
@@ -13,8 +13,8 @@ urlpatterns = [
     path('doctors/', GetAllDoctorsStaffAPIView.as_view(), name='get-all-doctors'),
     path('staff/<int:id>/', GetStaffByIdAPIView.as_view(), name='get_staff_by_id'),
     path('login/', StaffLoginAPIView.as_view(), name='staff-login'), #for login
-    path('dpis/', DpiListCreateView.as_view(), name='dpi-list-create'),
-    path('dpis/<str:social_security_number>/', DpiDetailBySSNView.as_view(), name='dpi-detail'),
-    path('dpis/qr/<int:id>/', DpiDetailByIdView.as_view(), name='dpi-detail-by-id'),  # For QR Code
+    path('dpis/', DpiCreateView.as_view(), name='dpi-create'),
+    path('dpis/search/<str:ssn_prefix>/', DpiSearchBySSNView.as_view(), name='dpi-search-ssn'),
+    path('dpis/<int:id>/', DpiDetailByIdView.as_view(), name='dpi-detail-by-id'),
     path('validate-prescription/', ValidatePrescriptionView.as_view(), name='validate-prescription'),
 ]
