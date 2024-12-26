@@ -201,4 +201,16 @@ class RadiologicalExamCreateView(CreateAPIView):
 class RadiologicalExamUpdateView(UpdateAPIView):
     queryset = RadiologicalExam.objects.all()
     serializer_class = RadiologicalExamUpdateSerializer
+
+class BiologicalExamListView(ListAPIView):
+    queryset = BiologicalExam.objects.all()
+    serializer_class = BiologicalExamCreateSerializer
+
+class RadiologicalExamListView(ListAPIView):
+    queryset = RadiologicalExam.objects.all()
+    serializer_class = RadiologicalExamCreateSerializer
+
+class NursingRecordListView(ListAPIView):
+    queryset = NursingRecord.objects.all()
+    serializer_class = NursingRecordCreateSerializer
     
