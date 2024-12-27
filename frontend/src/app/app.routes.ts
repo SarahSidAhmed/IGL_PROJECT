@@ -7,9 +7,12 @@ import { SoinListComponent } from './soins-todo/soin-list/soin-list.component';
 import { TestListComponent } from './tests-todo/test-list/test-list.component';
 
 export const routes: Routes = [
-  { path: 'dpilist', component: DpiListComponent },
+  
+];
+/*
+{ path: 'dpilist', component: DpiListComponent },
   { path: 'create-dpi', component: CreateDpiComponent },
   { path: 'radio-list', component: RadioListComponent },
   { path: 'soin-list', component: SoinListComponent },
   {path: 'tests-list', component: TestListComponent}
-];
+*/

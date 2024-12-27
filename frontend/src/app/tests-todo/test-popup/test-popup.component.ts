@@ -1,9 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
-import { provideCharts } from 'ng2-charts';
-
 import { BaseChartDirective } from 'ng2-charts';
 
 interface MedicalResults {
@@ -20,7 +25,7 @@ interface MedicalResults {
   standalone: true,
   imports: [CommonModule, FormsModule, BaseChartDirective],
   templateUrl: './test-popup.component.html',
-  styleUrl: './test-popup.component.scss',
+  styleUrls: ['./test-popup.component.scss'],
 })
 export class TestPopupComponent {
   @Input() patientName!: string;
@@ -37,36 +42,45 @@ export class TestPopupComponent {
 
   report: string = '';
   results: MedicalResults = {
-    glucose: null,
-    crp: null,
-    creatinine: null,
-    cholesterol: null,
-    sodium: null,
-    potassium: null,
+    glucose: 0,
+    crp: 0,
+    creatinine: 0,
+    cholesterol: 0,
+    sodium: 0,
+    potassium: 0,
   };
 
   showGraph: boolean = false;
 
   // Chart.js data and configuration
   chartData: ChartData<'bar'> = {
-    labels: ['Glucose', 'Créatinine', 'Sodium', 'Cholesterol', 'Potassium'],
+    labels: [
+      'Glucose',
+      'CRP',
+      'Creatinine',
+      'Cholesterol',
+      'Sodium',
+      'Potassium',
+    ],
     datasets: [
       {
         label: 'Test Results',
-        data: [],
-        backgroundColor: [
-          '#0F766E',
-          '#0F766E',
-          '#0F766E',
-          '#0F766E',
-          '#0F766E',
+        data: [
+          this.results.glucose,
+          this.results.crp,
+          this.results.creatinine,
+          this.results.cholesterol,
+          this.results.sodium,
+          this.results.potassium,
         ],
+        backgroundColor: Array(6).fill('#0F766E'),
       },
     ],
   };
 
   chartOptions: ChartOptions<'bar'> = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         title: {
@@ -76,6 +90,7 @@ export class TestPopupComponent {
       },
       y: {
         beginAtZero: true,
+        
         title: {
           display: true,
           text: 'Values',
@@ -90,15 +105,34 @@ export class TestPopupComponent {
     },
   };
 
+  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  /**
+   * Updates the `results` object when input values change.
+   * @param field The field name being updated.
+   * @param value The new value of the field.
+   */
+  onInputChange(field: keyof MedicalResults, event: Event): void {
+    const target = event.target as HTMLInputElement; // Cast to HTMLInputElement
+    const value = target.value; // Access the value safely
+    this.results[field] = value ? Number(value) : null; // Convert to number or assign null if empty
+    console.log(this.results); // Debug: Log updated results
+  }
+
   onGenerateGraph(): void {
     this.chartData.datasets[0].data = [
       this.results.glucose || 0,
+      this.results.crp || 0,
       this.results.creatinine || 0,
-      this.results.sodium || 0,
       this.results.cholesterol || 0,
+      this.results.sodium || 0,
       this.results.potassium || 0,
     ];
     this.showGraph = true;
+    this.cdr.detectChanges();
+    console.log(this.results);
   }
 
   closeGraph(): void {
