@@ -4,6 +4,9 @@ from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
+    path('consultations/<int:consultation_id>/records/', AllRecordsAndExamsForConsultationView.as_view(), name='all_records_and_exams_for_consultation'),
+    path('dpi/<int:dpi_id>/nursing-records/', NursingRecordsForDpiView.as_view(), name='nursing_records_for_dpi'),
+    path('dpi/<int:dpi_id>/exams/', AllExamsForDpiView.as_view(), name='all-exams-for-dpi'),
     path('radiological-exams/create/', RadiologicalExamCreateView.as_view(), name='create-radiological-exam'),
     path('radiological-exams/<int:pk>/update/', RadiologicalExamUpdateView.as_view(), name='update-radiological-exam'),
     path('nursing-records/create/', NursingRecordCreateView.as_view(), name='nursing-record-create'),
