@@ -67,8 +67,6 @@ class Consultation(models.Model):
     dpi = models.ForeignKey(Dpi, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Staff, on_delete=models.CASCADE)
     consultation_summary = models.TextField()
-    examination_required = models.TextField()
-    hospital = models.TextField()
     consultation_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
