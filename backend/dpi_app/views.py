@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from .pagination import DpiPagination, ConsultationPagination
+from .pagination import *
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -176,18 +176,39 @@ class RadiologicalExamUpdateView(UpdateAPIView):
 
 class BiologicalExamListView(ListAPIView):
     serializer_class = BiologicalExamCreateSerializer
-    def get_queryset(self):
-        return BiologicalExam.objects.filter(lab_technician__isnull=True)
+    pagination_class = BiologicalExamPagination
+ def get_queryset(self):
+        ssn_prefix = self.kwargs.get('ssn_prefix', '')
+        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True)
+        if ssn_prefix:
+            queryset = queryset.filter(
+                consultation__dpi__social_security_number__startswith=ssn_prefix
+            )
+        return queryset
 
 class RadiologicalExamListView(ListAPIView):
     serializer_class = RadiologicalExamCreateSerializer
+    pagination_class = RadiologicalExamPagination
+    ssn_prefix = self.kwargs.get('ssn_prefix', '')
     def get_queryset(self):
-        return RadiologicalExam.objects.filter(radiologist__isnull=True)
+        queryset = RadiologicalExam.objects.filter(radiologist__isnull=True)
+        if ssn_prefix:
+            queryset = queryset.filter(
+                consultation__dpi__social_security_number__startswith=ssn_prefix
+            )
+        return queryset
 
 class NursingRecordListView(ListAPIView):
     serializer_class = NursingRecordCreateSerializer
+    pagination_class = NursingRecordPagination
+    ssn_prefix = self.kwargs.get('ssn_prefix', '')
     def get_queryset(self):
-        return NursingRecord.objects.filter(nurse__isnull=True)
+        queryset = NursingRecord.objects.filter(nurse__isnull=True)
+        if ssn_prefix:
+            queryset = queryset.filter(
+                consultation__dpi__social_security_number__startswith=ssn_prefix
+            )
+        return queryset
 
 class AllExamsForDpiView(APIView):
     def get(self, request):
