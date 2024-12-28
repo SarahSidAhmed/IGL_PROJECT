@@ -92,11 +92,17 @@ class NursingRecordSerializer(serializers.ModelSerializer):
         model = NursingRecord
         fields = '__all__'
 
+class StaffReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Staff
+        fields = ['id', 'name']
+
 class ConsultationSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
     prescription = PrescriptionSerializer(read_only=True)
+    doctor = StaffReadSerializer()
 
     #only doctors can add consultations
     def validate_doctor(self, value):
@@ -108,12 +114,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
         model = Consultation
         fields = '__all__'
         read_only_fields = ['consultation_date']
-   
-class StaffReadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Staff
-        fields = ['id', 'name']
-    
+
 class DpiSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     doctor = StaffReadSerializer(read_only=True)
@@ -230,3 +231,13 @@ class NursingRecordUpdateSerializer(serializers.ModelSerializer):
          instance.save()
          return instance
 
+
+class UnifiedExamRecordSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    type = serializers.CharField()
+    exam_name = serializers.CharField(required=False)
+    result = serializers.CharField(required=False)
+    parameters = serializers.ListField(required=False)
+    image = serializers.ImageField(required=False)
+    exam_date = serializers.DateField(required=False)
+    staff = StaffReadSerializer(required=False)
