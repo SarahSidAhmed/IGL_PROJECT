@@ -195,7 +195,7 @@ class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         parameters_data = validated_data.pop('parameters', [])
         instance.result = validated_data.get('result', instance.result)
-        instance.exam_date = validated_data.get('exam_date', instance.exam_date)
+        instance.exam_date = timezone.now().date()
         instance.lab_technician = validated_data.get('lab_technician', instance.lab_technician)
 
         # Update parameter values
@@ -224,7 +224,7 @@ class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         
-        instance.exam_date = validated_data.get('exam_date', instance.exam_date)
+        instance.exam_date = timezone.now().date()  
         instance.result = validated_data.get('result', instance.result)
         instance.image = validated_data.get('image', instance.image)
         instance.radiologist = validated_data.get('radiologist', instance.radiologist)
@@ -245,7 +245,7 @@ class NursingRecordUpdateSerializer(serializers.ModelSerializer):
         model = NursingRecord
         fields = ['patient_observation', 'record_date', 'nurse']
         def update(self, instance, validated_data):
-         instance.record_date = validated_data.get('record_date', instance.record_date)
+         instance.record_date = timezone.now().date()
          instance.patient_observation = validated_data.get('patient_observation', instance.patient_observation)
          instance.nurse = validated_data.get('nurse', instance.nurse)
          instance.save()
