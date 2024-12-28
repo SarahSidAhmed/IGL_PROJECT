@@ -18,9 +18,6 @@ Before you begin, make sure you have the following installed on your system:
   - On Windows: `.\env\Scripts\activate`.
 4. Install the required dependencies: `pip install -r requirements.txt`.
 
-## Configuration
-
-Copy our `.env` file in root directory of the project.
 
 ## Running the Server
 

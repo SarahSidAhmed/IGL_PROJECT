@@ -38,6 +38,7 @@ class Dpi(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birthdate = models.DateField()
+    email = models.EmailField(max_length=100)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
     doctor = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True)
@@ -66,8 +67,6 @@ class Consultation(models.Model):
     dpi = models.ForeignKey(Dpi, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Staff, on_delete=models.CASCADE)
     consultation_summary = models.TextField()
-    examination_required = models.TextField()
-    hospital = models.TextField()
     consultation_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

@@ -24,46 +24,25 @@ class StaffLoginSerializer(serializers.Serializer):
         data["id"] = staff.id
         return data
 
-#login for patient with SSN
-class PatientSSNLoginSerializer(serializers.Serializer):
-    SSN = serializers.CharField()
+
+class PatientLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, required=True)
-    id = serializers.IntegerField(read_only=True)
 
     def validate(self, data):
-        SSN = data.get("email")
+        email = data.get("email")
         password = data.get("password")
 
         try:
-            patient = Dpi.objects.get(social_security_number=SSN)
-        except patient.DoesNotExist:
-            raise serializers.ValidationError("No DPI with that SSN. Check again!")
+            patient = Dpi.objects.get(email=email)
+        except Dpi.DoesNotExist:
+            raise serializers.ValidationError("No Patient with that email. Check again!")
 
         if not check_password(password, patient.password):
             raise serializers.ValidationError("Incorrect password. Check again!")
 
         data["id"] = patient.id
-        return data
-
-#login for patient with QR Code = ID
-class PatientQRLoginSerializer(serializers.Serializer):
-    id = serializers.IntegerField() #you should get it from the QR Scan
-    password = serializers.CharField(write_only=True, required=True)
-
-    def validate(self, data):
-        id = data.get("id")
-        password = data.get("password")
-
-        try:
-            patient = Dpi.objects.get(id=id)
-        except patient.DoesNotExist:
-            raise serializers.ValidationError("No DPI with that ID. Check again!")
-
-        if not check_password(password, patient.password):
-            raise serializers.ValidationError("Incorrect password. Check again!")
-
-        data["id"] = patient.id
-        return data  
+        return data 
     
 #this api is for adding just one medicine at a time
 class MedicineSerializer(serializers.ModelSerializer):
