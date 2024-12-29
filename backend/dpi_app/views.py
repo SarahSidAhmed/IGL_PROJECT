@@ -176,7 +176,7 @@ class RadiologicalExamUpdateView(UpdateAPIView):
 
 class BiologicalExamListView(ListAPIView):
     serializer_class = BiologicalExamCreateSerializer
-    pagination_class = BiologicalExamPagination
+    pagination_class = ExamsRecordsPagination
     def get_queryset(self):
         ssn_prefix = self.kwargs.get('ssn_prefix', None)
         queryset = BiologicalExam.objects.filter(lab_technician__isnull=True)
@@ -186,7 +186,7 @@ class BiologicalExamListView(ListAPIView):
 
 class RadiologicalExamListView(ListAPIView):
     serializer_class = RadiologicalExamCreateSerializer
-    pagination_class = RadiologicalExamPagination
+    pagination_class = ExamsRecordsPagination
     def get_queryset(self):
         ssn_prefix = self.kwargs.get('ssn_prefix', None)
         queryset = RadiologicalExam.objects.filter(radiologist__isnull=True)
@@ -196,7 +196,7 @@ class RadiologicalExamListView(ListAPIView):
 
 class NursingRecordListView(ListAPIView):
     serializer_class = NursingRecordCreateSerializer
-    pagination_class = NursingRecordPagination
+    pagination_class = ExamsRecordsPagination
     
     def get_queryset(self):
         ssn_prefix = self.kwargs.get('ssn_prefix', None)
