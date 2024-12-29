@@ -12,7 +12,7 @@ import { ConsultationDetailDoctorComponent } from '../consultation-detail-doctor
 
 @Component({
   selector: 'app-signin',
-  imports: [RouterOutlet],
+  imports: [],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })

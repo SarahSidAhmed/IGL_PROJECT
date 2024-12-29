@@ -36,8 +36,10 @@ ALLOWED_HOSTS = []
 
 # CORS settings
 # frontend should be running on http://localhost:3001
-CORS_ALLOWED_ORIGINS = ["http://localhost:3001"]  
+
+CORS_ALLOWED_ORIGINS = ["https://localhost:3001"]  
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'drf_yasg',
+  
 ]
 
 MIDDLEWARE = [
@@ -64,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'dpi_project.urls'

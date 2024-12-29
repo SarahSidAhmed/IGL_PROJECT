@@ -3,21 +3,26 @@
     <img class="h-10 w-15" src="./assets/logo.png" alt="" />
 
     <button
-      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200  flex items-center"
+      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
       (click)="onLogout()"
     >
       <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
       <span>Se déconnecter</span>
     </button>
   </header>
-  <div class="flex flex-col md:flex-col lg:flex-row gap-7 px-20 sm:px-32 py-10">
-    <div class="sm:flex-1 lg:w-100 relative bg-white p-10 rounded-lg shadow-lg">
-      <h1
-        class="text-lg text-center font-poppins text-primaryBlue font-bold mb-3"
+  <form [formGroup]="createDpiForm" (ngSubmit)="onSubmit()">
+    <div
+      class="flex flex-col md:flex-col lg:flex-row gap-7 px-20 sm:px-32 py-10"
+    >
+      <div
+        class="sm:flex-1 lg:w-100 relative bg-white p-10 rounded-lg shadow-lg"
       >
-        Créer un nouveau DPI
-      </h1>
-      <form id="form" novalidate>
+        <h1
+          class="text-lg text-center font-poppins text-primaryBlue font-bold mb-3"
+        >
+          Créer un nouveau DPI
+        </h1>
+
         <div class="flex flex-row items-center mb-3 space-x-2">
           <h1 class="font-poppins font-bold text-sm text-primaryBlue">
             Informations generales
@@ -31,14 +36,22 @@
             >
               Nom:
             </h1>
+            <label for="last_name"></label>
             <input
+              id="last_name"
+              formControlName="last_name"
               type="text"
-              name="nom"
               placeholder="Nom"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-xs font-poppins text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('last_name')?.invalid &&
+                createDpiForm.get('last_name')?.touched
+              "
+              class="text-xs font-poppins text-red-600 hidden"
+              id="error"
               >Le champ nom est réquis</span
             >
           </div>
@@ -48,14 +61,22 @@
             >
               Prénom:
             </h1>
+            <label for="first_name"></label>
             <input
+              id="first_name"
+              formControlName="first_name"
               type="text"
-              name="prénom"
               placeholder="Prénom"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('first_name')?.invalid &&
+                createDpiForm.get('first_name')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >Le champ prénom est réquis</span
             >
           </div>
@@ -67,15 +88,25 @@
             >
               Date de naissance:
             </h1>
+            <label for="birthdate"></label>
+
             <input
+              id="birthdate"
+              formControlName="birthdate"
               type="text"
-              name="datenaissance"
+              type="text"
               placeholder="Date de naissance"
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
               onclick="this.setAttribute('type', 'date');"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('birthdate')?.invalid &&
+                createDpiForm.get('birthdate')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >Date de naissance est réquis</span
             >
           </div>
@@ -87,21 +118,22 @@
               Sexe:
             </h1>
             <select
-              name="sexe"
+              formControlName="gender"
+              id="gender"
               placeholder="Sexe"
               class="py-1 pb-1.5 w-full pl-3 mt-0 rounded h-fit focus:outline-none focus:ring-0 border-2 border-primaryBlue text-gray-400 text-xs focus:bg-gray-100 bg-white placeholder:text-xs placeholder:font-poppins"
             >
-              <option
-               
-                value=""
-                selected
-                disabled
-                hidden
-              >Sélectionner</option>
+              <option value="" selected disabled hidden>Sélectionner</option>
               <option value="male">Masculin</option>
               <option value="female">Féminin</option>
             </select>
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('gender')?.invalid &&
+                createDpiForm.get('gender')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >Le sexe est requis</span
             >
           </div>
@@ -110,14 +142,22 @@
           <h1 class="font-semibold text-xs pl-3 font-poppins text-primaryBlue">
             Numéro de sécurité sociale:
           </h1>
+          <label for=" social_security_number"></label>
           <input
+            id="social_security_number"
+            formControlName="social_security_number"
             type="text"
-            name="nss"
             placeholder="Numéro de sécurite sociale"
             class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
           />
 
-          <span class="text-sm text-red-600 hidden" id="error"
+          <span
+            *ngIf="
+              createDpiForm.get('social_security_number')?.invalid &&
+              createDpiForm.get('social_security_number')?.touched
+            "
+            class="text-sm text-red-600 hidden"
+            id="error"
             >le NSS est réquis</span
           >
         </div>
@@ -128,14 +168,22 @@
             >
               Nom de l'hopital:
             </h1>
+            <label for="hospital"></label>
             <input
+              id="hospital"
+              formControlName="hospital"
               type="text"
-              name="nom-hopital"
               placeholder="Nom de l'hopital"
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('hospital')?.invalid &&
+                createDpiForm.get('hospital')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >champ réquis</span
             >
           </div>
@@ -146,8 +194,10 @@
             >
               Type sanguin :
             </h1>
+            <label for="blood-type"></label>
             <select
-              name="blood-type"
+              id="blood-type"
+              formControlName="blood_type"
               class="py-1 pb-1.5 w-full pl-3 mt-0 rounded h-fit focus:outline-none focus:ring-0 border-2 border-primaryBlue text-gray-400 text-xs focus:bg-gray-100 bg-white placeholder:text-xs placeholder:font-poppins"
             >
               <option
@@ -168,7 +218,14 @@
               <option value="AB+">AB+</option>
               <option value="AB-">AB-</option>
             </select>
-            <span class="text-sm text-red-600 hidden" id="error">
+            <span
+              *ngIf="
+                createDpiForm.get('blood_type')?.invalid &&
+                createDpiForm.get('blood_type')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
+            >
               Le type sanguin est requis.
             </span>
           </div>
@@ -186,14 +243,23 @@
             >
               Adresse:
             </h1>
+            <label for="address"></label>
+
             <input
+              id="address"
+              formControlName="address"
               type="text"
-              name="adresse"
               placeholder="Adresse"
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('adress')?.invalid &&
+                createDpiForm.get('adress')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >Champ Adresse réquis</span
             >
           </div>
@@ -204,13 +270,17 @@
             >
               Docteur administré:
             </h1>
+            <label for="doctor"></label>
             <select
-              name="doctor"
+              id="doctor"
+              formControlName="doctor"
+              placeholder="Docteur administré"
               class="py-1 pb-1.5 w-full pl-3 mt-0 rounded focus:outline-none focus:ring-0 border-primaryBlue border-2 focus:bg-gray-100 bg-white text-xs text-gray-400 placeholder:text-xs placeholder:font-poppins"
             >
               <option value="" selected disabled hidden>Sélectionner</option>
-              <option value="male">Masculin</option>
-              <option value="female">Féminin</option>
+              <option *ngFor="let doctor of doctors" [value]="doctor.id">
+                {{ doctor.name }}
+              </option>
             </select>
             <span class="text-sm text-red-600 hidden" id="error"
               >Champ réquis</span
@@ -224,7 +294,10 @@
             >
               Numéro de téléphone:
             </h1>
+            <label for="phone"></label>
             <input
+              id="phone"
+              formControlName="phone"
               type="text"
               name="num-tel"
               placeholder="Numéro de téléphone"
@@ -241,14 +314,24 @@
             >
               E-mail:
             </h1>
+            <label for="email"></label>
             <input
+              id="email"
+              formControlName="email"
               type="text"
-              name="email"
               placeholder="E-mail"
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error">required</span>
+            <span
+              *ngIf="
+                createDpiForm.get('email')?.invalid &&
+                createDpiForm.get('email')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
+              >required</span
+            >
           </div>
         </div>
         <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
@@ -258,14 +341,25 @@
             >
               Mot de passe:
             </h1>
+
+            <label for="password"></label>
             <input
+              id="password"
+              formControlName="password"
               type="password"
-              name="mdp"
               placeholder="Mot de passe"
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error">required</span>
+            <span
+              *ngIf="
+                createDpiForm.get('password')?.invalid &&
+                createDpiForm.get('password')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
+              >required</span
+            >
           </div>
           <div class="relative z-0 w-full">
             <h1
@@ -273,21 +367,29 @@
             >
               Confirmer le mot de passe:
             </h1>
+            <label for="confirm_password"></label>
             <input
+              id="confirm_password"
+              formControlName="confirm_password"
               type="password"
-              name="date"
-              placeholder="Confirmer:"
+              placeholder="Confirmer le mot de passe"
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error">required</span>
+            <span
+              *ngIf="
+                createDpiForm.hasError('passwordMismatch') &&
+                createDpiForm.get('confirm_password')?.touched
+              "
+            >
+              <small class="text-red-500">Passwords do not match.</small>
+              class="text-sm text-red-600 hidden" id="error">required</span
+            >
           </div>
         </div>
-      </form>
-    </div>
-    <div class="flex flex-col">
-      <div class="w-50 sm:w-full h-fit bg-white p-6 rounded-lg shadow-sm">
-        <form id="form-2" novalidate>
+      </div>
+      <div class="flex flex-col">
+        <div class="w-50 sm:w-full h-fit bg-white p-6 rounded-lg shadow-sm">
           <div class="flex flex-row items-center mb-3 mt-3 space-x-2">
             <h1 class="font-poppins font-bold text-sm text-primaryBlue">
               Informations d'urgence
@@ -300,13 +402,21 @@
             >
               Nom du contact:
             </h1>
+            <label for="emergency_contact_name"></label>
             <input
+              id="emergency_contact_name"
+              formControlName="emergency_contact_name"
               type="text"
-              name="contact-urgence"
               placeholder="Nom complet"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('emergency_contact_name')?.invalid &&
+                createDpiForm.get('emergency_contact_name')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >Champ requis</span
             >
           </div>
@@ -316,13 +426,21 @@
             >
               Numéro de télephone:
             </h1>
+            <label for="emergency_contact_phone"></label>
             <input
+              id="emergency_contact_phone"
+              formControlName="emergency_contact_phone"
               type="text"
-              name="numtel-urgence"
               placeholder="Numéro de téléphone"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('emergency_contact_phone')?.invalid &&
+                createDpiForm.get('emergency_contact_phone')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >Champ requis</span
             >
           </div>
@@ -332,13 +450,21 @@
             >
               Relation:
             </h1>
+            <label for="emergency_contact_relationship"></label>
             <input
+              id="emergency_contact_relationship"
+              formControlName="emergency_contact_relationship"
               type="text"
-              name="relation"
               placeholder="Relation"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
-            <span class="text-sm text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('emergency_contact_relationship')?.invalid &&
+                createDpiForm.get('emergency_contact_relationship')?.touched
+              "
+              class="text-sm text-red-600 hidden"
+              id="error"
               >Champ requis</span
             >
           </div>
@@ -354,14 +480,22 @@
             >
               Nom:
             </h1>
+            <label for="mutuelle_name"></label>
             <input
+              id="mutuelle_name"
+              formControlName="mutuelle_name"
               type="text"
-              name="nom"
               placeholder="Nom"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-xs font-poppins text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('mutuelle_name')?.invalid &&
+                createDpiForm.get('mutuelle_name')?.touched
+              "
+              class="text-xs font-poppins text-red-600 hidden"
+              id="error"
               >Le champ nom est réquis</span
             >
           </div>
@@ -371,14 +505,22 @@
             >
               Numéro de contrat:
             </h1>
+            <label for="mutuelle_policy_number"></label>
             <input
+              id="mutuelle_policy_number"
+              formControlName="mutuelle_policy_number"
               type="text"
-              name="policy-number"
               placeholder="Numéro de contrat"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-xs font-poppins text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('mutuelle_policy_number')?.invalid &&
+                createDpiForm.get('mutuelle_policy_number')?.touched
+              "
+              class="text-xs font-poppins text-red-600 hidden"
+              id="error"
               >Le champ nom est réquis</span
             >
           </div>
@@ -388,36 +530,87 @@
             >
               Antécédants médicaux:
             </h1>
+            <label for="medical_history"></label>
             <input
+              id="medical_history"
+              formControlName="medical_history"
               type="text"
-              name="medical-history"
               placeholder="Antécédants médicaux"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-xs font-poppins text-red-600 hidden" id="error"
+            <span
+              *ngIf="
+                createDpiForm.get('medical_history')?.invalid &&
+                createDpiForm.get('medical_history')?.touched
+              "
+              class="text-xs font-poppins text-red-600 hidden"
+              id="error"
               >Le champ nom est réquis</span
             >
           </div>
-        </form>
-      </div>
-      <div class="flex flex-row sm:justify-center gap-6 mt-7 -space-x-4">
-        <button
-          class=" sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#0F766E] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#0F766E] items-center flex rounded-md hover:bg-primaryBlue-dark focus:outline-none focus:ring-0"
-          type="submit"
-        >
-        <img class="sm:h-5 sm:w-6 size-3 mr-3" src="./assets/icons/save.png" />
-          <span>Confirmer et ajouter</span>
-        </button>
-        <button
-          class=" sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#F87171] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#F87171] rounded-md hover:bg-primaryBlue-dark items-center flex focus:outline-none focus:ring-0"
-          type="reset"
-        >
-       
-        <img class="sm:h-5 sm:w-5 size-3 mr-3" src="./assets/icons/cancel.png" />
-          Annuler
-        </button>
+        </div>
+        <div class="flex flex-row sm:justify-center gap-6 mt-7 -space-x-4">
+          <button
+            class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#0F766E] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#0F766E] items-center flex rounded-md hover:bg-primaryBlue-dark focus:outline-none focus:ring-0"
+            type="submit"
+            [disabled]="createDpiForm.invalid "
+            [ngClass]="{
+              'opacity-50 cursor-not-allowed':
+                createDpiForm.invalid || isSubmitting
+            }"
+            (click)="logFormStatus()"
+          >
+            <div class="flex items-center">
+              <!-- Show spinner when submitting -->
+              <span *ngIf="isSubmitting" class="mr-3">
+                <svg
+                  class="animate-spin h-5 w-5 text-[#0F766E]"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </span>
+
+              <img
+                *ngIf="!isSubmitting"
+                class="sm:h-5 sm:w-6 size-3 mr-3"
+                src="./assets/icons/save.png"
+                alt="save"
+              />
+
+            
+              <span>{{
+                isSubmitting ? "En cours..." : "Confirmer et ajouter"
+              }}</span>
+            </div>
+          </button>
+          <button
+            class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#F87171] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#F87171] rounded-md hover:bg-primaryBlue-dark items-center flex focus:outline-none focus:ring-0"
+            type="reset"
+          >
+            <img
+              class="sm:h-5 sm:w-5 size-3 mr-3"
+              src="./assets/icons/cancel.png"
+            />
+            Annuler
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
