@@ -149,11 +149,12 @@ class BiologicalExamParamUpdateSerializer(serializers.ModelSerializer):
 
 # Serializers for Biological Exam
 class BiologicalExamCreateSerializer(serializers.ModelSerializer):
+    dpi = DpiSerializer(source='consultation.dpi', read_only=True)  
     parameters = BiologicalExamParamSerializer(many=True, write_only=True)
 
     class Meta:
         model = BiologicalExam
-        fields = ['id', 'consultation', 'exam_name', 'parameters']
+        fields = ['id', 'consultation', 'exam_name', 'parameters', 'dpi']
 
     def create(self, validated_data):
         parameters_data = validated_data.pop('parameters', [])
@@ -175,7 +176,7 @@ class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         parameters_data = validated_data.pop('parameters', [])
         instance.result = validated_data.get('result', instance.result)
-        instance.exam_date = validated_data.get('exam_date', instance.exam_date)
+        instance.exam_date = timezone.now().date()
         instance.lab_technician = validated_data.get('lab_technician', instance.lab_technician)
 
         # Update parameter values
@@ -204,7 +205,7 @@ class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         
-        instance.exam_date = validated_data.get('exam_date', instance.exam_date)
+        instance.exam_date = timezone.now().date()  
         instance.result = validated_data.get('result', instance.result)
         instance.image = validated_data.get('image', instance.image)
         instance.radiologist = validated_data.get('radiologist', instance.radiologist)
@@ -215,9 +216,10 @@ class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
 
 # Serializers for Nursing Record
 class NursingRecordCreateSerializer(serializers.ModelSerializer):
+    dpi = DpiSerializer(source='consultation.dpi', read_only=True)  
     class Meta:
         model = NursingRecord
-        fields = ['id', 'consultation', 'care_name', 'record_date']
+        fields = ['id', 'consultation', 'care_name', 'dpi']
 
 
 class NursingRecordUpdateSerializer(serializers.ModelSerializer):
@@ -225,7 +227,7 @@ class NursingRecordUpdateSerializer(serializers.ModelSerializer):
         model = NursingRecord
         fields = ['patient_observation', 'record_date', 'nurse']
         def update(self, instance, validated_data):
-         instance.record_date = validated_data.get('record_date', instance.record_date)
+         instance.record_date = timezone.now().date()
          instance.patient_observation = validated_data.get('patient_observation', instance.patient_observation)
          instance.nurse = validated_data.get('nurse', instance.nurse)
          instance.save()
@@ -241,3 +243,28 @@ class UnifiedExamRecordSerializer(serializers.Serializer):
     image = serializers.ImageField(required=False)
     exam_date = serializers.DateField(required=False)
     staff = StaffReadSerializer(required=False)
+
+# Serializer for Dpi (reader version)
+class DpiReaderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dpi
+        fields = ['first_name', 'last_name', 'birthdate', 'gender']
+
+# Serializers for List Views
+class BiologicalExamListSerializer(serializers.ModelSerializer):
+    dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)
+    class Meta:
+        model = BiologicalExam
+        fields = ['id', 'exam_name', 'dpi', 'consultation']
+
+class RadiologicalExamListSerializer(serializers.ModelSerializer):
+    dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)
+    class Meta:
+        model = RadiologicalExam
+        fields = ['id', 'exam_name', 'dpi', 'consultation']
+
+class NursingRecordListSerializer(serializers.ModelSerializer):
+    dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)
+    class Meta:
+        model = NursingRecord
+        fields = ['id', 'care_name', 'dpi', 'consultation']

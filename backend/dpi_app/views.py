@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from .pagination import DpiPagination, ConsultationPagination
+from .pagination import *
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -155,17 +155,14 @@ class BiologicalExamCreateView(CreateAPIView):
     queryset = BiologicalExam.objects.all()
     serializer_class = BiologicalExamCreateSerializer
   
-
 class BiologicalExamUpdateView(UpdateAPIView):
     queryset = BiologicalExam.objects.all()
     serializer_class = BiologicalExamUpdateSerializer
     
-
 class NursingRecordCreateView(CreateAPIView):
     queryset = NursingRecord.objects.all()
     serializer_class = NursingRecordCreateSerializer
     
-
 class NursingRecordUpdateView(UpdateAPIView):
     queryset = NursingRecord.objects.all()
     serializer_class = NursingRecordUpdateSerializer
@@ -179,20 +176,36 @@ class RadiologicalExamUpdateView(UpdateAPIView):
     serializer_class = RadiologicalExamUpdateSerializer
 
 class BiologicalExamListView(ListAPIView):
-    serializer_class = BiologicalExamCreateSerializer
+    serializer_class = BiologicalExamListSerializer
+    pagination_class = ExamsRecordsPagination
     def get_queryset(self):
-        # Filter BiologicalExam records where lab_technician is NULL
-        return BiologicalExam.objects.filter(lab_technician__isnull=True)
+        ssn_prefix = self.kwargs.get('ssn_prefix', None)
+        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True).select_related('consultation', 'consultation__dpi')
+        if ssn_prefix:
+           queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+        return queryset
 
 class RadiologicalExamListView(ListAPIView):
-    serializer_class = RadiologicalExamCreateSerializer
+    serializer_class = RadiologicalExamListSerializer
+    pagination_class = ExamsRecordsPagination
     def get_queryset(self):
-        return RadiologicalExam.objects.filter(radiologist__isnull=True)
+        ssn_prefix = self.kwargs.get('ssn_prefix', None)
+        queryset = RadiologicalExam.objects.filter(radiologist__isnull=True).select_related('consultation', 'consultation__dpi')
+        if ssn_prefix:
+           queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+        return queryset
 
 class NursingRecordListView(ListAPIView):
-    serializer_class = NursingRecordCreateSerializer
+    serializer_class = NursingRecordListSerializer
+    pagination_class = ExamsRecordsPagination
+    
     def get_queryset(self):
-        return NursingRecord.objects.filter(nurse__isnull=True)
+        ssn_prefix = self.kwargs.get('ssn_prefix', None)
+        queryset = NursingRecord.objects.filter(nurse__isnull=True).select_related('consultation', 'consultation__dpi')
+        if ssn_prefix:
+           queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+        return queryset
+
 
 class UnifiedExamRecordView(APIView):
     @swagger_auto_schema(responses={200: UnifiedExamRecordSerializer(many=True)})

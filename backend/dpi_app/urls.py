@@ -4,12 +4,15 @@ from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
+    path('nursing-records/<str:ssn_prefix>/', NursingRecordListView.as_view(), name='nursing-record-list-filtered'),
+    path('radiological-exams/<str:ssn_prefix>/', RadiologicalExamListView.as_view(), name='radiological-exam-list-filtered'),
+    path('biological-exams/<str:ssn_prefix>/', BiologicalExamListView.as_view(), name='biological-exam-list-filtered'),
     path('radiological-exams/create/', RadiologicalExamCreateView.as_view(), name='create-radiological-exam'),
     path('radiological-exams/<int:pk>/update/', RadiologicalExamUpdateView.as_view(), name='update-radiological-exam'),
     path('nursing-records/create/', NursingRecordCreateView.as_view(), name='nursing-record-create'),
     path('nursing-records/<int:pk>/update/', NursingRecordUpdateView.as_view(), name='nursing-record-update'),
-    path('biological-exam/create/', BiologicalExamCreateView.as_view(), name='biological-exam-create'),
-    path('biological-exam/update/<int:pk>/', BiologicalExamUpdateView.as_view(), name='biological-exam-update'),
+    path('biological-exams/create/', BiologicalExamCreateView.as_view(), name='biological-exam-create'),
+    path('biological-exams/update/<int:pk>/', BiologicalExamUpdateView.as_view(), name='biological-exam-update'),
     path('medicine/add', AddMedicineAPIView.as_view(), name='add-medicine'),
     path('consultation/create', CreateConsultationAPIView.as_view(), name='create-consultation'),
     path('consultation/all/<int:dpi_id>', GetAllConsultationsByDpiId.as_view(), name='get-all-consultations'),
