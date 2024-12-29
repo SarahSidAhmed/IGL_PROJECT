@@ -35,10 +35,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # CORS settings
-# frontend should be running on http://localhost:3001
-CORS_ALLOWED_ORIGINS = ["http://localhost:3001"]  
-CORS_ALLOW_CREDENTIALS = True
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
