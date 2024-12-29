@@ -180,7 +180,7 @@ class BiologicalExamListView(ListAPIView):
     pagination_class = ExamsRecordsPagination
     def get_queryset(self):
         ssn_prefix = self.kwargs.get('ssn_prefix', None)
-        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True)
+        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True).select_related('consultation', 'consultation__dpi')
         if ssn_prefix:
            queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
         return queryset
@@ -190,7 +190,7 @@ class RadiologicalExamListView(ListAPIView):
     pagination_class = ExamsRecordsPagination
     def get_queryset(self):
         ssn_prefix = self.kwargs.get('ssn_prefix', None)
-        queryset = RadiologicalExam.objects.filter(radiologist__isnull=True)
+        queryset = RadiologicalExam.objects.filter(radiologist__isnull=True).select_related('consultation', 'consultation__dpi')
         if ssn_prefix:
            queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
         return queryset
@@ -201,100 +201,11 @@ class NursingRecordListView(ListAPIView):
     
     def get_queryset(self):
         ssn_prefix = self.kwargs.get('ssn_prefix', None)
-        queryset = NursingRecord.objects.filter(nurse__isnull=True)
+        queryset = NursingRecord.objects.filter(nurse__isnull=True).select_related('consultation', 'consultation__dpi')
         if ssn_prefix:
            queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
         return queryset
 
-class AllExamsForDpiView(APIView):
-    def get(self, request):
-        dpi_id = request.query_params.get("dpi_id")
-        if not dpi_id:
-            return Response({"error": "dpi_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
-
-        consultations = Consultation.objects.filter(dpi_id=dpi_id)
-        if not consultations.exists():
-            return Response({"error": "No consultations found for the given DPI ID."}, status=status.HTTP_404_NOT_FOUND)
-
-        radiological_exams = RadiologicalExam.objects.filter(consultation__in=consultations, radiologist__isnull=False)
-        biological_exams = BiologicalExam.objects.filter(consultation__in=consultations, lab_technician__isnull=False)
-
-        radiological_data = [
-            {"exam_name": exam.exam_name, "id": exam.id, "exam_type": "Radiological", "exam_date": exam.exam_date}
-            for exam in radiological_exams
-        ]
-        biological_data = [
-            {"exam_name": exam.exam_name, "id": exam.id, "exam_type": "Biological", "exam_date": exam.exam_date}
-            for exam in biological_exams
-        ]
-
-        # Combine and sort exams by date
-        combined_exams = radiological_data + biological_data
-        sorted_exams = sorted(combined_exams, key=lambda x: x["exam_date"])
-
-        return Response(sorted_exams, status=status.HTTP_200_OK)
-
-
-class NursingRecordsForDpiView(APIView):
-     def get(self, request):
-        dpi_id = request.query_params.get("dpi_id")
-        if not dpi_id:
-            return Response(
-                {"error": "dpi_id query parameter is required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        consultations = Consultation.objects.filter(dpi_id=dpi_id)
-        if not consultations.exists():
-            return Response({"error": "No consultations found for the given DPI ID."}, status=status.HTTP_404_NOT_FOUND)
-       
-        nursing_records = NursingRecord.objects.filter(consultation__in=consultations).order_by("record_date")
-
-        serializer = NursingRecordSerializer(nursing_records, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-class AllRecordsAndExamsForConsultationView(APIView):
-    def get(self, request, consultation_id):
-        consultation_id = request.query_params.get("consultation_id")
-        if not consultation_id:
-            return Response(
-                {"error": "consultation_id query parameter is required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        
-        # Check if the consultation exists
-        if not Consultation.objects.filter(id=consultation_id).exists():
-            return Response(
-                {"error": "No consultation found for the given ID."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        
-        
-        nursing_records = NursingRecord.objects.filter(consultation_id=consultation_id)
-        radiological_exams = RadiologicalExam.objects.filter(consultation_id=consultation_id)
-        biological_exams = BiologicalExam.objects.filter(consultation_id=consultation_id)
-
-        
-        nursing_data = NursingRecordSerializer(nursing_records, many=True).data
-        for record in nursing_data:
-            record["type"] = "nursing_record"
-            record["date"] = record.pop("record_date")  # normalize the date field name
-        
-        radiological_data = RadiologicalExamSerializer(radiological_exams, many=True).data
-        for exam in radiological_data:
-            exam["type"] = "radiological_exam"
-            exam["date"] = exam.pop("exam_date")  # normalize the date field name
-        
-        biological_data = BiologicalExamSerializer(biological_exams, many=True).data
-        for exam in biological_data:
-            exam["type"] = "biological_exam"
-            exam["date"] = exam.pop("exam_date")  # normalize the date field name
-
-        combined_data = nursing_data + radiological_data + biological_data
-        combined_data_sorted = sorted(combined_data, key=lambda x: x["date"])
-
-        return Response(combined_data_sorted, status=status.HTTP_200_OK)
 
 class UnifiedExamRecordView(APIView):
     @swagger_auto_schema(responses={200: UnifiedExamRecordSerializer(many=True)})
