@@ -193,10 +193,9 @@ class BiologicalExamUpdateSerializer(serializers.ModelSerializer):
 
 # Serializers for Radiological Exam
 class RadiologicalExamCreateSerializer(serializers.ModelSerializer):
-    dpi = DpiSerializer(source='consultation.dpi', read_only=True)  
     class Meta:
         model = RadiologicalExam
-        fields = ['id', 'consultation', 'exam_name', 'dpi']
+        fields = ['id', 'consultation', 'exam_name']
 
 
 class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
@@ -244,3 +243,28 @@ class UnifiedExamRecordSerializer(serializers.Serializer):
     image = serializers.ImageField(required=False)
     exam_date = serializers.DateField(required=False)
     staff = StaffReadSerializer(required=False)
+
+# Serializer for Dpi (reader version)
+class DpiReaderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dpi
+        fields = ['first_name', 'last_name', 'social_security_number', 'birthdate', 'gender']
+
+# Serializers for List Views
+class BiologicalExamListSerializer(serializers.ModelSerializer):
+    dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)
+    class Meta:
+        model = BiologicalExam
+        fields = ['id', 'exam_name', 'dpi', 'consultation']
+
+class RadiologicalExamListSerializer(serializers.ModelSerializer):
+    dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)
+    class Meta:
+        model = RadiologicalExam
+        fields = ['id', 'exam_name', 'dpi', 'consultation']
+
+class NursingRecordListSerializer(serializers.ModelSerializer):
+    dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)
+    class Meta:
+        model = NursingRecord
+        fields = ['id', 'care_name', 'dpi', 'consultation']
