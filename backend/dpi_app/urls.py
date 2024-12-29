@@ -27,5 +27,6 @@ urlpatterns = [
     path('dpis/', DpiCreateView.as_view(), name='dpi-create'),
     path('dpis/search/<str:ssn_prefix>/', DpiSearchBySSNView.as_view(), name='dpi-search-ssn'),
     path('dpis/<int:id>/', DpiDetailByIdView.as_view(), name='dpi-detail-by-id'),
+    path('dpis/<int:id>/exams/', UnifiedExamRecordView.as_view(), name='unified-exam-record'),
     path('validate-prescription/', ValidatePrescriptionView.as_view(), name='validate-prescription'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

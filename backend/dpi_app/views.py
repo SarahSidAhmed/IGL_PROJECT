@@ -110,7 +110,7 @@ class GetAllConsultationsByDpiId(APIView):
 
     @swagger_auto_schema(responses={200: ConsultationSerializer(many=True)})
     def get(self, request, dpi_id, *args, **kwargs):
-        consultations = Consultation.objects.filter(dpi_id=dpi_id)
+        consultations = Consultation.objects.filter(dpi_id=dpi_id).select_related('doctor')
         serializer = ConsultationSerializer(consultations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -128,6 +128,7 @@ class DpiSearchBySSNView(ListAPIView):
 
 
 class DpiDetailByIdView(RetrieveUpdateDestroyAPIView):
+    queryset = Dpi.objects.all()
     serializer_class = DpiCreateSerializer
     lookup_field = 'id'
 
@@ -295,3 +296,60 @@ class AllRecordsAndExamsForConsultationView(APIView):
 
         return Response(combined_data_sorted, status=status.HTTP_200_OK)
 
+class UnifiedExamRecordView(APIView):
+    @swagger_auto_schema(responses={200: UnifiedExamRecordSerializer(many=True)})
+    def get(self, request, id, *args, **kwargs):
+        try:
+            dpi = Dpi.objects.get(pk=id)
+        except Dpi.DoesNotExist:
+            return Response({"error": "Dpi not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        consultations = Consultation.objects.filter(dpi=dpi)
+
+        biological_exams = BiologicalExam.objects.filter(
+            consultation__in=consultations,
+            lab_technician_id__isnull=False
+        ).prefetch_related('biologicalexamparam_set').select_related('lab_technician')
+
+        radiological_exams = RadiologicalExam.objects.filter(
+            consultation__in=consultations,
+            radiologist_id__isnull=False
+        ).select_related('radiologist')
+
+        unified_records = []
+
+        for exam in biological_exams:
+            parameters = list(
+                exam.biologicalexamparam_set.values('id', 'param_name', 'value')
+            )
+            unified_records.append({
+                'id': exam.id,
+                'type': 'biological-exam',
+                'exam_name': exam.exam_name,
+                'result': exam.result,
+                'parameters': parameters,
+                'exam_date': exam.exam_date,
+                'staff': {
+                    'id': exam.lab_technician.id,
+                    'name': exam.lab_technician.name
+                }
+            })
+
+        for exam in radiological_exams:
+            unified_records.append({
+                'id': exam.id,
+                'type': 'radiological-exam',
+                'exam_name': exam.exam_name,
+                'result': exam.result,
+                'image': exam.image,
+                'exam_date': exam.exam_date,
+                'staff': {
+                    'id': exam.radiologist.id,
+                    'name': exam.radiologist.name
+                }
+            })
+
+        unified_records.sort(key=lambda x: x['exam_date'], reverse=True)
+
+        serializer = UnifiedExamRecordSerializer(unified_records, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
