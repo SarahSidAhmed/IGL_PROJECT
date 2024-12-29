@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from '../navbar/navbar.component';
-import { TestCardComponent } from '../test-card/test-card.component';
-import { InfoCardComponent } from '../info-card/info-card.component';
-import { ConsultationCardComponent } from '../consultation-card/consultation-card.component';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { TestCardComponent } from '../../components/test-card/test-card.component';
+import { InfoCardComponent } from '../../components/info-card/info-card.component';
+import { ConsultationCardComponent } from '../../components/consultation-card/consultation-card.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
