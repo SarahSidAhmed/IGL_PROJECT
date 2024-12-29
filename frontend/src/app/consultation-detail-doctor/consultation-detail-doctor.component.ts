@@ -43,8 +43,6 @@ addMedicament() {
     this.isEditing = !this.isEditing;
   }
 
-
-
   discardChanges() {
     this.isEditing = false;
   }
