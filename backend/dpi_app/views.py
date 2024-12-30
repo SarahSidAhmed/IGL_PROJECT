@@ -123,8 +123,14 @@ class DpiSearchBySSNView(ListAPIView):
     pagination_class = DpiPagination
 
     def get_queryset(self):
-        ssn_prefix = self.kwargs.get('ssn_prefix', '')
-        return Dpi.objects.filter(social_security_number__startswith=ssn_prefix).select_related('doctor')
+        queryset = Dpi.objects.all().select_related('doctor').order_by('-id')
+        
+        ssn_prefix = self.request.query_params.get('ssn_prefix')
+        
+        if ssn_prefix:
+            queryset = queryset.filter(social_security_number__startswith=ssn_prefix)
+        
+        return queryset
 
 
 class DpiDetailByIdView(RetrieveUpdateDestroyAPIView):
