@@ -65,3 +65,7 @@
     ></app-dpi-card>
   </div>
 </div>
+<app-qr-scan
+  *ngIf="scanQrVisible"
+  (closePopup)="scanQrCode()"
+></app-qr-scan>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DpiCardComponent } from '../dpi-card/dpi-card.component';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,7 +20,7 @@ interface Patient {
   selector: 'app-dpi-list',
   templateUrl: './dpi-list.component.html',
   styleUrls: ['./dpi-list.component.scss'],
-  imports: [DpiCardComponent, CommonModule, FormsModule],
+  imports: [DpiCardComponent, CommonModule, FormsModule, QrScanComponent],
 })
 export class DpiListComponent {
   constructor(private router: Router) {}  // Inject Router
@@ -28,9 +29,12 @@ export class DpiListComponent {
     this.router.navigate(['/create-dpi']); 
   }
 
+scanQrVisible: boolean = false;
 scanQrCode() {
-throw new Error('Method not implemented.');
+  this.scanQrVisible = !this.scanQrVisible;
 }
+
+
   searchQuery: string = '';
   dpiList: Patient[] = [
     {
