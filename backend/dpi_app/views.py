@@ -103,6 +103,12 @@ class GetAllMedicinesByPrescriptionId(APIView):
             )
         serializer = MedicineSerializer(medicines, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class GetPrescriptionByConsultationId(RetrieveUpdateDestroyAPIView):
+    queryset = Prescription.objects.all()
+    serializer_class = PrescriptionSerializer
+    lookup_field = 'consultation_id'
+
 
 #getting all the consultations of a patient to display them
 class GetAllConsultationsByDpiId(APIView):

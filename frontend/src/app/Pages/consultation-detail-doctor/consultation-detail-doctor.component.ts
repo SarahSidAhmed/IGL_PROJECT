@@ -15,7 +15,6 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class ConsultationDetailDoctorComponent {
-  currentConsultation =  { }
   isEditing = false;
   resume = 'Lorem ipsum dolor sit amet...';
   tests = ['Test 1', 'Test 2', 'Test 3'];
@@ -36,32 +35,104 @@ export class ConsultationDetailDoctorComponent {
     this.newMedicament = { nom: '', dosage: '', duree: '', frequence: '' };
   }
 
-  addMedicament() {
+  addMedicament(consultationId: number) {
     if (
       this.newMedicament.nom &&
       this.newMedicament.dosage &&
       this.newMedicament.duree &&
       this.newMedicament.frequence
     ) {
-      // Make the HTTP request to add the medicament to the backend
+      // Step 1: Use the prescription endpoint to fetch or create the prescription
       this.http
-        .post('http://127.0.0.1:8000/api/medicine/add/', this.newMedicament)
+        .get(`http://127.0.0.1:8000/api/prescription/${consultationId}/`)
         .subscribe(
-          (response: any) => {
-            // Assuming response is a success confirmation
-            this.listItemsord.push({ ...this.newMedicament });
-            this.toggleAddMedicamentPopup();
-            this.showNotificationMessage('success', 'Medicament ajouté avec succès!');
+          (prescriptionResponse: any) => {
+            const prescriptionId = prescriptionResponse.prescription_id;
+  
+            // Step 2: Fetch prescription details (if necessary)
+            this.http
+              .get(`http://127.0.0.1:8000/api/prescription/${prescriptionId}/`)
+              .subscribe(
+                (prescriptionDetails: any) => {
+                  console.log('Prescription details:', prescriptionDetails);
+  
+                  // Step 3: Add the prescription ID to the medicine payload
+                  const medicamentPayload = {
+                    ...this.newMedicament,
+                    prescription_id: prescriptionId,
+                  };
+  
+                  // Step 4: Make the HTTP request to add the medicine
+                  this.http
+                    .post('http://127.0.0.1:8000/api/medicine/add/', medicamentPayload)
+                    .subscribe(
+                      (response: any) => {
+                        // Assuming response is a success confirmation
+                        this.listItemsord.push({ ...this.newMedicament });
+                        this.toggleAddMedicamentPopup();
+                        this.showNotificationMessage(
+                          'success',
+                          'Médicament ajouté avec succès!'
+                        );
+                      },
+                      (error: HttpErrorResponse) => {
+                        console.error(error);
+                        this.showNotificationMessage(
+                          'error',
+                          "Échec de l'ajout du médicament."
+                        );
+                      }
+                    );
+                },
+                (error: HttpErrorResponse) => {
+                  console.error(error);
+                  this.showNotificationMessage(
+                    'error',
+                    "Échec de la récupération des détails de l'ordonnance."
+                  );
+                }
+              );
           },
           (error: HttpErrorResponse) => {
             console.error(error);
-            this.showNotificationMessage('error', 'Échec de l\'ajout du médicament.');
+            this.showNotificationMessage(
+              'error',
+              "Échec de la récupération ou de la création de l'ordonnance."
+            );
           }
         );
     } else {
       alert('Veuillez remplir tous les champs du médicament.');
     }
   }
+  
+
+  // addMedicament(consultationId: number) {
+  //   if (
+  //     this.newMedicament.nom &&
+  //     this.newMedicament.dosage &&
+  //     this.newMedicament.duree &&
+  //     this.newMedicament.frequence
+  //   ) {
+  //     // Make the HTTP request to add the medicament to the backend
+  //     this.http
+  //       .post('http://127.0.0.1:8000/api/medicine/add/', this.newMedicament)
+  //       .subscribe(
+  //         (response: any) => {
+  //           // Assuming response is a success confirmation
+  //           this.listItemsord.push({ ...this.newMedicament });
+  //           this.toggleAddMedicamentPopup();
+  //           this.showNotificationMessage('success', 'Medicament ajouté avec succès!');
+  //         },
+  //         (error: HttpErrorResponse) => {
+  //           console.error(error);
+  //           this.showNotificationMessage('error', 'Échec de l\'ajout du médicament.');
+  //         }
+  //       );
+  //   } else {
+  //     alert('Veuillez remplir tous les champs du médicament.');
+  //   }
+  // }
 
   toggleEdit() {
     this.isEditing = !this.isEditing;
