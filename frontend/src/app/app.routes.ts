@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DpiCardComponent } from './pages/gestiondpi/dpi-card/dpi-card.component';
-import { DpiListComponent } from './pages/gestiondpi/dpi-list/dpi-list.component';
-import { CreateDpiComponent } from './pages/gestiondpi/create-dpi/create-dpi.component';
-import { RadioListComponent } from './pages/radios-todo/radio-list/radio-list.component';
-import { SoinListComponent } from './pages/soins-todo/soin-list/soin-list.component';
-import { TestListComponent } from './pages/tests-todo/test-list/test-list.component';
-import { SigninComponent } from './pages/signin/signin.component';
+import { DpiCardComponent } from './Pages/gestiondpi/dpi-card/dpi-card.component';
+import { DpiListComponent } from './Pages/gestiondpi/dpi-list/dpi-list.component';
+import { CreateDpiComponent } from './Pages/gestiondpi/create-dpi/create-dpi.component';
+import { RadioListComponent } from './Pages/radios-todo/radio-list/radio-list.component';
+import { SoinListComponent } from './Pages/soins-todo/soin-list/soin-list.component';
+import { TestListComponent } from './Pages/tests-todo/test-list/test-list.component';
+import { SigninComponent } from './Pages/signin/signin.component';
+import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-doctor/consultation-detail-doctor.component';
 
 
 export const routes: Routes = [
@@ -16,7 +17,9 @@ export const routes: Routes = [
   { path: 'create-dpi', component: CreateDpiComponent },
   { path: 'radio-list', component: RadioListComponent },
   { path: 'soin-list', component: SoinListComponent },
-  { path: 'tests-list', component: TestListComponent}
+  { path: 'tests-list', component: TestListComponent},
+  { path: 'consultation-detail-doctor', component: ConsultationDetailDoctorComponent},
+  
 ];
 
 
