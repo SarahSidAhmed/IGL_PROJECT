@@ -11,9 +11,7 @@
     </button>
   </header>
   <div class="flex justify-center mt-4 mb-4">
-    <h1 class="text-primaryBlue font-poppins text-xl font-bold">
-      GESTION DPI
-    </h1>
+    <h1 class="text-primaryBlue font-poppins text-xl font-bold">GESTION DPI</h1>
   </div>
   <div class="flex flex-row justify-center">
     <div
@@ -22,8 +20,10 @@
       <div class="flex-grow relative p-4">
         <input
           type="text"
-          placeholder="Rechercher..."
+        
           [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange($event)"
+          placeholder="Search by SSN prefix..."
           class="w-full p-1 bg-slate-100 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 placeholder:font-poppins placeholder:text-xs placeholder:pl-4"
         />
       </div>
@@ -35,16 +35,15 @@
       </button>
       <button
         class="ml-4 bg-primaryBlue text-white text-xs font-poppins px-2 py-1 rounded-md flex items-center focus:outline-none h-8 mr-5"
-        (click)="onSearch()"
       >
         <i class="fas fa-search mr-2"></i>
         Search
       </button>
     </div>
     <div class="flex justify-evenly space-x-4">
-    
       <button
-        class="ml-2 bg-[#16c2d5] text-white font-poppins px-1 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-24 text-xs font-semibold" (click)="onCreateDpi()"
+        class="ml-2 bg-[#16c2d5] text-white font-poppins px-1 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-24 text-xs font-semibold"
+        (click)="onCreateDpi()"
       >
         <img class="size-5 mr-1" src="./assets/icons/creerDpi.png" />
         <span class="flex">Créer un nouveau DPI</span>
@@ -53,15 +52,21 @@
   </div>
 
   <div class="m-7 mb-0 mt-2 overflow-y-auto custom-scrollbar">
-    <app-dpi-card
-      *ngFor="let patient of filteredDpiList"
-      [patientName]="patient.patientName"
-      [gender]="patient.gender"
-      [age]="patient.age"
-      [patientId]="patient.patientId"
-      [socialSecurityNumber]="patient.socialSecurityNumber"
-      [contactNumber]="patient.contactNumber"
-      [email]="patient.email"
-    ></app-dpi-card>
+    <div class="dpi-cards">
+      <app-dpi-card
+        *ngFor="let dpi of dpis"
+        [patientName]="dpi.first_name + ' ' + dpi.last_name"
+        [gender]="dpi.gender"
+        [age]="calculateAge(dpi.birthdate)"
+        [patientId]="dpi.id.toString()"
+        [socialSecurityNumber]="dpi.social_security_number"
+        [contactNumber]="dpi.phone"
+        [email]="dpi.email"
+      ></app-dpi-card>
+    </div>
+
+    <div *ngIf="!dpis.length" class="text-center">
+      <p>No results found.</p>
+    </div>
   </div>
 </div>

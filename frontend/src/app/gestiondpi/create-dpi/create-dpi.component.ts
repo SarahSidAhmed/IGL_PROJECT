@@ -20,7 +20,6 @@ import { CommonModule } from '@angular/common';
 })
 export class CreateDpiComponent implements OnInit {
   onLogout(): void {
-    // Implement logout logic
     this.router.navigate(['/signin']);
   }
   createDpiForm!: FormGroup;
@@ -58,115 +57,112 @@ export class CreateDpiComponent implements OnInit {
     });
   }
   private initializeForm(): void {
-    this.createDpiForm = this.fb.group(
-      {
-        social_security_number: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(20),
-           // Validators.pattern('^[0-9]+$'),
-          ],
+    this.createDpiForm = this.fb.group({
+      social_security_number: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(20),
+          // Validators.pattern('^[0-9]+$'),
         ],
-        password: [
-          '',
-          [
-            Validators.required,
-            //Validators.minLength(8),
-           /* Validators.pattern(
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          //Validators.minLength(8),
+          /* Validators.pattern(
               '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'
             ),*/
-          ],
         ],
-        confirm_password: ['', [Validators.required]],
-        first_name: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(50),
-          ],
+      ],
+      confirm_password: ['', [Validators.required]],
+      first_name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(50),
         ],
-        last_name: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(50),
-          ],
+      ],
+      last_name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(50),
         ],
-        birthdate: ['', Validators.required],
-        email: [
-          '',
-          [Validators.required, Validators.email, Validators.maxLength(100)],
+      ],
+      birthdate: ['', Validators.required],
+      email: [
+        '',
+        [Validators.required, Validators.email, Validators.maxLength(100)],
+      ],
+      address: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(200),
         ],
-        address: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(200),
-          ],
+      ],
+      phone: [
+        '',
+        [
+          Validators.required,
+          // Validators.pattern('^[0-9]+$'),
+          Validators.minLength(10),
+          Validators.maxLength(20),
         ],
-        phone: [
-          '',
-          [
-            Validators.required,
-           // Validators.pattern('^[0-9]+$'),
-            Validators.minLength(10),
-            Validators.maxLength(20),
-          ],
+      ],
+      emergency_contact_name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(100),
         ],
-        emergency_contact_name: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(100),
-          ],
+      ],
+      emergency_contact_phone: [
+        '',
+        [
+          Validators.required,
+          //Validators.pattern('^[0-9]+$'),
+          Validators.minLength(10),
+          Validators.maxLength(20),
         ],
-        emergency_contact_phone: [
-          '',
-          [
-            Validators.required,
-            //Validators.pattern('^[0-9]+$'),
-            Validators.minLength(10),
-            Validators.maxLength(20),
-          ],
+      ],
+      emergency_contact_relationship: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(30),
         ],
-        emergency_contact_relationship: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(30),
-          ],
+      ],
+      gender: ['', Validators.required],
+      blood_type: ['', Validators.required],
+      mutuelle_name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(255),
         ],
-        gender: ['', Validators.required],
-        blood_type: ['', Validators.required],
-        mutuelle_name: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(255),
-          ],
+      ],
+      mutuelle_policy_number: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(100),
         ],
-        mutuelle_policy_number: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(1),
-            Validators.maxLength(100),
-          ],
-        ],
-        medical_history: [''],
-        hospital: ['', Validators.required],
-        doctor: [''],
-      },
-   
-    );
+      ],
+      medical_history: [''],
+      hospital: ['', Validators.required],
+      doctor: [''],
+    });
   }
 
   private passwordMatchValidator(
@@ -199,7 +195,7 @@ export class CreateDpiComponent implements OnInit {
       const formData = {
         ...this.createDpiForm.value, // Spread the form's current values
         password: this.createDpiForm.get('password')?.value, // Ensure password is included
-  
+
         first_name: this.createDpiForm.get('first_name')?.value, // First Name
         last_name: this.createDpiForm.get('last_name')?.value, // Last Name
         birthdate: new Date(this.createDpiForm.get('birthdate')?.value)
@@ -225,21 +221,20 @@ export class CreateDpiComponent implements OnInit {
         hospital: this.createDpiForm.get('hospital')?.value, // Hospital Name
         doctor: this.createDpiForm.get('doctor')?.value, // Doctor ID (ensure only the ID is passed)
       };
-  
+
       this.isSubmitting = true;
       this.errorMessage = '';
       this.successMessage = '';
-  
+
       // Pass the `formData` instead of `this.createDpiForm.value`
       this.createDpiService.createDpi(formData).subscribe({
         next: (response) => {
           console.log('DPI created successfully', response);
           this.successMessage = 'DPI créé avec succès!';
-          // Reset form or redirect
+          this.router.navigate(['/dpi-list']);
           setTimeout(() => {
             this.createDpiForm.reset();
-            // Redirect to another page if needed
-            // this.router.navigate(['/dpis']);
+            this.router.navigate(['/dpi-list']);
           }, 2000);
         },
         error: (error) => {
@@ -255,7 +250,7 @@ export class CreateDpiComponent implements OnInit {
       this.markFormGroupTouched(this.createDpiForm);
     }
   }
-  
+
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
