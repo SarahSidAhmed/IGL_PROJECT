@@ -12,7 +12,7 @@ import { RechDoctorService } from '../../../services/rech-doctor.service';
 interface Dpi {
   id: number;
   password: string;
-  doctorStaff: {
+  doctor: {
     id: number;
     name: string;
   };
@@ -50,32 +50,36 @@ export class RechDoctorComponent implements OnInit {
 
     private router: Router,
     private patientListService: RechDoctorService
-  ) {}
+  ) {
+    this.route.params.subscribe((params) => {
+      this.doctorId = Number(params['id']);
+      console.log('Doctor ID from route:', this.doctorId);
+      this.fetchDpis();
+    });
+  }
+
   ngOnInit(): void {
-    // Retrieve doctorId from the route
     const doctorIdFromRoute = this.route.snapshot.paramMap.get('id');
+    console.log(this.doctorId);
     this.doctorId = doctorIdFromRoute ? Number(doctorIdFromRoute) : null;
 
-    // Validate doctorId
     if (this.doctorId === null || isNaN(this.doctorId)) {
       console.error('Doctor ID is invalid or missing.');
       return;
     }
 
-    // Fetch initial DPIs
     this.fetchDpis();
 
-    // Set up search input with debounce and switchMap
     this.searchInput
       .pipe(
         debounceTime(300),
         switchMap((query) => {
           if (!query.trim()) {
-            return this.patientListService.searchDpis(this.doctorId!);
+            return this.patientListService.searchDpis('', this.doctorId!);
           }
           return this.patientListService.searchDpis(
-            this.doctorId!,
-            query.trim()
+            query.trim(),
+            this.doctorId!
           );
         })
       )
@@ -94,7 +98,7 @@ export class RechDoctorComponent implements OnInit {
       console.error('Doctor ID is null.');
       return;
     }
-    this.patientListService.searchDpis(this.doctorId, '43').subscribe({
+    this.patientListService.searchDpis('', this.doctorId).subscribe({
       next: (response) => {
         this.dpis = response.results;
       },

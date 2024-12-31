@@ -12,7 +12,7 @@ interface DpiResponse {
 interface Dpi {
   id: number;
   password: string;
-  doctorStaff: {
+  doctor: {
     id: number;
     name: string;
   };
@@ -35,36 +35,40 @@ interface Dpi {
   admission_date: string;
 }
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class RechDoctorService {
   private baseUrl = 'http://127.0.0.1:8000/api';
-
+  
   constructor(private http: HttpClient) {}
-
-  searchDpis(
-    doctorId: number,
-    ssnPrefix: string = ''
-  ): Observable<DpiResponse> {
+  
+  searchDpis(ssnPrefix: string = '', doctorId?: number): Observable<DpiResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
     });
-
+  
     let params = new HttpParams();
     if (ssnPrefix) {
       params = params.set('ssn_prefix', ssnPrefix);
     }
-
+  
     const url = `${this.baseUrl}/dpis/search/`;
-
+    
     return this.http.get<DpiResponse>(url, { headers, params }).pipe(
-      map((response) => ({
-        ...response,
-        results: response.results.filter((dpi) =>
-          doctorId ? dpi.doctorStaff.id === doctorId : true
-        ),
-      }))
+      map(response => {
+        console.log('Raw API response:', response);
+        return {
+          ...response,
+          results: response.results.filter(dpi => {
+            if (!dpi.doctor) {
+              console.warn('DPI missing doctor:', dpi);
+              return false;
+            }
+            return doctorId ? dpi.doctor.id === doctorId : true;
+          })
+        };
+      })
     );
   }
 }
