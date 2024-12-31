@@ -9,6 +9,7 @@ import { SoinListComponent } from './Pages/soins-todo/soin-list/soin-list.compon
 import { TestListComponent } from './Pages/tests-todo/test-list/test-list.component';
 import { SigninComponent } from './Pages/signin/signin.component';
 import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-doctor/consultation-detail-doctor.component';
+import { RechDoctorComponent } from './Pages/rech-doctor/rech-doctor/rech-doctor.component';
 
 
 export const routes: Routes = [
@@ -19,6 +20,10 @@ export const routes: Routes = [
   { path: 'soin-list', component: SoinListComponent },
   { path: 'tests-list', component: TestListComponent},
   { path: 'consultation-detail-doctor', component: ConsultationDetailDoctorComponent},
+  {
+    path: 'doctor/:id',
+  component: RechDoctorComponent
+  }
   
 ];
 
