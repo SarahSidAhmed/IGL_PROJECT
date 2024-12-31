@@ -57,6 +57,7 @@
         [socialSecurityNumber]="dpi.social_security_number"
         [contactNumber]="dpi.phone"
         [email]="dpi.email"
+        (dpiDeleted)="onDpiDeleted($event)"
       ></app-dpi-card>
     </div>
 

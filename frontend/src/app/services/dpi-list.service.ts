@@ -57,4 +57,9 @@ export class DpiListService {
 
     return this.http.get<DpiResponse>(url, { headers, params });
   }
+
+  deleteDpi(dpiId: number): Observable<void> {
+    const url = `${this.baseUrl}/dpis/${dpiId}/`;
+    return this.http.delete<void>(url);
+  }
 }

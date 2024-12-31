@@ -14,4 +14,6 @@ export class PatientCardComponent {
   @Input() socialSecurityNumber!: string;
   @Input() contactNumber!: string;
   @Input() email!: string;
+
+  
 }
