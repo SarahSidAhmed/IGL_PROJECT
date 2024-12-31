@@ -67,8 +67,6 @@ class Consultation(models.Model):
     dpi = models.ForeignKey(Dpi, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Staff, on_delete=models.CASCADE)
     consultation_summary = models.TextField()
-    examination_required = models.TextField()
-    hospital = models.TextField()
     consultation_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -103,7 +101,7 @@ class BiologicalExam(models.Model):
     lab_technician = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
     exam_name = models.CharField(max_length=100)
     result = models.TextField(null=True, blank=True)
-    exam_date = models.DateField(default=timezone.now)
+    exam_date = models.DateField(null=True)
 
     def __str__(self):
         return self.exam_name
@@ -126,7 +124,7 @@ class RadiologicalExam(models.Model):
     exam_name = models.TextField()
     image = models.ImageField(upload_to='radiological_exam_images/', null=True, blank=True)  # Handle images
     result = models.TextField(null=True, blank=True)
-    exam_date = models.DateField(default=timezone.now)
+    exam_date = models.DateField(null=True)
 
     def __str__(self):
         return self.exam_name
@@ -138,7 +136,7 @@ class NursingRecord(models.Model):
     nurse = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
     care_name = models.TextField()
     patient_observation = models.TextField(null=True, blank=True)
-    record_date = models.DateTimeField(default=timezone.now)
+    record_date = models.DateTimeField(null=True)
 
     def __str__(self):
         return f'Nursing record for DPI {self.consultation.dpi.id}'
