@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DpiListService } from '../../services/dpi-list.service';
+import { DpiListService } from '../../../services/dpi-list.service';
 import { debounceTime, Subject, switchMap } from 'rxjs';
 
 interface Dpi {
@@ -74,7 +74,7 @@ export class DpiListComponent implements OnInit {
   }
 
   fetchDpis(): void {
-    this.dpiListService.searchDpis().subscribe({
+    this.dpiListService.searchDpis('43').subscribe({
       next: (response) => {
         this.dpis = response.results;
       },
@@ -98,17 +98,34 @@ export class DpiListComponent implements OnInit {
   }
 
   calculateAge(birthdate: string): number {
+    // Make sure we have a valid date string
+    if (!birthdate) return 0;
+
     const birth = new Date(birthdate);
+    
+    // Check if the date is valid
+    if (isNaN(birth.getTime())) return 0;
+    
     const today = new Date();
+    
+    // Calculate age
     let age = today.getFullYear() - birth.getFullYear();
+    
+    // Get month difference
     const monthDiff = today.getMonth() - birth.getMonth();
     
+    // If birthday hasn't occurred this year, subtract one year
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
       age--;
     }
     
+    // Add logging to debug
+    console.log('Birthdate:', birthdate);
+    console.log('Calculated age:', age);
+    
     return age;
   }
+
 
   scanQrCode() {
     throw new Error('Method not implemented.');

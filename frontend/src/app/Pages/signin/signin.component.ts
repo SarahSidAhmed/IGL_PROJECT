@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
-  imports: [RouterOutlet],
+  imports: [],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })

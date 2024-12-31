@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
@@ -35,7 +35,6 @@ interface Dpi {
   admission_date: string;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -45,7 +44,17 @@ export class DpiListService {
   constructor(private http: HttpClient) {}
 
   searchDpis(ssnPrefix: string = ''): Observable<DpiResponse> {
-    const url = `${this.baseUrl}/dpis/search/${ssnPrefix ? ssnPrefix : ''}`;
-    return this.http.get<DpiResponse>(url);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    const params = ssnPrefix
+      ? new HttpParams().set('ssn_prefix', ssnPrefix)
+      : new HttpParams();
+
+    const url = `${this.baseUrl}/dpis/search/`;
+
+    return this.http.get<DpiResponse>(url, { headers, params });
   }
 }

@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CreateDpiService } from '../../services/create-dpi.service';
+import { CreateDpiService } from '../../../services/create-dpi.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
