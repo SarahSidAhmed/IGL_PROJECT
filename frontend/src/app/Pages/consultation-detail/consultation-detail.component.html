@@ -1,80 +1,79 @@
 <div class="bg-[#F1FFFC] min-h-screen lg:flex lg:flex-col">
-    <app-navbar></app-navbar>
-    <div class="p-6">
-      <div class="flex items-center justify-between mb-6 relative">
-        <div class="absolute left-0 w-8 h-8 flex items-center justify-center bg-white shadow-md rounded">
-          <img src="assets/arrow.svg" alt="Back Arrow" class="h-4 w-4" />
-        </div>
-        <h1 class="text-2xl font-bold text-[#10217D] mx-auto">Consultation</h1>
+  <app-navbar></app-navbar>
+  <div class="p-6">
+    <div class="flex items-center justify-between mb-6 relative">
+      <div class="absolute left-0 w-8 h-8 flex items-center justify-center bg-white shadow-md rounded">
+        <img src="assets/arrow.svg" alt="Back Arrow" class="h-4 w-4" />
       </div>
-      <div class="flex flex-wrap gap-4">
-        <div class="flex-1 bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-xl font-semibold text-[#10217D] mb-4">Visite Ordinaire</h2>
-          <div class="flex flex-wrap lg:flex-nowrap gap-4">
-            <div class="flex-1">
-                <div class="flex items-center text-sm text-gray-700 mb-6">
-                    <div class="flex items-center gap-2 mr-4">
-                      <img src="assets/hopital.svg" alt="Hospital Icon" class="h-4 w-4" />
-                      <span>Hopital El Harrache</span>
-                    </div>
-                    <div class="flex items-center gap-2 mr-4">
-                      <img src="assets/dr.svg" alt="Doctor Icon" class="h-4 w-4" />
-                      <span>Dr. Mohamed Bouzekri</span>
-                    </div>
-                    <div class="flex items-center gap-2 mr-4">
-                      <img src="assets/date.svg" alt="Date Icon" class="h-4 w-4" />
-                      <span>15/06/2021</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <img src="assets/hour.svg" alt="Time Icon" class="h-4 w-4" />
-                      <span>12:15 PM</span>
-                    </div>
+      <h1 class="text-2xl font-bold text-[#10217D] mx-auto">Consultation</h1>
+    </div>
+    <div class="flex flex-wrap gap-4">
+      <div class="flex-1 bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-[#10217D] mb-4">Visite Ordinaire</h2>
+        <div class="flex flex-wrap lg:flex-nowrap gap-4">
+          <div class="flex-1">
+              <div class="flex items-center text-sm text-gray-700 mb-6">
+                  <div class="flex items-center gap-2 mr-4">
+                    <img src="assets/hopital.svg" alt="Hospital Icon" class="h-4 w-4" />
+                    <span>Hopital El Harrache</span>
                   </div>
-                  <div class="relative border-[1.5px] border-[#10217D] rounded-lg p-4 mb-4">
-                    <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Résumé</h3>
-                    <p class="text-gray-600">lorem ispum lorem ispum lorem ispum lorem ispumlorem ispum lorem ispum lorem ispumlorem ispumlorem ispumlorem ispumlorem ispumlorem ispumlorem ispum </p>
+                  <div class="flex items-center gap-2 mr-4">
+                    <img src="assets/dr.svg" alt="Doctor Icon" class="h-4 w-4" />
+                    <span>Dr. Mohamed Bouzekri</span>
                   </div>
-                  <div>
-                    <h3 class="font-semibold text-lg text-[#10217D]">Tests et Soins</h3>
-                    <div class="mt-4">
-                        <div *ngFor="let item of tests" class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-                              <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
-                              <span class="list-disc text-[#10217D]">{{item}}</span>
-                            </div>
-                            
-                            <button 
-                              class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
-                            >
-                              Open
-                            </button>
+                  <div class="flex items-center gap-2 mr-4">
+                    <img src="assets/date.svg" alt="Date Icon" class="h-4 w-4" />
+                    <span>15/06/2021</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <img src="assets/hour.svg" alt="Time Icon" class="h-4 w-4" />
+                    <span>12:15 PM</span>
+                  </div>
+                </div>
+                <div class="relative border-[1.5px] border-[#10217D] rounded-lg p-4 mb-4">
+                  <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Résumé</h3>
+                  <p class="text-gray-600">lorem ispum lorem ispum lorem ispum lorem ispumlorem ispum lorem ispum lorem ispumlorem ispumlorem ispumlorem ispumlorem ispumlorem ispumlorem ispum</p>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-lg text-[#10217D]">Tests et Soins</h3>
+                  <div class="mt-4">
+                      <div *ngFor="let item of tests" class="flex justify-between items-center mb-2">
+                          <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+                            <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
+                            <span class="list-disc text-[#10217D]">{{item.name}}</span>
                           </div>
-                    </div>
-        
-                    <div>
-                        <div *ngFor="let item of soins" class="flex items-center mb-2">
-                            <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-                              <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
-                              <span class="list-disc text-[#10217D]">{{item}}</span>
-                            </div>
+                          
+                          <button 
+                            class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
+                          >
+                            Open
+                          </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="w-full lg:w-1/3 relative rounded-lg p-4">
-                <div class="flex-1 relative border-[1.5px] border-[#10217D] rounded-lg p-4">
-                    <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Ordonnance</h3>
-                    <div *ngFor="let item of listItemsord" class="flex items-center gap-2">
-                      <img src="assets/bullet.svg" alt="Time" class="h-1 w-1" />
-                      <p class="text-gray-600">{{ item.nom }} - {{ item.duree }} - {{ item.dosage }} - {{ item.frequence }}</p>
-                    </div>
-                </div>
-            </div>
+                  </div>
+      
+                  <div>
+                      <div *ngFor="let item of soins" class="flex items-center mb-2">
+                          <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+                            <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
+                            <span class="list-disc text-[#10217D]">{{item}}</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="w-full lg:w-1/3 relative rounded-lg p-4 lg:pt-11">
+              <div class="flex-1 h-full relative border-[1.5px] border-[#10217D] rounded-lg p-4">
+                  <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Ordonnance</h3>
+                  <div *ngFor="let item of listItemsord" class="flex items-center gap-2">
+                    <img src="assets/bullet.svg" alt="Time" class="h-1 w-1" />
+                    <p class="text-gray-600">{{ item.nom }} - {{ item.duree }} - {{ item.dosage }} - {{ item.frequence }}</p>
+                  </div>
+              </div>
           </div>
         </div>
-        
       </div>
+      
     </div>
   </div>
-  <router-outlet />
-  
+</div>
+<router-outlet />

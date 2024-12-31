@@ -1,73 +1,85 @@
 <div class="bg-[#F1FFFC] min-h-screen lg:flex lg:flex-col">
-    <div
-  *ngIf="showNotification"
-  class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg flex items-center gap-4 z-50"
-  [ngClass]="{
-    'bg-white text-[#1BA9B5] font-bold': notificationType === 'success',
-    'bg-white text-[#FF7373] font-bold': notificationType === 'error'
-  }"
+  <div
+*ngIf="showNotification"
+class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg flex items-center gap-4 z-50"
+[ngClass]="{
+  'bg-white text-[#1BA9B5] font-bold': notificationType === 'success',
+  'bg-white text-[#FF7373] font-bold': notificationType === 'error'
+}"
 >
-  <img
-    [src]="notificationType === 'success' ? 'assets/valid.svg' : 'assets/error.svg'"
-    alt="Notification Icon"
-    class="h-6 w-6"
-  />
-  <span>{{ notificationMessage }}</span>
+<img
+  [src]="notificationType === 'success' ? 'assets/valid.svg' : 'assets/error.svg'"
+  alt="Notification Icon"
+  class="h-6 w-6"
+/>
+<span>{{ notificationMessage }}</span>
 </div>
-    <app-navbar></app-navbar>
-    <div class="p-6">
-      <div class="flex items-center justify-between mb-6 relative">
-        <div class="absolute left-0 w-8 h-8 flex items-center justify-center bg-white shadow-md rounded">
-          <img src="assets/arrow.svg" alt="Back Arrow" class="h-4 w-4" />
-        </div>
-        <h1 class="text-2xl font-bold text-[#10217D] mx-auto">Consultation</h1>
+  <app-navbar></app-navbar>
+  <div class="p-6">
+    <div class="flex items-center justify-center mb-6 relative">
+      <div class="absolute left-0 w-8 h-8 flex items-center justify-center bg-white shadow-md rounded">
+        <img src="assets/arrow.svg" alt="Back Arrow" class="h-4 w-4" />
       </div>
-      <div class="flex flex-wrap gap-4">
-        <div class="flex-1 bg-white rounded-lg shadow-md p-6">
-          <div class="flex items-center justify-between w-full mb-6">
-            <h2 class="text-xl font-semibold text-[#10217D]">Visite Ordinaire</h2>
-            <div *ngIf="!isEditing">
-              <button
-                (click)="toggleEdit()"
-                class="text-sm text-[#008080] font-bold "
-              >
-              <img src="assets/edit.svg" class="inline-block w-4 h-4" /> Edit
-              </button>
-            </div>
-            <div *ngIf="isEditing" class="flex gap-4">
-              <button
-                (click)="saveChanges()"
-                class="text-sm  text-[#16C2D5] font-bold "
-              >
-              <img src="assets/valid.svg" class="inline-block w-4 h-4" /> Enregistrer
-              </button>
-              <button
-                (click)="discardChanges()"
-                class="text-sm  text-[#FF7373] font-bold rounded-md"
-              >
-              <img src="assets/cancel.svg" class="inline-block w-4 h-4" /> Annuler
-              </button>
-            </div>
+      <h1 class="text-2xl font-bold text-[#10217D]">
+        Consultation
+      </h1>
+      <div class="absolute right-0 flex flex-col md:flex-row">
+        <button
+          (click)="toggleAddTestPopup()"
+          class="bg-[#008080] text-sm text-white font-bold px-4 py-2 rounded-md flex items-center gap-2"
+        >
+          <img src="assets/send.svg" class="inline-block w-4 h-4" />
+          <span class="hidden md:inline">envoyer pour examination</span>
+        </button>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4">
+      <div class="flex-1 bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between w-full mb-6">
+          <h2 class="text-xl font-semibold text-[#10217D]">Visite Ordinaire</h2>
+          <div *ngIf="!isEditing">
+            <button
+              (click)="toggleEdit()"
+              class="text-sm text-[#008080] font-bold "
+            >
+            <img src="assets/edit.svg" class="inline-block w-4 h-4" /> Edit
+            </button>
           </div>
-            <div class="flex-1">
-                <div class="flex items-center text-sm text-gray-700 mb-6">
-                    <div class="flex items-center gap-2 mr-4">
-                      <img src="assets/hopital.svg" alt="Hospital Icon" class="h-4 w-4" />
-                      <span>Hopital El Harrache</span>
-                    </div>
-                    <div class="flex items-center gap-2 mr-4">
-                      <img src="assets/dr.svg" alt="Doctor Icon" class="h-4 w-4" />
-                      <span>Dr. Mohamed Bouzekri</span>
-                    </div>
-                    <div class="flex items-center gap-2 mr-4">
-                      <img src="assets/date.svg" alt="Date Icon" class="h-4 w-4" />
-                      <span>15/06/2021</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <img src="assets/hour.svg" alt="Time Icon" class="h-4 w-4" />
-                      <span>12:15 PM</span>
-                    </div>
-                  </div>
+          <div *ngIf="isEditing" class="flex gap-4">
+            <button
+              (click)="saveChanges()"
+              class="text-sm  text-[#16C2D5] font-bold "
+            >
+            <img src="assets/valid.svg" class="inline-block w-4 h-4" /> Enregistrer
+            </button>
+            <button
+              (click)="discardChanges()"
+              class="text-sm  text-[#FF7373] font-bold rounded-md"
+            >
+            <img src="assets/cancel.svg" class="inline-block w-4 h-4" /> Annuler
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-wrap lg:flex-nowrap gap-4">
+          <div class="flex-1">
+            <div class="flex items-center text-sm text-gray-700 mb-6">
+                <div class="flex items-center gap-2 mr-4">
+                  <img src="assets/hopital.svg" alt="Hospital Icon" class="h-4 w-4" />
+                  <span>Hopital El Harrache</span>
+                </div>
+                <div class="flex items-center gap-2 mr-4">
+                  <img src="assets/dr.svg" alt="Doctor Icon" class="h-4 w-4" />
+                  <span>Dr. Mohamed Bouzekri</span>
+                </div>
+                <div class="flex items-center gap-2 mr-4">
+                  <img src="assets/date.svg" alt="Date Icon" class="h-4 w-4" />
+                  <span>15/06/2021</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <img src="assets/hour.svg" alt="Time Icon" class="h-4 w-4" />
+                  <span>12:15 PM</span>
+                </div>
+              </div>
               <div class="relative border-[1.5px] border-[#10217D] rounded-lg p-4 mb-4">
                 <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Résumé</h3>
                 <textarea
@@ -75,122 +87,238 @@
                   [(ngModel)]="resume"
                   class="w-full text-gray-600 outline-none"
                 ></textarea>
-                <p *ngIf="!isEditing" class="text-gray-600">{{ resume }}</p>
-              </div>
-              <div>
-                <h3 class="font-semibold text-lg text-[#10217D]">Tests et Soins</h3>
-                <div class="mt-4">
-                  <div *ngFor="let item of tests; let i = index" class="flex justify-between items-center mb-2">
-                    <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-                      <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
-                      <button *ngIf="isEditing" (click)="deleteItem(tests, i)" class="text-[#FF5252]">
-                        <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
-                      </button>
-                      <span class="list-disc text-[#10217D]">{{ item }}</span>
-                    </div>
-                    <button class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0">
-                      Open
-                    </button>
-                  </div>
-                  <div *ngFor="let item of soins; let i = index" class="flex items-center mb-2">
-                    <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-                      <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
-                      <button *ngIf="isEditing" (click)="deleteItem(soins, i)" class="text-[#FF5252]">
-                        <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
-                      </button>
-                      <span class="list-disc text-[#10217D]">{{ item }}</span>
-                    </div>
-                  </div>
+                <div class="max-w-lg">
+                  <p *ngIf="!isEditing" class="text-gray-600 break-words">
+                    {{ resume }}
+                  </p>
                 </div>
               </div>
-            </div>
-            <div class="w-full lg:w-1/3 relative border-[1.5px] border-[#10217D] rounded-lg p-4">
-              <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Ordonnance</h3>
-              <div *ngIf="isEditing" class="mt-4">
+          <div>
+            <div class="flex items-center justify-between w-full mb-6">
+              <h3 class="font-semibold text-lg text-[#10217D]">Tests et Soins</h3>
+              <div *ngIf="isEditing">
                 <button
+                 (click)="toggleAddSoinPopup()"
                   class="bg-[#008080] text-sm text-white font-bold px-4 py-2 rounded-md flex items-center gap-2"
-                  (click)="toggleAddMedicamentPopup()"
                 >
-                  <img src="assets/plus.svg" alt="Add" class="h-4 w-4" />
-                  Ajouter Medicament
+                  <img src="assets/plus.svg" class="inline-block w-4 h-4" /> Ajouter Soin
                 </button>
               </div>
-              <div *ngFor="let item of listItemsord; let i = index" class="flex items-center gap-2">
-                <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
-                <button *ngIf="isEditing" (click)="deleteItem(listItemsord, i)" class="text-[#FF5252]">
-                  <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
+            </div>
+            <div class="mt-4">
+              <div *ngFor="let item of tests; let i = index" class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+                  <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
+                  <button *ngIf="isEditing" (click)="deleteItem(tests, i)" class="text-[#FF5252]">
+                    <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
+                  </button>
+                  <span class="list-disc text-[#10217D]">{{ item.name }}</span>
+                </div>
+                <button class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0">
+                  Open
                 </button>
-                <p class="text-gray-600">{{ item.nom }} - {{ item.duree }} - {{ item.dosage }} - {{ item.frequence }}</p>
+              </div>
+              <div *ngFor="let item of soins; let i = index" class="flex items-center mb-2">
+                <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+                  <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
+                  <button *ngIf="isEditing" (click)="deleteItem(soins, i)" class="text-[#FF5252]">
+                    <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
+                  </button>
+                  <span class="list-disc text-[#10217D]">{{ item }}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-  *ngIf="showAddMedicament"
+        <div class="w-full lg:w-1/3 relative rounded-lg p-4 lg:pt-11">
+          <div class="flex-1 h-full relative border-[1.5px] border-[#10217D] rounded-lg p-4">
+            <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Ordonnance</h3>
+            <div *ngIf="isEditing" class="mt-4">
+              <button
+                class="bg-[#008080] text-sm text-white font-bold px-4 py-2 rounded-md flex items-center gap-2"
+                (click)="toggleAddMedicamentPopup()"
+              >
+                <img src="assets/plus.svg" alt="Add" class="h-4 w-4" />
+                Ajouter médicament
+              </button>
+            </div>
+            <div *ngFor="let item of listItemsord; let i = index" class="flex items-center gap-2">
+              <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
+              <button *ngIf="isEditing" (click)="deleteItem(listItemsord, i)" class="text-[#FF5252]">
+                <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
+              </button>
+              <p class="text-gray-600">{{ item.nom }} - {{ item.duree }} - {{ item.dosage }} - {{ item.frequence }}</p>
+            </div>
+          </div>
+
+        </div>
+        </div>
+        </div>
+      </div>
+      <div
+class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+*ngIf="showAddMedicament"
 >
-  <div class="bg-white w-[90%] max-w-lg rounded-lg p-6">
-    <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Ajouter Medicament</h2>
-    <div class="flex items-center justify-between mb-4">
-      <hr class="flex-1 border-t-[1.5px] border-[#10217D]" />
-      <h3 class="ml-4 text-[#10217D] font-medium">Informations</h3>
+<div class="bg-white w-[90%] max-w-lg rounded-lg p-6">
+  <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Ajouter Medicament</h2>
+  <div class="flex items-center justify-between mb-4">
+    <hr class="flex-1 border-t-[1.5px] border-[#10217D]" />
+    <h3 class="ml-4 text-[#10217D] font-medium">Informations</h3>
+  </div>
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-[#10217D] mb-1">Nom médicament:</label>
+      <input
+        type="text"
+        class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
+        [(ngModel)]="newMedicament.nom"  
+      />
     </div>
-    <div class="flex gap-4 mb-4">
-      <div class="flex-1">
-        <label class="block text-sm font-medium text-[#10217D] mb-1">Nom médicament:</label>
-        <input
-          type="text"
-          class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
-          [(ngModel)]="newMedicament.nom"  
-        />
-      </div>
-      <div class="flex-1">
-        <label class="block text-sm font-medium text-[#10217D] mb-1">Dosage:</label>
-        <input
-          type="text"
-          class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
-          [(ngModel)]="newMedicament.dosage" 
-        />
-      </div>
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-[#10217D] mb-1">Dosage:</label>
+      <input
+        type="text"
+        class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
+        [(ngModel)]="newMedicament.dosage" 
+      />
     </div>
-    <div class="flex gap-4 mb-4">
-      <div class="flex-1">
-        <label class="block text-sm font-medium text-[#10217D] mb-1">Durée:</label>
-        <input
-          type="text"
-          class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
-          [(ngModel)]="newMedicament.duree"  
-        />
-      </div>
-      <div class="flex-1">
-        <label class="block text-sm font-medium text-[#10217D] mb-1">Fréquence:</label>
-        <input
-          type="text"
-          class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
-          [(ngModel)]="newMedicament.frequence" 
-        />
-      </div>
+  </div>
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-[#10217D] mb-1">Durée:</label>
+      <input
+        type="text"
+        class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
+        [(ngModel)]="newMedicament.duree"  
+      />
     </div>
-    <div class="flex justify-end gap-4">
-      <button
-        class="bg-white text-[#008080] border-[1.5px] border-[#008080] px-4 py-2 rounded-md flex items-center gap-2"
-        (click)="addMedicament()"
-      >
-        <img src="assets/check.svg" alt="Add" class="h-4 w-4" />
-        Ajouter
-      </button>
-      <button
-        class="bg-white text-[#FF7373] border-[1.5px] border-[#FF7373] px-4 py-2 rounded-md flex items-center gap-2"
-        (click)="toggleAddMedicamentPopup()"
-      >
-        <img src="assets/cross.svg" alt="Cancel" class="h-4 w-4" />
-        Annuler
-      </button>
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-[#10217D] mb-1">Fréquence:</label>
+      <input
+        type="text"
+        class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
+        [(ngModel)]="newMedicament.frequence" 
+      />
     </div>
+  </div>
+  <div class="flex justify-end gap-4">
+    <button
+      class="bg-white text-[#008080] border-[1.5px] border-[#008080] px-4 py-2 rounded-md flex items-center gap-2"
+      (click)="addMedicament()"
+    >
+      <img src="assets/check.svg" alt="Add" class="h-4 w-4" />
+      Ajouter
+    </button>
+    <button
+      class="bg-white text-[#FF7373] border-[1.5px] border-[#FF7373] px-4 py-2 rounded-md flex items-center gap-2"
+      (click)="toggleAddMedicamentPopup()"
+    >
+      <img src="assets/cross.svg" alt="Cancel" class="h-4 w-4" />
+      Annuler
+    </button>
   </div>
 </div>
+</div>
 
-    </div>
+<div
+class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+*ngIf="showAddSoin"
+>
+<div class="bg-white w-[90%] max-w-lg rounded-lg p-6">
+  <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Ajouter Soin</h2>
+  <div class="flex items-center justify-between mb-4">
+    <hr class="flex-1 border-t-[1.5px] border-[#10217D]" />
+    <h3 class="ml-4 text-[#10217D] font-medium">Informations</h3>
   </div>
-  <router-outlet />
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-[#10217D] mb-1">Nom soin:</label>
+      <input
+        type="text"
+        class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
+        [(ngModel)]="newSoin"  
+      />
+    </div>
+    
+  </div>
   
+  <div class="flex justify-end gap-4">
+    <button
+      class="bg-white text-[#008080] border-[1.5px] border-[#008080] px-4 py-2 rounded-md flex items-center gap-2"
+      (click)="addSoin()"
+    >
+      <img src="assets/check.svg" alt="Add" class="h-4 w-4" />
+      Ajouter
+    </button>
+    <button
+      class="bg-white text-[#FF7373] border-[1.5px] border-[#FF7373] px-4 py-2 rounded-md flex items-center gap-2"
+      (click)="toggleAddSoinPopup()"
+    >
+      <img src="assets/cross.svg" alt="Cancel" class="h-4 w-4" />
+      Annuler
+    </button>
+  </div>
+</div>
+</div>
+
+
+<div
+class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+*ngIf="showAddTest"
+>
+<div class="bg-white w-[90%] max-w-lg rounded-lg p-6">
+  <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Ajouter Test</h2>
+  <div class="flex items-center justify-between mb-4">
+    <hr class="flex-1 border-t-[1.5px] border-[#10217D]" />
+    <h3 class="ml-4 text-[#10217D] font-medium">Informations</h3>
+  </div>
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-[#10217D] mb-1">Nom test:</label>
+      <input
+        type="text"
+        class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
+        [(ngModel)]="newTest.name"  
+      />
+    </div>
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-[#10217D] mb-1">Type test:</label>
+      <div class="relative">
+        <select 
+          id="test" 
+          name="test" 
+          [(ngModel)]="newTest.type"
+          class="mt-1 pl-5 w-full px-2 py-2 border border-[#10217D] rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm appearance-none pr-10 text-[#10217D] font-medium mb-4"
+        >
+          <option value="bilan" class="text-[#10217D]">Bilan</option>
+          <option value="radio" class="text-[#10217D]">Radio</option>
+        </select>
+        <svg class="absolute right-3 top-1/2 transform -translate-y-3 w-4 h-4 text-[#10217D]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+    
+  </div>
+  <div class="flex justify-end gap-4">
+    <button
+      class="bg-white text-[#008080] border-[1.5px] border-[#008080] px-4 py-2 rounded-md flex items-center gap-2"
+      (click)="addTest()"
+    >
+      <img src="assets/check.svg" alt="Add" class="h-4 w-4" />
+      Ajouter
+    </button>
+    <button
+      class="bg-white text-[#FF7373] border-[1.5px] border-[#FF7373] px-4 py-2 rounded-md flex items-center gap-2"
+      (click)="toggleAddTestPopup()"
+    >
+      <img src="assets/cross.svg" alt="Cancel" class="h-4 w-4" />
+      Annuler
+    </button>
+  </div>
+</div>
+</div>
+  </div>
+</div>
+<router-outlet />
+
