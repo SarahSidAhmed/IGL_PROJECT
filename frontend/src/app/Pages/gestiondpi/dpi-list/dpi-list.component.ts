@@ -48,7 +48,7 @@ export class DpiListComponent implements OnInit {
     this.fetchDpis();
   }
 
-<<<<<<< HEAD
+
 scanQrVisible: boolean = false;
 scanQrCode() {
   this.scanQrVisible = !this.scanQrVisible;
@@ -121,9 +121,6 @@ scanQrCode() {
     return age;
   }
 
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
 
   onCreateDpi(): void {
     this.router.navigate(['/create-dpi']);

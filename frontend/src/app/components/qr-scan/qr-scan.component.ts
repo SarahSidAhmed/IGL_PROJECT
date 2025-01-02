@@ -93,21 +93,5 @@ async ReadQr(event: Event): Promise<void> {
   }
 }
 
-searchDpi(): void {
-    if (!this.scannedCode) {
-      alert('No ID extracted from the QR code. Please scan a QR code first.');
-      return;
-    }
-
-    const url = `http://127.0.0.1:8000/dpis/${this.scannedCode}/`;
-    this.http.get(url).subscribe({
-      next: (response) => {
-        console.log('Response:', response);
-      },
-      error: (error) => {
-        console.error('Error:', error);
-      }
-    });
-  }
 
 }

@@ -23,7 +23,7 @@ export const routes: Routes = [
   { path: 'radio-list', component: RadioListComponent },
   { path: 'soin-list', component: SoinListComponent },
   { path: 'tests-list', component: TestListComponent},
-  { path: 'qr', component: QrCardComponent}
+  { path: 'qr', component: QrCardComponent},
   { path: 'consultation-detail-doctor', component: ConsultationDetailDoctorComponent},
   { path: 'doctor/:id',component: RechDoctorComponent},
   { path: 'qr-card', component: QrCardComponent },
