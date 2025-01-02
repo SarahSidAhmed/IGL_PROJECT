@@ -84,7 +84,7 @@ async ReadQr(event: Event): Promise<void> {
           alert('QR Code scanned successfully: ' + this.scannedCode);
         } catch (error) {
           console.error('Error reading QR code from image:', error);
-          alert('Failed to read QR code from the image. Please try another image.');
+          alert('Failed to read QR code from the image. Please try anotther image.');
         }
       }
     };
