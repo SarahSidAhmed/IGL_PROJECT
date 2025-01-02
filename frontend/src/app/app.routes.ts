@@ -13,6 +13,7 @@ import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-d
 import { RechDoctorComponent } from './Pages/rech-doctor/rech-doctor/rech-doctor.component';
 import { QrCardComponent } from './Pages/qr-card/qr-card.component';
 import { EditDpiComponent } from './Pages/edit-dpi/edit-dpi.component';
+import { DpiDoctorComponent } from './Pages/dpi-doctor/dpi-doctor.component';
 
 
 
@@ -27,7 +28,8 @@ export const routes: Routes = [
   { path: 'consultation-detail-doctor', component: ConsultationDetailDoctorComponent},
   { path: 'doctor/:id',component: RechDoctorComponent},
   { path: 'qr-card', component: QrCardComponent },
-  { path: 'edit-dpi/:id', component: EditDpiComponent}
+  {path: 'edit-dpi/:id', component: EditDpiComponent},
+  {path: 'dpi-doctor', component: DpiDoctorComponent}
 
 ];
 
