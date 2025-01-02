@@ -230,11 +230,17 @@ export class CreateDpiComponent implements OnInit {
       this.createDpiService.createDpi(formData).subscribe({
         next: (response) => {
           console.log('DPI created successfully', response);
+          
           this.successMessage = 'DPI créé avec succès!';
-          this.router.navigate(['/dpi-list']);
+          this.router.navigate(['/qr-card'], {
+            state: { 
+              ssn: formData.social_security_number,
+              patientId: response.id // Assuming the response contains the patient ID
+            }
+          });
           setTimeout(() => {
             this.createDpiForm.reset();
-            this.router.navigate(['/dpi-list']);
+            
           }, 2000);
         },
         error: (error) => {
@@ -264,5 +270,6 @@ export class CreateDpiComponent implements OnInit {
     this.createDpiForm.reset();
     this.errorMessage = '';
     this.successMessage = '';
+    this.router.navigate(['/dpi-list']);
   }
 }

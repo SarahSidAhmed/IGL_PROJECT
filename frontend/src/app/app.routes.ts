@@ -10,6 +10,7 @@ import { TestListComponent } from './Pages/tests-todo/test-list/test-list.compon
 import { SigninComponent } from './Pages/signin/signin.component';
 import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-doctor/consultation-detail-doctor.component';
 import { RechDoctorComponent } from './Pages/rech-doctor/rech-doctor/rech-doctor.component';
+import { QrCardComponent } from './Pages/qr-card/qr-card.component';
 
 
 export const routes: Routes = [
@@ -23,7 +24,8 @@ export const routes: Routes = [
   {
     path: 'doctor/:id',
   component: RechDoctorComponent
-  }
+  },
+  { path: 'qr-card', component: QrCardComponent },
   
 ];
 
