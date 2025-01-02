@@ -235,7 +235,7 @@ export class CreateDpiComponent implements OnInit {
           this.router.navigate(['/qr-card'], {
             state: { 
               ssn: formData.social_security_number,
-              patientId: response.id // Assuming the response contains the patient ID
+              patientId: response.id 
             }
           });
           setTimeout(() => {

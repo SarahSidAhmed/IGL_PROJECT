@@ -24,10 +24,8 @@ export class QrCardComponent implements OnInit{
     
     if (state) {
       this.patientId = state.patientId;
-      // Generate QR code for the SSN
       this.generateQRCode(state.ssn);
     } else {
-      // Redirect to home if no state
       this.router.navigate(['/']);
     }
   }

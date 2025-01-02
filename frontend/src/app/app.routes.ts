@@ -11,6 +11,7 @@ import { SigninComponent } from './Pages/signin/signin.component';
 import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-doctor/consultation-detail-doctor.component';
 import { RechDoctorComponent } from './Pages/rech-doctor/rech-doctor/rech-doctor.component';
 import { QrCardComponent } from './Pages/qr-card/qr-card.component';
+import { EditDpiComponent } from './Pages/edit-dpi/edit-dpi.component';
 
 
 export const routes: Routes = [
@@ -26,7 +27,7 @@ export const routes: Routes = [
   component: RechDoctorComponent
   },
   { path: 'qr-card', component: QrCardComponent },
-  
+  {path: 'edit-dpi/:id', component: EditDpiComponent}
 ];
 
 
