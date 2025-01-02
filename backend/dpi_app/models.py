@@ -33,7 +33,7 @@ class Staff(models.Model):
 
 class Dpi(models.Model):
     id = models.AutoField(primary_key=True)
-    social_security_number = models.CharField(max_length=20, unique=True)
+    social_security_number = models.CharField(max_length=20, unique=True, null=True)
     password = models.CharField(max_length=128, null=False)    
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
