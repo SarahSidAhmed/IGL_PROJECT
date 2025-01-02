@@ -26,7 +26,7 @@ export class QrScanComponent {
   @Output() closePopup = new EventEmitter<void>();
 
   isScanning: boolean = false; 
-  scannedCode: string = '1';
+  scannedCode: string = '14';
 
   ngOnInit() {
     this.checkCameraPermissions();
@@ -48,7 +48,7 @@ export class QrScanComponent {
     this.closePopup.emit();
   }
 
-  // Starts the scanning process
+
   startScan() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true })
@@ -65,7 +65,7 @@ export class QrScanComponent {
     }
   }
 
-  // Handles successful scan
+
   onScanSuccess(result: string): void {
     this.scannedCode = result;
     this.isScanning = false;
@@ -98,14 +98,11 @@ async ReadQr(event: Event): Promise<void> {
 }
   
   onSearchClick(): void {
-    console.log('in search 00');
-    // alert('First alert');
-    // if (!this.scannedCode.trim()) {
-    //   alert('No QR code scanned.');
-    //   this.onClose();
-    //   return;
-    // }
-    // alert('Here');
+    if (!this.scannedCode.trim()) {
+      alert('No QR code scanned.');
+      this.onClose();
+      return;
+    }
     this.searchDpi.emit(this.scannedCode); // Emit the scanned code
   }
 

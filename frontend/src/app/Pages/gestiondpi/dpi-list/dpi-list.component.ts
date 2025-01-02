@@ -132,21 +132,28 @@ scanQrCode() {
   }
 
   searchDpi(id: string): void {
-    console.log('in search');
-    if (!id.trim()) {
-      alert('Please scan a QR code containing the ID.');
-      return;
-    }
-
-    this.dpiListService.searchDpisQR(id).subscribe({
-      next: (response) => {
-         console.log('DPI Search Response:', response);
-      },
-      error: (error) => {
-        console.error('Error searching DPIs:', error);
-        alert('Failed to search DPI. Please try again.');
-      },
-    });
+  const numericId = parseInt(id, 10); // Convert the string to a number
+  if (isNaN(numericId)) {
+    console.error('Invalid ID: must be a number');
+    alert('Invalid ID: Please scan a valid QR code containing a numeric ID.');
+    return;
   }
+
+  this.dpiListService.searchDpisQR(numericId).subscribe({
+    next: (response) => {
+      console.log('DPI Search Response:', response);
+      if (response.results.length === 0) {
+        alert('No DPI found with the given ID.');
+        return;
+      }
+      this.dpis = response.results;
+    },
+    error: (error) => {
+      console.error('Error searching DPIs:', error);
+      alert('Failed to search DPI. Please try again.');
+    },
+  });
+}
+
 
 }
