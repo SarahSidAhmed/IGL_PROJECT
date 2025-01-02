@@ -19,7 +19,7 @@ export class SigninComponent {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  constructor(private loginService: LoginService,private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   login(): void {
     // Ensure payload conforms to API documentation
@@ -30,26 +30,25 @@ export class SigninComponent {
 
     this.loginService.login(loginPayload).subscribe({
       next: (response) => {
-        sessionStorage.setItem('userId',response.staff.id.toString()); 
+        sessionStorage.setItem('userId', response.staff.id.toString());
 
-      const role = response.staff.role; 
-      if (role === 'Nurse') {
-        this.router.navigate(['/soin-list']);
-      } else if (role === 'Radiologist') {
-        this.router.navigate(['/radio-list']);
-      } else if (role === 'Admin') {
-        this.router.navigate(['/dpilist']);
-      } else if (role === 'Doctor') {
-        this.router.navigate(['/dpilist']);
-      } else if (role === 'LabTechnician') {
-        this.router.navigate(['/tests-list']);
-      }else {
-        console.error('role non trouvé:', role);
-      }
-        
+        const role = response.staff.role;
+        if (role === 'Nurse') {
+          this.router.navigate(['/soin-list']);
+        } else if (role === 'Radiologist') {
+          this.router.navigate(['/radio-list']);
+        } else if (role === 'Admin') {
+          this.router.navigate(['/dpilist']);
+        } else if (role === 'Doctor') {
+          const userId = response.staff.id;
+          this.router.navigate([`/doctor/${userId}`]);
+        } else if (role === 'LabTechnician') {
+          this.router.navigate(['/tests-list']);
+        } else {
+          console.error('role non trouvé:', role);
+        }
       },
       error: (error) => {
-        
         if (error.error.email) {
           console.error('Email error:', error.error.email);
         }
@@ -57,7 +56,7 @@ export class SigninComponent {
           console.error('Password error:', error.error.password);
         }
         alert('Login failed. Please check your credentials.');
-      }
+      },
     });
   }
 }
