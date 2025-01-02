@@ -188,7 +188,7 @@ class BiologicalExamListView(ListAPIView):
     def get_queryset(self):
         dpi_id = self.request.query_params.get('dpi_id', None)
         ssn_prefix = self.request.query_params.get('ssn_prefix', None)
-        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True).select_related('consultation', 'consultation__dpi')
+        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True).select_related('consultation', 'consultation__dpi').prefetch_related('biologicalexamparam_set')
 
         if dpi_id:
             queryset = queryset.filter(consultation__dpi_id=dpi_id)
