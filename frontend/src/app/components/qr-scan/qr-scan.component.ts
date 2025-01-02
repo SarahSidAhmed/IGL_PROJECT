@@ -3,11 +3,12 @@ import { NgModule } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserQRCodeReader } from '@zxing/browser';
 
 @Component({
   selector: 'app-qr-scan',
-  imports: [ZXingScannerModule, CommonModule],
+  imports: [ZXingScannerModule, CommonModule, HttpClientModule],
   templateUrl: './qr-scan.component.html',
   styleUrls: ['./qr-scan.component.scss']
 })
