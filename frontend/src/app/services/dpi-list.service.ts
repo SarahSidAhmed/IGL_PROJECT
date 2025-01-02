@@ -58,6 +58,17 @@ export class DpiListService {
     return this.http.get<DpiResponse>(url, { headers, params });
   }
 
+  searchDpisQR(id: string = ''): Observable<DpiResponse> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    const url = `${this.baseUrl}/dpis/${id}`;
+
+    return this.http.get<DpiResponse>(url);
+  }
+
   deleteDpi(dpiId: number): Observable<void> {
     const url = `${this.baseUrl}/dpis/${dpiId}/`;
     return this.http.delete<void>(url);

@@ -5,6 +5,8 @@ import { BarcodeFormat } from '@zxing/library';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserQRCodeReader } from '@zxing/browser';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-qr-scan',
@@ -17,18 +19,20 @@ export class QrScanComponent {
     BarcodeFormat.QR_CODE,
   ];
 
-  selectedDevice: MediaDeviceInfo | undefined; // Use undefined instead of null
+  selectedDevice: MediaDeviceInfo | undefined;
   devices: MediaDeviceInfo[] = [];
 
+  @Output() searchDpi = new EventEmitter<string>();
   @Output() closePopup = new EventEmitter<void>();
 
-  isScanning: boolean = false; // Controls the visibility of the scanner
-  scannedCode: string = ''; // Stores the scanned QR code
+  isScanning: boolean = false; 
+  scannedCode: string = '1';
 
   ngOnInit() {
     this.checkCameraPermissions();
   }
 
+  
   checkCameraPermissions() {
     if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
       navigator.mediaDevices.enumerateDevices().then(devices => {
@@ -64,7 +68,7 @@ export class QrScanComponent {
   // Handles successful scan
   onScanSuccess(result: string): void {
     this.scannedCode = result;
-    this.isScanning = false; // Stops the scanner after a successful scan
+    this.isScanning = false;
   }
 
   // Reads QR code from an uploaded image
@@ -80,7 +84,7 @@ async ReadQr(event: Event): Promise<void> {
         try {
           // Decode QR code from the image URL
           const result = await qrReader.decodeFromImageUrl(reader.result as string);
-          this.scannedCode = result.getText(); // Use getText() to retrieve the decoded text
+          this.scannedCode = result.getText(); 
           alert('QR Code scanned successfully: ' + this.scannedCode);
         } catch (error) {
           console.error('Error reading QR code from image:', error);
@@ -92,6 +96,18 @@ async ReadQr(event: Event): Promise<void> {
     reader.readAsDataURL(file);
   }
 }
+  
+  onSearchClick(): void {
+    console.log('in search 00');
+    // alert('First alert');
+    // if (!this.scannedCode.trim()) {
+    //   alert('No QR code scanned.');
+    //   this.onClose();
+    //   return;
+    // }
+    // alert('Here');
+    this.searchDpi.emit(this.scannedCode); // Emit the scanned code
+  }
 
 
 }

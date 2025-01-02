@@ -130,4 +130,23 @@ scanQrCode() {
     console.log('Logging out...');
     // Add logout logic here
   }
+
+  searchDpi(id: string): void {
+    console.log('in search');
+    if (!id.trim()) {
+      alert('Please scan a QR code containing the ID.');
+      return;
+    }
+
+    this.dpiListService.searchDpisQR(id).subscribe({
+      next: (response) => {
+         console.log('DPI Search Response:', response);
+      },
+      error: (error) => {
+        console.error('Error searching DPIs:', error);
+        alert('Failed to search DPI. Please try again.');
+      },
+    });
+  }
+
 }
