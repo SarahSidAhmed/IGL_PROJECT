@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+
 import { DpiCardComponent } from './Pages/gestiondpi/dpi-card/dpi-card.component';
 import { DpiListComponent } from './Pages/gestiondpi/dpi-list/dpi-list.component';
 import { CreateDpiComponent } from './Pages/gestiondpi/create-dpi/create-dpi.component';
@@ -15,6 +16,7 @@ import { EditDpiComponent } from './Pages/edit-dpi/edit-dpi.component';
 import { DpiDoctorComponent } from './Pages/dpi-doctor/dpi-doctor.component';
 
 
+
 export const routes: Routes = [
   { path: '', component: SigninComponent },
   { path: 'dpilist', component: DpiListComponent },
@@ -22,14 +24,13 @@ export const routes: Routes = [
   { path: 'radio-list', component: RadioListComponent },
   { path: 'soin-list', component: SoinListComponent },
   { path: 'tests-list', component: TestListComponent},
+  { path: 'qr', component: QrCardComponent},
   { path: 'consultation-detail-doctor', component: ConsultationDetailDoctorComponent},
-  {
-    path: 'doctor/:id',
-  component: RechDoctorComponent
-  },
+  { path: 'doctor/:id',component: RechDoctorComponent},
   { path: 'qr-card', component: QrCardComponent },
   {path: 'edit-dpi/:id', component: EditDpiComponent},
   {path: 'dpi-doctor', component: DpiDoctorComponent}
+
 ];
 
 
