@@ -125,6 +125,8 @@ class DpiSerializer(serializers.ModelSerializer):
         read_only_fields = ['admission_date']
 
 class DpiCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    
     class Meta:
         model = Dpi
         fields = '__all__'
