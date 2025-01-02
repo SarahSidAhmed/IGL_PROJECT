@@ -4,9 +4,9 @@ from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
-    path('nursing-records/<str:ssn_prefix>/', NursingRecordListView.as_view(), name='nursing-record-list-filtered'),
-    path('radiological-exams/<str:ssn_prefix>/', RadiologicalExamListView.as_view(), name='radiological-exam-list-filtered'),
-    path('biological-exams/<str:ssn_prefix>/', BiologicalExamListView.as_view(), name='biological-exam-list-filtered'),
+    path('nursing-records/search/', NursingRecordListView.as_view(), name='nursing-record-list-filtered'),
+    path('radiological-exams/search/', RadiologicalExamListView.as_view(), name='radiological-exam-list-filtered'),
+    path('biological-exams/search/', BiologicalExamListView.as_view(), name='biological-exam-list-filtered'),
     path('radiological-exams/create/', RadiologicalExamCreateView.as_view(), name='create-radiological-exam'),
     path('radiological-exams/<int:pk>/update/', RadiologicalExamUpdateView.as_view(), name='update-radiological-exam'),
     path('nursing-records/create/', NursingRecordCreateView.as_view(), name='nursing-record-create'),
