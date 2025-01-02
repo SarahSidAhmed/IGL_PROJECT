@@ -33,6 +33,7 @@ interface Dpi {
   hospital: string;
   admission_date: string;
 }
+
 @Component({
   selector: 'app-dpi-list',
   imports: [DpiCardComponent, CommonModule, FormsModule, QrScanComponent],
@@ -47,13 +48,13 @@ export class DpiListComponent implements OnInit {
   constructor(private router: Router, private dpiListService: DpiListService) {
     this.fetchDpis();
   }
-isQrCodeSearch: boolean = false;
-currentId: number = 0;
+  isQrCodeSearch: boolean = false;
+  currentId: number = 0;
 
-scanQrVisible: boolean = false;
-scanQrCode() {
-  this.scanQrVisible = !this.scanQrVisible;
-}
+  scanQrVisible: boolean = false;
+  scanQrCode() {
+    this.scanQrVisible = !this.scanQrVisible;
+  }
 
   ngOnInit(): void {
     this.fetchDpis();
@@ -87,9 +88,11 @@ scanQrCode() {
       },
     });
   }
+
   onDpiDeleted(deletedDpiId: number): void {
     this.dpis = this.dpis.filter(dpi => dpi.id !== deletedDpiId);
   }
+
   onSearchChange(query: string): void {
     if (!this.isQrCodeSearch){
     this.searchInput.next(query);}
@@ -123,38 +126,33 @@ scanQrCode() {
     return age;
   }
 
-
   onCreateDpi(): void {
     this.router.navigate(['/create-dpi']);
   }
 
   onLogout(): void {
     console.log('Logging out...');
-    // Add logout logic here
   }
 
   searchDpi(id: string): void {
-  const numericId = parseInt(id, 10); // Convert the string to a number
-  if (isNaN(numericId)) {
-    console.error('Invalid ID: must be a number');
-    alert('Invalid ID: Please scan a valid QR code containing a numeric ID.');
-    return;
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      console.error('Invalid ID: must be a number');
+      alert('ID invalide : Veuillez scanner un code QR valide contenant un ID numérique.');
+      return;
+    }
+
+    this.dpiListService.searchDpisQR(numericId).subscribe({
+      next: (response) => {
+        console.log('DPI Search Response:', response);
+        this.dpis = [response];
+        this.dpis.length = 1;
+        console.log('DPI Search Response.results:', response);
+      },
+      error: (error) => {
+        console.error('Error searching DPIs:', error);
+        alert('Il n\'y a pas de DPI avec cet ID');
+      },
+    });
   }
-
-  this.dpiListService.searchDpisQR(numericId).subscribe({
-    next: (response) => {
-      console.log('DPI Search Response:', response);
-      this.dpis = [response];
-      this.dpis.length = 1;
-      // this.dpis = response;
-      console.log('DPI Search Response.results:', response);
-    },
-    error: (error) => {
-      console.error('Error searching DPIs:', error);
-      alert('There is No DPI with that ID');
-    },
-  });
-}
-
-
 }
