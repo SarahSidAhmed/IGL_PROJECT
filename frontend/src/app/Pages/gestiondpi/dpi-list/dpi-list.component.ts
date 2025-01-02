@@ -47,7 +47,8 @@ export class DpiListComponent implements OnInit {
   constructor(private router: Router, private dpiListService: DpiListService) {
     this.fetchDpis();
   }
-
+isQrCodeSearch: boolean = false;
+currentId: number = 0;
 
 scanQrVisible: boolean = false;
 scanQrCode() {
@@ -60,10 +61,10 @@ scanQrCode() {
       .pipe(
         debounceTime(300),
         switchMap((query) => {
-          if (!query.trim()) {
-            return this.dpiListService.searchDpis();
-          }
-          return this.dpiListService.searchDpis(query.trim());
+            if(!query.trim()) {
+              return this.dpiListService.searchDpis();
+            }
+            return this.dpiListService.searchDpis(query.trim());
         })
       )
       .subscribe({
@@ -90,7 +91,8 @@ scanQrCode() {
     this.dpis = this.dpis.filter(dpi => dpi.id !== deletedDpiId);
   }
   onSearchChange(query: string): void {
-    this.searchInput.next(query);
+    if (!this.isQrCodeSearch){
+    this.searchInput.next(query);}
   }
 
   clearSearch(): void {
@@ -142,15 +144,14 @@ scanQrCode() {
   this.dpiListService.searchDpisQR(numericId).subscribe({
     next: (response) => {
       console.log('DPI Search Response:', response);
-      if (response.results.length === 0) {
-        alert('No DPI found with the given ID.');
-        return;
-      }
-      this.dpis = response.results;
+      this.dpis = [response];
+      this.dpis.length = 1;
+      // this.dpis = response;
+      console.log('DPI Search Response.results:', response);
     },
     error: (error) => {
       console.error('Error searching DPIs:', error);
-      alert('Failed to search DPI. Please try again.');
+      alert('There is No DPI with that ID');
     },
   });
 }

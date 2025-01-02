@@ -26,7 +26,7 @@ export class QrScanComponent {
   @Output() closePopup = new EventEmitter<void>();
 
   isScanning: boolean = false; 
-  scannedCode: string = '14';
+  scannedCode: string = '5';
 
   ngOnInit() {
     this.checkCameraPermissions();
@@ -85,7 +85,6 @@ async ReadQr(event: Event): Promise<void> {
           // Decode QR code from the image URL
           const result = await qrReader.decodeFromImageUrl(reader.result as string);
           this.scannedCode = result.getText(); 
-          alert('QR Code scanned successfully: ' + this.scannedCode);
         } catch (error) {
           console.error('Error reading QR code from image:', error);
           alert('Failed to read QR code from the image. Please try anotther image.');
@@ -103,7 +102,8 @@ async ReadQr(event: Event): Promise<void> {
       this.onClose();
       return;
     }
-    this.searchDpi.emit(this.scannedCode); // Emit the scanned code
+    this.searchDpi.emit(this.scannedCode);
+    this.onClose();
   }
 
 
