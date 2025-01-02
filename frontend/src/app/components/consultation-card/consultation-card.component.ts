@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -11,16 +11,7 @@ import { RouterOutlet } from '@angular/router';
 export class ConsultationCardComponent {
   isExpanded = false;
 
-  listItems = [
-    'Radio',
-    'Bilan',
-    'Graph'
-  ];
-  listItemsord = [
-    'Paracetamol',
-    'anti virus'
-  ];
-
+  @Input() consultation: any;
   toggleExpand(): void {
     this.isExpanded = !this.isExpanded;
   }

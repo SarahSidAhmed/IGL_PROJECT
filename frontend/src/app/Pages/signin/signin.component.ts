@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoginService } from './login.service';
+import { LoginService } from '../../services/login.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
@@ -31,21 +31,10 @@ export class SigninComponent {
     this.loginService.login(loginPayload).subscribe({
       next: (response) => {
         sessionStorage.setItem('userId',response.staff.id.toString()); 
+        this.router.navigate(['/dpi-patient/3']);
 
       const role = response.staff.role; 
-      if (role === 'Nurse') {
-        this.router.navigate(['/soin-list']);
-      } else if (role === 'Radiologist') {
-        this.router.navigate(['/radio-list']);
-      } else if (role === 'Admin') {
-        this.router.navigate(['/dpilist']);
-      } else if (role === 'Doctor') {
-        this.router.navigate(['/dpilist']);
-      } else if (role === 'LabTechnician') {
-        this.router.navigate(['/tests-list']);
-      }else {
-        console.error('role non trouvé:', role);
-      }
+      
         
       },
       error: (error) => {

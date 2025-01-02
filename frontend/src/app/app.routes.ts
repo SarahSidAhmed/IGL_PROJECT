@@ -10,11 +10,14 @@ import { TestListComponent } from './Pages/tests-todo/test-list/test-list.compon
 import { SigninComponent } from './Pages/signin/signin.component';
 import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-doctor/consultation-detail-doctor.component';
 import { RechDoctorComponent } from './Pages/rech-doctor/rech-doctor/rech-doctor.component';
+import { DpiComponent } from './Pages/dpi-patient/dpi-patient.component';
 
 
 export const routes: Routes = [
   { path: '', component: SigninComponent },
   { path: 'dpilist', component: DpiListComponent },
+  { path: 'dpi-patient/:id', component: DpiComponent },
+  { path: 'rech-doctor', component: RechDoctorComponent },
   { path: 'create-dpi', component: CreateDpiComponent },
   { path: 'radio-list', component: RadioListComponent },
   { path: 'soin-list', component: SoinListComponent },

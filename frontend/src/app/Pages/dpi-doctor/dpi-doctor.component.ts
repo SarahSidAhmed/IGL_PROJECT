@@ -19,6 +19,9 @@ export class DpiDoctorComponent {
   notificationType: 'success' | 'error' = 'success'; 
   notificationMessage: string = '';
 
+
+   
+
   consultations = [
     { id: 1, title: 'Consultation 1', details: 'Details about consultation 1' },
     { id: 2, title: 'Consultation 2', details: 'Details about consultation 2' },

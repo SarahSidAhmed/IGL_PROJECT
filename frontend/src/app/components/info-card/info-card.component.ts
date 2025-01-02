@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -9,5 +9,6 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './info-card.component.scss'
 })
 export class InfoCardComponent {
+  @Input() patient: any;
 
 }
