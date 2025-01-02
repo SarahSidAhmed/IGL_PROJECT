@@ -9,9 +9,9 @@ import { TestListService } from '../../services/test-list.service';
   templateUrl: './test-card.component.html',
   styleUrl: './test-card.component.scss'
 })
-export class TestCardComponent implements OnInit{
-  @Input() dpiId!: number; // Accept the DPI ID as an input
-  exams: any[] = []; // Store the exams data
+export class TestCardComponent implements OnInit {
+  @Input() dpiId!: number;
+  exams: any[] = [];
 
   constructor(private examService: TestListService) {}
 
@@ -22,7 +22,7 @@ export class TestCardComponent implements OnInit{
   loadExams(): void {
     this.examService.getExams(this.dpiId).subscribe(
       (data) => {
-        this.exams = data; // Store the fetched data
+        this.exams = data;
         console.log('Exams:', this.exams);
       },
       (error) => {
@@ -31,4 +31,7 @@ export class TestCardComponent implements OnInit{
     );
   }
 
+  toggleModal(exam: any): void {
+    exam.showModal = !exam.showModal;
+  }
 }

@@ -11,12 +11,14 @@ import { SigninComponent } from './Pages/signin/signin.component';
 import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-doctor/consultation-detail-doctor.component';
 import { RechDoctorComponent } from './Pages/rech-doctor/rech-doctor/rech-doctor.component';
 import { DpiComponent } from './Pages/dpi-patient/dpi-patient.component';
+import { ConsultationDetailComponent } from './Pages/consultation-detail/consultation-detail.component';
 
 
 export const routes: Routes = [
   { path: '', component: SigninComponent },
   { path: 'dpilist', component: DpiListComponent },
   { path: 'dpi-patient/:id', component: DpiComponent },
+  { path: 'consultation-patient/:id', component: ConsultationDetailComponent },
   { path: 'rech-doctor', component: RechDoctorComponent },
   { path: 'create-dpi', component: CreateDpiComponent },
   { path: 'radio-list', component: RadioListComponent },

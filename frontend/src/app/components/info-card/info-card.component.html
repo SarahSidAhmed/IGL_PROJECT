@@ -13,10 +13,6 @@
     </div>
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-2">
-        <span class="text-gray-800 font-medium text-sm">Patient ID:</span>
-        <span class="text-gray-600 text-sm">{{ patient.id }}</span>
-      </div>
-      <div class="flex items-center gap-2">
         <span class="text-gray-800 font-medium text-sm">Genre:</span>
         <span class="text-gray-600 text-sm">{{ patient.gender }}</span>
       </div>
@@ -46,9 +42,9 @@
         </div>
       </div>
     </div>
-    <div class="mt-2 shrink-0">
-      <img src="assets/qr.svg" alt="QR Code" class="h-25 w-auto">
+    <div class="mt-4" >
+      <img *ngIf="qrCodeUrl" [src]="qrCodeUrl" alt="QR Code" />
+    </div>
     </div>
   </div>
-</div>
   <router-outlet />  
