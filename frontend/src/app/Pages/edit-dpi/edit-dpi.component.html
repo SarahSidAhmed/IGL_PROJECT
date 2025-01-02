@@ -1,16 +1,21 @@
 <div class="bg-teal-50">
-  <header class="flex justify-between bg-white p-4 rounded-md shadow-sm">
-    <img class="h-10 w-15" src="./assets/logo.png" alt="" />
+  <app-navbar></app-navbar>
+  <div *ngIf="isLoading" class="text-center py-4">Loading...</div>
 
-    <button
-      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
-      (click)="onLogout()"
-    >
-      <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
-      <span>Se déconnecter</span>
-    </button>
-  </header>
-  <form [formGroup]="createDpiForm" (ngSubmit)="onSubmit()">
+  <div
+    *ngIf="errorMessage"
+    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+  >
+    {{ errorMessage }}
+  </div>
+
+  <div
+    *ngIf="successMessage"
+    class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4"
+  >
+    {{ successMessage }}
+  </div>
+  <form [formGroup]="editDpiForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
     <div
       class="flex flex-col md:flex-col lg:flex-row gap-7 px-20 sm:px-32 py-10"
     >
@@ -47,8 +52,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('last_name')?.invalid &&
-                createDpiForm.get('last_name')?.touched
+                editDpiForm.get('last_name')?.invalid &&
+                editDpiForm.get('last_name')?.touched
               "
               class="text-xs font-poppins text-red-600 hidden"
               id="error"
@@ -72,8 +77,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('first_name')?.invalid &&
-                createDpiForm.get('first_name')?.touched
+                editDpiForm.get('first_name')?.invalid &&
+                editDpiForm.get('first_name')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -102,8 +107,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('birthdate')?.invalid &&
-                createDpiForm.get('birthdate')?.touched
+                editDpiForm.get('birthdate')?.invalid &&
+                editDpiForm.get('birthdate')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -129,8 +134,8 @@
             </select>
             <span
               *ngIf="
-                createDpiForm.get('gender')?.invalid &&
-                createDpiForm.get('gender')?.touched
+                editDpiForm.get('gender')?.invalid &&
+                editDpiForm.get('gender')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -153,8 +158,8 @@
 
           <span
             *ngIf="
-              createDpiForm.get('social_security_number')?.invalid &&
-              createDpiForm.get('social_security_number')?.touched
+              editDpiForm.get('social_security_number')?.invalid &&
+              editDpiForm.get('social_security_number')?.touched
             "
             class="text-sm text-red-600 hidden"
             id="error"
@@ -179,8 +184,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('hospital')?.invalid &&
-                createDpiForm.get('hospital')?.touched
+                editDpiForm.get('hospital')?.invalid &&
+                editDpiForm.get('hospital')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -220,8 +225,8 @@
             </select>
             <span
               *ngIf="
-                createDpiForm.get('blood_type')?.invalid &&
-                createDpiForm.get('blood_type')?.touched
+                editDpiForm.get('blood_type')?.invalid &&
+                editDpiForm.get('blood_type')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -255,8 +260,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('adress')?.invalid &&
-                createDpiForm.get('adress')?.touched
+                editDpiForm.get('adress')?.invalid &&
+                editDpiForm.get('adress')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -325,8 +330,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('email')?.invalid &&
-                createDpiForm.get('email')?.touched
+                editDpiForm.get('email')?.invalid &&
+                editDpiForm.get('email')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -335,56 +340,37 @@
           </div>
         </div>
         <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
-          <div class="relative z-0 w-full">
-            <h1
-              class="font-semibold pl-3 text-xs font-poppins text-primaryBlue"
-            >
-              Mot de passe:
-            </h1>
+          <div
+            class="col-span-2 grid grid-cols-2 gap-4"
+           
+          >
+            <div class="relative z-0 w-full">
+              <h1
+                class="font-semibold pl-3 text-xs font-poppins text-primaryBlue"
+              >
+                Mot de passe:
+              </h1>
 
-            <label for="password"></label>
-            <input
-              id="password"
-              formControlName="password"
-              type="password"
-              placeholder="Mot de passe"
-              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
-            />
+              <label for="password"></label>
+              <input
+                id="password"
+                formControlName="password"
+                type="password"
+                placeholder="Mot de passe"
+                class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
+              />
 
-            <span
-              *ngIf="
-                createDpiForm.get('password')?.invalid &&
-                createDpiForm.get('password')?.touched
-              "
-              class="text-sm text-red-600 hidden"
-              id="error"
-              >required</span
-            >
-          </div>
-          <div class="relative z-0 w-full">
-            <h1
-              class="font-semibold font-poppins pl-3 text-primaryBlue text-xs"
-            >
-              Confirmer le mot de passe:
-            </h1>
-            <label for="confirm_password"></label>
-            <input
-              id="confirm_password"
-              formControlName="confirm_password"
-              type="password"
-              placeholder="Confirmer le mot de passe"
-              class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
-            />
-
-            <span
-              *ngIf="
-                createDpiForm.hasError('passwordMismatch') &&
-                createDpiForm.get('confirm_password')?.touched
-              "
-            >
-              <small class="text-red-500">Passwords do not match.</small>
-              class="text-sm text-red-600 hidden" id="error">required</span
-            >
+              <span
+                *ngIf="
+                  editDpiForm.get('password')?.invalid &&
+                  editDpiForm.get('password')?.touched
+                "
+                class="text-sm text-red-600 hidden"
+                id="error"
+                >required</span
+              >
+            </div>
+            
           </div>
         </div>
       </div>
@@ -412,8 +398,8 @@
             />
             <span
               *ngIf="
-                createDpiForm.get('emergency_contact_name')?.invalid &&
-                createDpiForm.get('emergency_contact_name')?.touched
+                editDpiForm.get('emergency_contact_name')?.invalid &&
+                editDpiForm.get('emergency_contact_name')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -436,8 +422,8 @@
             />
             <span
               *ngIf="
-                createDpiForm.get('emergency_contact_phone')?.invalid &&
-                createDpiForm.get('emergency_contact_phone')?.touched
+                editDpiForm.get('emergency_contact_phone')?.invalid &&
+                editDpiForm.get('emergency_contact_phone')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -460,8 +446,8 @@
             />
             <span
               *ngIf="
-                createDpiForm.get('emergency_contact_relationship')?.invalid &&
-                createDpiForm.get('emergency_contact_relationship')?.touched
+                editDpiForm.get('emergency_contact_relationship')?.invalid &&
+                editDpiForm.get('emergency_contact_relationship')?.touched
               "
               class="text-sm text-red-600 hidden"
               id="error"
@@ -491,8 +477,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('mutuelle_name')?.invalid &&
-                createDpiForm.get('mutuelle_name')?.touched
+                editDpiForm.get('mutuelle_name')?.invalid &&
+                editDpiForm.get('mutuelle_name')?.touched
               "
               class="text-xs font-poppins text-red-600 hidden"
               id="error"
@@ -516,8 +502,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('mutuelle_policy_number')?.invalid &&
-                createDpiForm.get('mutuelle_policy_number')?.touched
+                editDpiForm.get('mutuelle_policy_number')?.invalid &&
+                editDpiForm.get('mutuelle_policy_number')?.touched
               "
               class="text-xs font-poppins text-red-600 hidden"
               id="error"
@@ -541,8 +527,8 @@
 
             <span
               *ngIf="
-                createDpiForm.get('medical_history')?.invalid &&
-                createDpiForm.get('medical_history')?.touched
+                editDpiForm.get('medical_history')?.invalid &&
+                editDpiForm.get('medical_history')?.touched
               "
               class="text-xs font-poppins text-red-600 hidden"
               id="error"
@@ -554,16 +540,14 @@
           <button
             class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#0F766E] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#0F766E] items-center flex rounded-md hover:bg-primaryBlue-dark focus:outline-none focus:ring-0"
             type="submit"
-            [disabled]="createDpiForm.invalid "
+            [disabled]="editDpiForm.invalid"
             [ngClass]="{
-              'opacity-50 cursor-not-allowed':
-                createDpiForm.invalid || isSubmitting
+              'opacity-50 cursor-not-allowed': editDpiForm.invalid
             }"
-            (click)="logFormStatus()"
           >
             <div class="flex items-center">
               <!-- Show spinner when submitting -->
-              <span *ngIf="isSubmitting" class="mr-3">
+              <span *ngIf="editDpiForm.invalid" class="mr-3">
                 <svg
                   class="animate-spin h-5 w-5 text-[#0F766E]"
                   xmlns="http://www.w3.org/2000/svg"
@@ -587,21 +571,21 @@
               </span>
 
               <img
-                *ngIf="!isSubmitting"
+                *ngIf="!editDpiForm.invalid"
                 class="sm:h-5 sm:w-6 size-3 mr-3"
                 src="./assets/icons/save.png"
                 alt="save"
               />
 
-            
               <span>{{
-                isSubmitting ? "En cours..." : "Confirmer et ajouter"
+                editDpiForm.invalid ? "En cours..." : "Confirmer"
               }}</span>
             </div>
           </button>
           <button
             class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#F87171] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#F87171] rounded-md hover:bg-primaryBlue-dark items-center flex focus:outline-none focus:ring-0"
             type="reset"
+            (click)="onCancel()"
           >
             <img
               class="sm:h-5 sm:w-5 size-3 mr-3"

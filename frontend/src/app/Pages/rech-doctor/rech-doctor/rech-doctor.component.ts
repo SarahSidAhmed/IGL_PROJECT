@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { DpiCardComponent } from '../dpi-card/dpi-card.component';
-import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DpiListService } from '../../../services/dpi-list.service';
+import { ActivatedRoute } from '@angular/router';
+
 import { debounceTime, Subject, switchMap } from 'rxjs';
+import { PatientCardComponent } from '../patient-card/patient-card/patient-card.component';
+import { RechDoctorService } from '../../../services/rech-doctor.service';
 
 interface Dpi {
   id: number;
   password: string;
-  doctorStaff: {
+  doctor: {
     id: number;
     name: string;
   };
@@ -34,36 +35,52 @@ interface Dpi {
   admission_date: string;
 }
 @Component({
-  selector: 'app-dpi-list',
-  imports: [DpiCardComponent, CommonModule, FormsModule, QrScanComponent],
-  templateUrl: './dpi-list.component.html',
-  styleUrls: ['./dpi-list.component.scss'],
+  selector: 'app-rech-doctor',
+  imports: [CommonModule, FormsModule, PatientCardComponent],
+  templateUrl: './rech-doctor.component.html',
+  styleUrl: './rech-doctor.component.scss',
 })
-export class DpiListComponent implements OnInit {
+export class RechDoctorComponent implements OnInit {
   dpis: Dpi[] = [];
   searchInput = new Subject<string>();
   searchQuery: string = '';
+  doctorId: number | null = null;
+  constructor(
+    private route: ActivatedRoute,
 
-  constructor(private router: Router, private dpiListService: DpiListService) {
-    this.fetchDpis();
+    private router: Router,
+    private patientListService: RechDoctorService
+  ) {
+    this.route.params.subscribe((params) => {
+      this.doctorId = Number(params['id']);
+      console.log('Doctor ID from route:', this.doctorId);
+      this.fetchDpis();
+    });
   }
 
-<<<<<<< HEAD
-scanQrVisible: boolean = false;
-scanQrCode() {
-  this.scanQrVisible = !this.scanQrVisible;
-}
-
   ngOnInit(): void {
+    const doctorIdFromRoute = this.route.snapshot.paramMap.get('id');
+    console.log(this.doctorId);
+    this.doctorId = doctorIdFromRoute ? Number(doctorIdFromRoute) : null;
+
+    if (this.doctorId === null || isNaN(this.doctorId)) {
+      console.error('Doctor ID is invalid or missing.');
+      return;
+    }
+
     this.fetchDpis();
+
     this.searchInput
       .pipe(
         debounceTime(300),
         switchMap((query) => {
           if (!query.trim()) {
-            return this.dpiListService.searchDpis();
+            return this.patientListService.searchDpis('', this.doctorId!);
           }
-          return this.dpiListService.searchDpis(query.trim());
+          return this.patientListService.searchDpis(
+            query.trim(),
+            this.doctorId!
+          );
         })
       )
       .subscribe({
@@ -77,7 +94,11 @@ scanQrCode() {
   }
 
   fetchDpis(): void {
-    this.dpiListService.searchDpis('').subscribe({
+    if (this.doctorId === null) {
+      console.error('Doctor ID is null.');
+      return;
+    }
+    this.patientListService.searchDpis('', this.doctorId).subscribe({
       next: (response) => {
         this.dpis = response.results;
       },
@@ -86,9 +107,7 @@ scanQrCode() {
       },
     });
   }
-  onDpiDeleted(deletedDpiId: number): void {
-    this.dpis = this.dpis.filter(dpi => dpi.id !== deletedDpiId);
-  }
+
   onSearchChange(query: string): void {
     this.searchInput.next(query);
   }
@@ -118,6 +137,9 @@ scanQrCode() {
       age--;
     }
 
+    console.log('Birthdate:', birthdate);
+    console.log('Calculated age:', age);
+
     return age;
   }
 
@@ -131,6 +153,5 @@ scanQrCode() {
 
   onLogout(): void {
     console.log('Logging out...');
-    // Add logout logic here
   }
 }

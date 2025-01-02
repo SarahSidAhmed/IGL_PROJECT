@@ -1,8 +1,9 @@
+
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
   selector: 'app-consultation-detail-doctor',
@@ -13,9 +14,13 @@ import { FormsModule } from '@angular/forms';
 export class ConsultationDetailDoctorComponent {
   isEditing = false;
   resume = 'Lorem ipsum dolor sit amet...';
-  tests = ['Test 1', 'Test 2', 'Test 3'];
+  newTest = { name: '', type: '' };
+  tests = [{ name: 'Test 1', type: 'bilan' }, { name: 'Test 2', type: 'bilan' }, { name: 'Test 3', type: 'radio' }];
   soins = ['Soin 1', 'Soin 2', 'Soin 3'];
   showAddMedicament = false;
+  showAddSoin = false;
+  showAddTest = false;
+  newSoin = '';
   listItemsord: { nom: string; dosage: string; duree: string; frequence: string }[] = [];
   newMedicament = { nom: '', dosage: '', duree: '', frequence: ''  };
   showNotification = false;
@@ -24,6 +29,23 @@ notificationMessage = '';
 toggleAddMedicamentPopup() {
   this.showAddMedicament = !this.showAddMedicament;
   this.newMedicament = { nom: '', dosage: '', duree: '', frequence: '' };
+}
+addTest() {
+  if (this.newTest.name.trim() && this.newTest.type.trim()) {
+    this.tests.push({ name: this.newTest.name.trim(), type: this.newTest.type.trim() });
+    this.newTest = { name: '', type: '' };
+    this.toggleAddTestPopup(); 
+    this.showNotificationMessage('success', 'Test ajouté!');
+  } else {
+    this.showNotificationMessage('error', 'Une erreur s\'est produite. Veuillez remplir tous les champs.');
+  }
+}
+toggleAddSoinPopup() {
+  this.showAddSoin = !this.showAddSoin;
+}
+
+toggleAddTestPopup() {
+  this.showAddTest = !this.showAddTest;
 }
 addMedicament() {
   if (
@@ -38,6 +60,18 @@ addMedicament() {
     alert('Veuillez remplir tous les champs du médicament.'); 
   }
 }
+addSoin() {
+  if (this.newSoin.trim()) {
+    this.soins.push(this.newSoin.trim());
+    this.newSoin = ''; 
+    this.toggleAddSoinPopup(); 
+    this.showNotificationMessage('success', 'Soin ajouté!');
+  } else {
+    this.showNotificationMessage('error', 'Une erreur s\'est produite. Veuillez réessayer.');
+  }
+}
+
+
 
   toggleEdit() {
     this.isEditing = !this.isEditing;
@@ -66,9 +100,10 @@ addMedicament() {
     const isSaveSuccessful = true;
   
     if (isSaveSuccessful) {
-      this.showNotificationMessage('success', 'Changes saved successfully!');
+      this.showNotificationMessage('success', 'les changements ont été enregistré!');
     } else {
-      this.showNotificationMessage('error', 'Failed to save changes. Please try again.');
+      this.showNotificationMessage('error', 'Une erreur s\'est produite. Veuillez réessayer.');
     }
   }
 }
+

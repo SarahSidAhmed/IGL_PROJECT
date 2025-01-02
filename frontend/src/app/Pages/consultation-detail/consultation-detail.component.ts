@@ -1,8 +1,8 @@
+
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-
 @Component({
   selector: 'app-consultation-detail',
   imports: [RouterOutlet,CommonModule,NavbarComponent],
@@ -10,11 +10,8 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
   styleUrl: './consultation-detail.component.scss'
 })
 export class ConsultationDetailComponent {
-  tests = [
-    'Radio',
-    'Bilan',
-    'Graph'
-  ];
+  tests = [{ name: 'Test 1', type: 'bilan' }, { name: 'Test 2', type: 'bilan' }, { name: 'Test 3', type: 'radio' }];
+
 
   soins = [
     'Dose antivirus',
