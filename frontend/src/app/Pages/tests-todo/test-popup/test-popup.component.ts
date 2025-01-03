@@ -31,7 +31,7 @@ export class TestPopupComponent {
   @Input() patientName!: string;
   @Input() gender!: string;
   @Input() age!: number;
-  @Input() patientId!: string;
+  @Input() testId!: number;
   @Input() testsNeeded!: string;
 
   @Output() closePopup = new EventEmitter<void>();

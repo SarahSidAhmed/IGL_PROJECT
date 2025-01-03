@@ -12,7 +12,7 @@ export class TestCardComponent {
   @Input() patientName!: string;
   @Input() gender!: string;
   @Input() age!: number;
-  @Input() patientId!: string;
+  @Input() testId!: number;
   @Input() testsNeeded!: string;
   isPopupVisible: boolean = false;
 
