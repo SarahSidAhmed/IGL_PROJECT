@@ -1,77 +1,119 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RadioCardComponent } from '../radio-card/radio-card.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-interface data {
-  patientName: string;
-  gender: string;
-  age: number;
-  patientId: string;
-  radioNeeded:string;
+import { debounceTime, Subject, switchMap } from 'rxjs';
+
+import { RadioListService } from '../../../services/radio-list.service';
+import { Router } from '@angular/router';
+import { NavbarComponent } from "../../../components/navbar/navbar.component";
+
+interface RadiologicalExam {
+  id: number;
+  exam_name: string;
+  dpi: {
+    first_name: string;
+    last_name: string;
+    birthdate: string;
+    gender: string;
+  };
+  consultation: number;
 }
+
 @Component({
   selector: 'app-radio-list',
-  imports: [RadioCardComponent, CommonModule,FormsModule],
+  imports: [RadioCardComponent, CommonModule, FormsModule, NavbarComponent],
   templateUrl: './radio-list.component.html',
-  styleUrl: './radio-list.component.scss'
+  styleUrl: './radio-list.component.scss',
 })
-export class RadioListComponent {
+export class RadioListComponent implements OnInit {
+  radiologicalExams: RadiologicalExam[] = [];
+  searchInput = new Subject<string>();
+  searchQuery: string = '';
+  isQrCodeSearch: boolean = false;
+  constructor(
+    private router: Router,
+    private radiologicalExamService: RadioListService
+  ) {
+    this.fetchRadiologicalExams();
+  }
+  ngOnInit(): void {
+    console.log('Component initialized');
+    this.fetchRadiologicalExams();
+    this.searchInput
+      .pipe(
+        debounceTime(300),
+        switchMap((query) => {
+          console.log('Search triggered with query:', query);
+          if (!query.trim()) {
+            return this.radiologicalExamService.searchRadiologicalExams();
+          }
+          return this.radiologicalExamService.searchRadiologicalExams(
+            query.trim()
+          );
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Search response:', response);
+          this.radiologicalExams = response.results;
+        },
+        error: (error) => {
+          console.error('Search error:', error);
+        },
+      });
+  }
+  fetchRadiologicalExams(): void {
+    console.log('Fetching radios');
+    this.radiologicalExamService.searchRadiologicalExams('').subscribe({
+      next: (response) => {
+        console.log('Fetch response:', response);
+        this.radiologicalExams = response.results;
+      },
+      error: (error) => {
+        console.error('Fetch error:', error);
+      },
+    });
+  }
+
+  onSearchChange(query: string): void {
+    console.log('Search input changed:', query);
+    if (!this.isQrCodeSearch) {
+      this.searchInput.next(query);
+    }
+  }
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.onSearchChange('');
+  }
   scanQrCode() {
     throw new Error('Method not implemented.');
+  }
+
+  onLogout() {
+    console.log('Logging out...');
+    // Add logout logic here
+  }
+  calculateAge(birthdate: string): number {
+    if (!birthdate) return 0;
+
+    const birth = new Date(birthdate);
+
+    if (isNaN(birth.getTime())) return 0;
+
+    const today = new Date();
+
+    let age = today.getFullYear() - birth.getFullYear();
+
+    const monthDiff = today.getMonth() - birth.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
     }
-      searchQuery: string = '';
-      radioList: data[] = [
-        {
-          patientName: 'John Doeeeeeee',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          radioNeeded:'left arm'
-        },
-        {
-          patientName: 'Kheddia Assiaas',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          radioNeeded:'chest'
-        },
-        {
-          patientName: 'Kadid Selssabil',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          radioNeeded:'brain scan'
-        },
-        {
-          patientName: 'Djouaher Yasmine',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          radioNeeded:'teeth'
-        },
-        {
-          patientName: 'Jane Smith',
-          gender: 'Female',
-          age: 25,
-          patientId: '002',
-          radioNeeded:'jsppp'
-        },
-        // Add more dummy data here
-      ];
-    
-      filteredRadioList: data[] = [...this.radioList];
-    
-      onLogout() {
-        console.log('Logging out...');
-        // Add logout logic here
-      }
-      
-    
-      // Triggered on clicking the Search button
-      onSearch() {
-        this.filteredRadioList = this.radioList.filter((card) =>
-          card.patientName.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      }
-     
+
+    return age;
+  }
 }
