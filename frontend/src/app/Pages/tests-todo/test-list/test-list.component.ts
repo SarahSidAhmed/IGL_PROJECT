@@ -1,77 +1,114 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TestCardComponent } from '../test-card/test-card.component';
 import { FormsModule } from '@angular/forms';
-interface data {
-  patientName: string;
-  gender: string;
-  age: number;
-  patientId: string;
-  testsNeeded:string;
+import { TestTodoListService } from '../../../services/test-todo-list.service';
+import { Router } from '@angular/router';
+import { debounceTime, Subject, switchMap } from 'rxjs';
+interface BiologicalExam {
+  id: number;
+  exam_name: string;
+  dpi: {
+    first_name: string;
+    last_name: string;
+    birthdate: string;
+    gender: string;
+  };
+  consultation: number;
+  parameters: Parameter[];
 }
 
+interface Parameter {
+  id: number;
+  param_name: string;
+}
 @Component({
   selector: 'app-test-list',
   imports: [CommonModule, TestCardComponent, FormsModule],
   templateUrl: './test-list.component.html',
-  styleUrl: './test-list.component.scss'
+  styleUrl: './test-list.component.scss',
 })
-export class TestListComponent {
+export class TestListComponent implements OnInit {
+  biologicalExams: BiologicalExam[] = [];
+  searchInput = new Subject<string>();
+  searchQuery: string = '';
+  isQrCodeSearch: boolean = false;
+
+  constructor(
+    private router: Router,
+    private biologicalExamService: TestTodoListService
+  ) {
+    this.fetchBioExams();
+  }
   scanQrCode() {
     throw new Error('Method not implemented.');
+  }
+
+  onLogout() {
+    console.log('Logging out...');
+    // Add logout logic here
+  }
+
+  ngOnInit(): void {
+    this.fetchBioExams();
+    this.searchInput
+      .pipe(
+        debounceTime(300),
+        switchMap((query) => {
+          if (!query.trim()) {
+            return this.biologicalExamService.searchBiologicalExams();
+          }
+          return this.biologicalExamService.searchBiologicalExams(query.trim());
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.biologicalExams = response.results;
+        },
+        error: (error) => {
+          console.error('Error fetching biological exams:', error);
+        },
+      });
+  }
+  calculateAge(birthdate: string): number {
+    if (!birthdate) return 0;
+
+    const birth = new Date(birthdate);
+
+    if (isNaN(birth.getTime())) return 0;
+
+    const today = new Date();
+
+    let age = today.getFullYear() - birth.getFullYear();
+
+    const monthDiff = today.getMonth() - birth.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
     }
-      searchQuery: string = '';
-      radioList: data[] = [
-        {
-          patientName: 'John Doeeeeeee',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          testsNeeded:'left arm, mewi, lala'
-        },
-        {
-          patientName: 'Kheddia Assiaas',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          testsNeeded:'chest, dddd, hhhhh'
-        },
-        {
-          patientName: 'Kadid Selssabil',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          testsNeeded:'brain, oops, nann'
-        },
-        {
-          patientName: 'Djouaher Yasmine',
-          gender: 'Male',
-          age: 30,
-          patientId: '001',
-          testsNeeded:'glucose, etc'
-        },
-        {
-          patientName: 'Jane Smith',
-          gender: 'Female',
-          age: 25,
-          patientId: '002',
-          testsNeeded:'jsppp, cutttt'
-        },
-        // Add more dummy data here
-      ];
-    
-      filteredRadioList: data[] = [...this.radioList];
-    
-      onLogout() {
-        console.log('Logging out...');
-        // Add logout logic here
-      }
-      
-    
-      // Triggered on clicking the Search button
-      onSearch() {
-        this.filteredRadioList = this.radioList.filter((card) =>
-          card.patientName.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      }
+
+    return age;
+  }
+  fetchBioExams(): void {
+    this.biologicalExamService.searchBiologicalExams('').subscribe({
+      next: (response) => {
+        this.biologicalExams = response.results;
+      },
+      error: (error) => {
+        console.error('Error fetching biological exams:', error);
+      },
+    });
+  }
+
+  onSearchChange(query: string): void {
+    this.searchInput.next(query);
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.onSearchChange('');
+  }
 }

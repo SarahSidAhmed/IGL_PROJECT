@@ -74,22 +74,23 @@ class StaffSerializer(serializers.ModelSerializer):
 class BiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalExam
-        fields = '__all__'
+        fields = ['id', 'exam_name']
         
 class RadiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = RadiologicalExam
-        fields = '__all__'
+        fields = ['id', 'exam_name']
         
 class NursingRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
-        fields = '__all__'
+        fields = ['id', 'care_name']
 
 class StaffReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = ['id', 'name']
+
 
 class ConsultationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,12 +100,13 @@ class ConsultationSerializer(serializers.ModelSerializer):
 
 #The same endpoint of getting consulations by dpi_id, use the serializer that you name with 2 return prescription and medicines with it (read only) 
 
-class ConsultationSerializer2(serializers.ModelSerializer):
+class ConsultationListSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
-    prescription = PrescriptionSerializer(read_only=True)
-    doctor = StaffReadSerializer()
+    prescription = PrescriptionSerializer(read_only=True)    
+    doctor = StaffReadSerializer(read_only=True)
+
     #only doctors can add consultations
     def validate_doctor(self, value):
         if value.role != "Doctor":

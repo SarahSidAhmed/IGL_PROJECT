@@ -13,7 +13,7 @@ throw new Error('Method not implemented.');
   @Input() patientName!: string;
   @Input() gender!: string;
   @Input() age!: number;
-  @Input() patientId!: string;
+  @Input() radioId!: number;
   @Input() radioNeeded!: string;
 
   @Output() closePopup = new EventEmitter<void>();

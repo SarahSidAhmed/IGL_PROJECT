@@ -11,7 +11,7 @@ export class SoinPopupComponent {
   @Input() patientName!: string;
   @Input() gender!: string;
   @Input() age!: number;
-  @Input() patientId!: string;
+  @Input() soinId!: number;
   @Input() soinNeeded!: string;
 
   @Output() closePopup = new EventEmitter<void>();

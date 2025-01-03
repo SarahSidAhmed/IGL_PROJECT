@@ -7,6 +7,7 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DpiListService } from '../../../services/dpi-list.service';
 import { debounceTime, Subject, switchMap } from 'rxjs';
+import { NavbarComponent } from "../../../components/navbar/navbar.component";
 
 interface Dpi {
   id: number;
@@ -35,7 +36,7 @@ interface Dpi {
 }
 @Component({
   selector: 'app-dpi-list',
-  imports: [DpiCardComponent, CommonModule, FormsModule, QrScanComponent],
+  imports: [CommonModule, DpiCardComponent, FormsModule, NavbarComponent, QrScanComponent],
   templateUrl: './dpi-list.component.html',
   styleUrls: ['./dpi-list.component.scss'],
 })
