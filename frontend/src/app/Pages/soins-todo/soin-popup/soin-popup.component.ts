@@ -18,6 +18,7 @@ export class SoinPopupComponent {
 
   @Output() closePopup = new EventEmitter<void>();
 
+  
   patientObservation: string = ''; // Bind this to the observation input field
   nurseId: number = 0; // Populate this with the logged-in nurse's ID or another value
 

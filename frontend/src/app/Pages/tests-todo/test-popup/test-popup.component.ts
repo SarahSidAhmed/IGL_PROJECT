@@ -1,4 +1,6 @@
-import { CommonModule } from '@angular/common';
+ import { CommonModule } from '@angular/common';
+ import { UpdateTestService } from '../../../services/update-test.service';
+ import { FormsModule } from '@angular/forms'; 
 import {
   ChangeDetectorRef,
   Component,
@@ -7,7 +9,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
@@ -19,6 +20,7 @@ interface MedicalResults {
   sodium: number | null;
   potassium: number | null;
 }
+
 
 @Component({
   selector: 'app-test-popup',
@@ -35,10 +37,16 @@ export class TestPopupComponent {
   @Input() testsNeeded!: string;
 
   @Output() closePopup = new EventEmitter<void>();
+
   @Output() submitResults = new EventEmitter<{
     results: MedicalResults;
     report: string;
   }>();
+
+  constructor(
+  private cdr: ChangeDetectorRef,
+  private updateTestService: UpdateTestService
+) {}
 
   report: string = '';
   results: MedicalResults = {
@@ -107,7 +115,6 @@ export class TestPopupComponent {
 
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
-  constructor(private cdr: ChangeDetectorRef) {}
 
   /**
    * Updates the `results` object when input values change.
@@ -144,12 +151,32 @@ export class TestPopupComponent {
   }
 
   onSubmit(): void {
-    this.submitResults.emit({
-      results: this.results,
-      report: this.report,
-    });
-    this.onClose();
-  }
+  const id = parseInt(this.patientId); // Assuming patientId is the test record ID.
+  const data = {
+    result: this.report,
+    exam_date: new Date().toISOString().split('T')[0], // Example date format.
+    lab_technician: 123, // Replace with the actual technician ID if available.
+    parameters: [
+      { id: 1, value: this.results.glucose || 0 },
+      { id: 2, value: this.results.crp || 0 },
+      { id: 3, value: this.results.creatinine || 0 },
+      { id: 4, value: this.results.cholesterol || 0 },
+      { id: 5, value: this.results.sodium || 0 },
+      { id: 6, value: this.results.potassium || 0 },
+    ],
+  };
+
+  this.updateTestService.updateTest(id, data).subscribe({
+    next: (response) => {
+      console.log('Update successful', response);
+      this.onClose();
+    },
+    error: (error) => {
+      console.error('Update failed', error);
+    },
+  });
+}
+
 
   onReset(): void {
     this.results = {
@@ -161,5 +188,7 @@ export class TestPopupComponent {
       potassium: null,
     };
     this.report = '';
+    this.closePopup.emit();
   }
+
 }
