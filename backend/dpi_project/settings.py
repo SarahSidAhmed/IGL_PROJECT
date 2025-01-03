@@ -35,7 +35,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # CORS settings
+# frontend should be running on http://localhost:3001
+
+CORS_ALLOWED_ORIGINS = ["https://localhost:3001"]  
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
+
 
 # Application definition
 
@@ -50,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'drf_yasg',
+  
 ]
 
 MIDDLEWARE = [
@@ -61,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'dpi_project.urls'
@@ -97,7 +104,7 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD', ''),
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '3306'),
-        'CONN_MAX_AGE': None,
+        'CONN_MAX_AGE': 600,
         # 'OPTIONS': {
         #     'ssl': {
         #         'ca': os.getenv('SSL_CA_PATH', None),

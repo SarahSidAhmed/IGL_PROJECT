@@ -1,104 +1,160 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DpiCardComponent } from '../dpi-card/dpi-card.component';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DpiListService } from '../../../services/dpi-list.service';
+import { debounceTime, Subject, switchMap } from 'rxjs';
 
-interface Patient {
-  patientName: string;
-  gender: string;
-  age: number;
-  patientId: string;
-  socialSecurityNumber: string;
-  contactNumber: string;
+interface Dpi {
+  id: number;
+  password: string;
+  doctorStaff: {
+    id: number;
+    name: string;
+  };
+  social_security_number: string;
+  first_name: string;
+  last_name: string;
+  birthdate: string;
   email: string;
+  address: string;
+  phone: string;
+  emergency_contact_name: string;
+  emergency_contact_phone: string;
+  emergency_contact_relationship: string;
+  gender: string;
+  blood_type: string;
+  mutuelle_name: string;
+  mutuelle_policy_number: string;
+  medical_history: string | null;
+  hospital: string;
+  admission_date: string;
 }
-
 @Component({
   selector: 'app-dpi-list',
+  imports: [DpiCardComponent, CommonModule, FormsModule, QrScanComponent],
   templateUrl: './dpi-list.component.html',
   styleUrls: ['./dpi-list.component.scss'],
-  imports: [DpiCardComponent, CommonModule, FormsModule],
 })
-export class DpiListComponent {
-  constructor(private router: Router) {}  // Inject Router
+export class DpiListComponent implements OnInit {
+  dpis: Dpi[] = [];
+  searchInput = new Subject<string>();
+  searchQuery: string = '';
 
-  onCreateDpi() {
-    this.router.navigate(['/create-dpi']); 
+  constructor(private router: Router, private dpiListService: DpiListService) {
+    this.fetchDpis();
+  }
+isQrCodeSearch: boolean = false;
+currentId: number = 0;
+
+scanQrVisible: boolean = false;
+scanQrCode() {
+  this.scanQrVisible = !this.scanQrVisible;
+}
+
+  ngOnInit(): void {
+    this.fetchDpis();
+    this.searchInput
+      .pipe(
+        debounceTime(300),
+        switchMap((query) => {
+            if(!query.trim()) {
+              return this.dpiListService.searchDpis();
+            }
+            return this.dpiListService.searchDpis(query.trim());
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.dpis = response.results;
+        },
+        error: (error) => {
+          console.error('Error fetching DPIs:', error);
+        },
+      });
   }
 
-scanQrCode() {
-throw new Error('Method not implemented.');
-}
-  searchQuery: string = '';
-  dpiList: Patient[] = [
-    {
-      patientName: 'John Doe',
-      gender: 'Male',
-      age: 30,
-      patientId: '001',
-      socialSecurityNumber: '123-45-6789',
-      contactNumber: '123-456-7890',
-      email: 'john.doe@example.com',
-    },
-    {
-      patientName: 'Kheddia Assia',
-      gender: 'Male',
-      age: 30,
-      patientId: '001',
-      socialSecurityNumber: '123-45-6789',
-      contactNumber: '123-456-7890',
-      email: 'john.doe@example.com',
-    },
-    {
-      patientName: 'Kadid Selssabil',
-      gender: 'Male',
-      age: 30,
-      patientId: '001',
-      socialSecurityNumber: '123-45-6789',
-      contactNumber: '123-456-7890',
-      email: 'john.doe@example.com',
-    },
-    {
-      patientName: 'Djouaher Yasmine',
-      gender: 'Male',
-      age: 30,
-      patientId: '001',
-      socialSecurityNumber: '123-45-6789',
-      contactNumber: '123-456-7890',
-      email: 'john.doe@example.com',
-    },
-    {
-      patientName: 'Jane Smith',
-      gender: 'Female',
-      age: 25,
-      patientId: '002',
-      socialSecurityNumber: '987-65-4321',
-      contactNumber: '987-654-3210',
-      email: 'jane.smith@example.com',
-    },
-    // Add more dummy data here
-  ];
+  fetchDpis(): void {
+    this.dpiListService.searchDpis('').subscribe({
+      next: (response) => {
+        this.dpis = response.results;
+      },
+      error: (error) => {
+        console.error('Error fetching DPIs:', error);
+      },
+    });
+  }
+  onDpiDeleted(deletedDpiId: number): void {
+    this.dpis = this.dpis.filter(dpi => dpi.id !== deletedDpiId);
+  }
+  onSearchChange(query: string): void {
+    if (!this.isQrCodeSearch){
+    this.searchInput.next(query);}
+  }
 
-  filteredDpiList: Patient[] = [...this.dpiList];
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.onSearchChange('');
+  }
 
-  onLogout() {
+  calculateAge(birthdate: string): number {
+    if (!birthdate) return 0;
+
+    const birth = new Date(birthdate);
+
+    if (isNaN(birth.getTime())) return 0;
+
+    const today = new Date();
+
+    let age = today.getFullYear() - birth.getFullYear();
+
+    const monthDiff = today.getMonth() - birth.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  }
+
+
+  onCreateDpi(): void {
+    this.router.navigate(['/create-dpi']);
+  }
+
+  onLogout(): void {
     console.log('Logging out...');
     // Add logout logic here
   }
-  
 
-  // Triggered on clicking the Search button
-  onSearch() {
-    this.filteredDpiList = this.dpiList.filter((card) =>
-      card.patientName.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
+  searchDpi(id: string): void {
+  const numericId = parseInt(id, 10); // Convert the string to a number
+  if (isNaN(numericId)) {
+    console.error('Invalid ID: must be a number');
+    alert('Invalid ID: Please scan a valid QR code containing a numeric ID.');
+    return;
   }
-  /*filterDpiCards() {
-    const query = this.searchQuery.toLowerCase();
-    this.filteredDpiList = this.dpiList.filter((patient) =>
-      patient.patientName.toLowerCase().includes(query)
-    );
-  }*/
+
+  this.dpiListService.searchDpisQR(numericId).subscribe({
+    next: (response) => {
+      console.log('DPI Search Response:', response);
+      this.dpis = [response];
+      this.dpis.length = 1;
+      // this.dpis = response;
+      console.log('DPI Search Response.results:', response);
+    },
+    error: (error) => {
+      console.error('Error searching DPIs:', error);
+      alert('There is No DPI with that ID');
+    },
+  });
+}
+
+
 }

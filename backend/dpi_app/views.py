@@ -201,32 +201,51 @@ class RadiologicalExamUpdateView(UpdateAPIView):
 class BiologicalExamListView(ListAPIView):
     serializer_class = BiologicalExamListSerializer
     pagination_class = ExamsRecordsPagination
+
     def get_queryset(self):
-        ssn_prefix = self.kwargs.get('ssn_prefix', None)
-        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True).select_related('consultation', 'consultation__dpi')
-        if ssn_prefix:
-           queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+        dpi_id = self.request.query_params.get('dpi_id', None)
+        ssn_prefix = self.request.query_params.get('ssn_prefix', None)
+        queryset = BiologicalExam.objects.filter(lab_technician__isnull=True).select_related('consultation', 'consultation__dpi').prefetch_related('biologicalexamparam_set')
+
+        if dpi_id:
+            queryset = queryset.filter(consultation__dpi_id=dpi_id)
+        elif ssn_prefix:
+            queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+
         return queryset
+
 
 class RadiologicalExamListView(ListAPIView):
     serializer_class = RadiologicalExamListSerializer
     pagination_class = ExamsRecordsPagination
+
     def get_queryset(self):
-        ssn_prefix = self.kwargs.get('ssn_prefix', None)
+        dpi_id = self.request.query_params.get('dpi_id', None)
+        ssn_prefix = self.request.query_params.get('ssn_prefix', None)
         queryset = RadiologicalExam.objects.filter(radiologist__isnull=True).select_related('consultation', 'consultation__dpi')
-        if ssn_prefix:
-           queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+
+        if dpi_id:
+            queryset = queryset.filter(consultation__dpi_id=dpi_id)
+        elif ssn_prefix:
+            queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+
         return queryset
+
 
 class NursingRecordListView(ListAPIView):
     serializer_class = NursingRecordListSerializer
     pagination_class = ExamsRecordsPagination
-    
+
     def get_queryset(self):
-        ssn_prefix = self.kwargs.get('ssn_prefix', None)
+        dpi_id = self.request.query_params.get('dpi_id', None)
+        ssn_prefix = self.request.query_params.get('ssn_prefix', None)
         queryset = NursingRecord.objects.filter(nurse__isnull=True).select_related('consultation', 'consultation__dpi')
-        if ssn_prefix:
-           queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+
+        if dpi_id:
+            queryset = queryset.filter(consultation__dpi_id=dpi_id)
+        elif ssn_prefix:
+            queryset = queryset.filter(consultation__dpi__social_security_number__startswith=ssn_prefix)
+
         return queryset
 
 

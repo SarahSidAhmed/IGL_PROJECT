@@ -126,6 +126,8 @@ class DpiSerializer(serializers.ModelSerializer):
         read_only_fields = ['admission_date']
 
 class DpiCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    
     class Meta:
         model = Dpi
         fields = '__all__'
@@ -254,9 +256,10 @@ class DpiReaderSerializer(serializers.ModelSerializer):
 # Serializers for List Views
 class BiologicalExamListSerializer(serializers.ModelSerializer):
     dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)
+    parameters = BiologicalExamParamSerializer(source='biologicalexamparam_set', many=True, read_only=True)
     class Meta:
         model = BiologicalExam
-        fields = ['id', 'exam_name', 'dpi', 'consultation']
+        fields = ['id', 'exam_name', 'dpi', 'consultation', 'parameters']
 
 class RadiologicalExamListSerializer(serializers.ModelSerializer):
     dpi = DpiReaderSerializer(source='consultation.dpi', read_only=True)

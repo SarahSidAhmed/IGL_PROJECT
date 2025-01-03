@@ -1,0 +1,67 @@
+<div class="flex flex-col h-screen bg-teal-100">
+    <header class="flex justify-between bg-white shadow-sm p-4 rounded-md">
+      <img class="h-10 w-15" src="./assets/logo.png" alt="" />
+  
+      <button
+        class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
+        (click)="onLogout()"
+      >
+        <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
+        <span>Se déconnecter</span>
+      </button>
+    </header>
+    <div class="flex justify-center mt-4 mb-4">
+      <h1 class="text-primaryBlue font-poppins text-xl font-bold">GESTION DPI</h1>
+    </div>
+    <div class="flex flex-row justify-center">
+      <div
+        class="flex flex-row justify-between h-16 w-2/3 bg-white shadow-sm items-center rounded-lg mr-8"
+      >
+        <div class="flex-grow relative p-4">
+          <input
+            type="text"
+          
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Search by SSN prefix..."
+            class="w-full p-1 bg-slate-100 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 placeholder:font-poppins placeholder:text-xs placeholder:pl-4"
+          />
+        </div>
+        <button
+          class="text-white p-1 rounded-md focus:outline-none"
+          (click)="scanQrCode()"
+        >
+          <img class="size-7 mr-3" src="./assets/icons/scanQr.png" />
+        </button>
+        
+      </div>
+      <div class="flex justify-evenly space-x-4">
+        <button
+          class="ml-2 bg-[#16c2d5] text-white font-poppins px-1 py-2 rounded-md hover:bg-blue-600 focus:outline-none mr-5 flex flex-col items-center justify-center w-24 text-xs font-semibold"
+          (click)="onCreateDpi()"
+        >
+          <img class="size-5 mr-1" src="./assets/icons/creerDpi.png" />
+          <span class="flex">Créer un nouveau DPI</span>
+        </button>
+      </div>
+    </div>
+  
+    <div class="m-7 mb-0 mt-2 overflow-y-auto custom-scrollbar">
+      <div class="dpi-cards">
+        <app-patient-card
+          *ngFor="let dpi of dpis"
+          [patientName]="dpi.first_name + ' ' + dpi.last_name"
+          [gender]="dpi.gender"
+          [age]="calculateAge(dpi.birthdate)"
+          [socialSecurityNumber]="dpi.social_security_number"
+          [contactNumber]="dpi.phone"
+          [email]="dpi.email"
+        ></app-patient-card>
+      </div>
+  
+      <div *ngIf="!dpis.length" class="text-center">
+        <p>No results found.</p>
+      </div>
+    </div>
+  </div>
+  

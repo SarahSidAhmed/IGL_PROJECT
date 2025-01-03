@@ -4,9 +4,9 @@ from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
-    path('nursing-records/<str:ssn_prefix>/', NursingRecordListView.as_view(), name='nursing-record-list-filtered'),
-    path('radiological-exams/<str:ssn_prefix>/', RadiologicalExamListView.as_view(), name='radiological-exam-list-filtered'),
-    path('biological-exams/<str:ssn_prefix>/', BiologicalExamListView.as_view(), name='biological-exam-list-filtered'),
+    path('nursing-records/search/', NursingRecordListView.as_view(), name='nursing-record-list-filtered'),
+    path('radiological-exams/search/', RadiologicalExamListView.as_view(), name='radiological-exam-list-filtered'),
+    path('biological-exams/search/', BiologicalExamListView.as_view(), name='biological-exam-list-filtered'),
     path('radiological-exams/create/', RadiologicalExamCreateView.as_view(), name='create-radiological-exam'),
     path('radiological-exams/<int:pk>/update/', RadiologicalExamUpdateView.as_view(), name='update-radiological-exam'),
     path('nursing-records/create/', NursingRecordCreateView.as_view(), name='nursing-record-create'),
@@ -29,5 +29,5 @@ urlpatterns = [
     path('dpis/search/', DpiSearchBySSNView.as_view(), name='dpi-search-ssn'),
     path('dpis/<int:id>/', DpiDetailByIdView.as_view(), name='dpi-detail-by-id'),
     path('dpis/<int:id>/exams/', UnifiedExamRecordView.as_view(), name='unified-exam-record'),
-    path('validate-prescription/', ValidatePrescriptionView.as_view(), name='validate-prescription'),
+    path('validate-prescription/', ValidatePrescriptionView.as_view(), name='validate-prescription'), # For SGPH system
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
