@@ -97,6 +97,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['consultation_date']
 
+#The same endpoint of getting consulations by dpi_id, use the serializer that you name with 2 return prescription and medicines with it (read only) 
 
 class ConsultationSerializer2(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
@@ -104,7 +105,6 @@ class ConsultationSerializer2(serializers.ModelSerializer):
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
     prescription = PrescriptionSerializer(read_only=True)
     doctor = StaffReadSerializer()
-
     #only doctors can add consultations
     def validate_doctor(self, value):
         if value.role != "Doctor":

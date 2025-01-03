@@ -73,6 +73,10 @@ class UpdateConsultationAPIView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
 
 
+#i want to create the prescription to get created when the consultation is created
+
+
+
 class AddMedicineAPIView(CreateAPIView):
     serializer_class = MedicineSerializer
 
