@@ -21,12 +21,12 @@ export class SoinUpdateService {
   constructor(private http: HttpClient) {}
 
   updateNursingRecord(id: number, data: NursingRecordUpdate): Observable<any> {
-    const url = `${this.baseUrl}/${id}/update`;
+    const url = `${this.baseUrl}/${id}/update/`;
     console.log('Data to send:', data);
     console.log('URL:', url);
     console.log('Headers:', this.headers);
 
-    return this.http.put(url, data, { headers: this.headers }).
+    return this.http.patch(url, data, { headers : this.headers }).
     pipe(catchError(this.handleError));
   }
 
