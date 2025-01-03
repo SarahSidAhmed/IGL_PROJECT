@@ -61,16 +61,29 @@ class PatientLoginView(APIView):
             }, status=status.HTTP_200_OK)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CreatePrescriptionAPIView(CreateAPIView):
-    serializer_class = PrescriptionSerializer
+class CreateConsultationAPIView(APIView):
+    @swagger_auto_schema(request_body=ConsultationSerializer, responses={201: ConsultationListSerializer})
+    def post(self, request, *args, **kwargs):
+        serializer = ConsultationSerializer(data=request.data)
+        if serializer.is_valid():
+            consultation = serializer.save()
 
-class CreateConsultationAPIView(CreateAPIView):
-    serializer_class = ConsultationSerializer
+            Prescription.objects.create(consultation=consultation)
 
-class UpdateConsultationAPIView(RetrieveUpdateDestroyAPIView):
+            response_serializer = ConsultationListSerializer(consultation)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UpdateConsultationAPIView(UpdateAPIView):
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
     lookup_field = 'id'
+
+
+#i want to create the prescription to get created when the consultation is created
+
 
 
 class AddMedicineAPIView(CreateAPIView):
@@ -125,10 +138,10 @@ class GetPrescriptionByConsultationId(APIView):
 class GetAllConsultationsByDpiId(APIView):
     pagination_class = ConsultationPagination
 
-    @swagger_auto_schema(responses={200: ConsultationSerializer(many=True)})
+    @swagger_auto_schema(responses={200: ConsultationListSerializer(many=True)})
     def get(self, request, dpi_id, *args, **kwargs):
         consultations = Consultation.objects.filter(dpi_id=dpi_id).select_related('doctor')
-        serializer = ConsultationSerializer(consultations, many=True)
+        serializer = ConsultationListSerializer(consultations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
