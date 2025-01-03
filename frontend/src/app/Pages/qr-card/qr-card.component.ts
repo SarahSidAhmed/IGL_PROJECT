@@ -7,25 +7,24 @@ import { QrCodeService } from '../../services/qr-code.service';
 @Component({
   selector: 'app-qr-card',
   standalone: true,
-  imports: [CommonModule,NavbarComponent],
+  imports: [CommonModule, NavbarComponent],
   templateUrl: './qr-card.component.html',
-  styleUrl: './qr-card.component.scss'
+  styleUrl: './qr-card.component.scss',
 })
-export class QrCardComponent implements OnInit{
+export class QrCardComponent implements OnInit {
   @ViewChild('qrImage', { static: false }) qrImage!: ElementRef;
   patientId: string = '';
   qrCodeData: string = '';
-  constructor(
-    private router: Router,
-    private qrService: QrCodeService
-  ) {
+  constructor(private router: Router, private qrService: QrCodeService) {
     const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { ssn: string, patientId: string };
-    
-    if (state) {
+    const state = navigation?.extras.state as { patientId: string };
+
+    if (state && state.patientId) {
+      console.log('Patient ID received:', state.patientId);
       this.patientId = state.patientId;
-      this.generateQRCode(state.ssn);
+      this.generateQRCode(state.patientId);
     } else {
+      console.warn('Missing or invalid patient ID. Redirecting...');
       this.router.navigate(['/']);
     }
   }
@@ -34,13 +33,22 @@ export class QrCardComponent implements OnInit{
     // Component initialization logic
   }
 
-  async generateQRCode(ssn: string): Promise<void> {
+  async generateQRCode(patientId: string): Promise<void> {
     try {
-      this.qrCodeData = await this.qrService.generateQRCode(ssn);
+      if (!patientId) {
+        throw new Error('Invalid patient ID');
+      }
+      this.qrCodeData = await this.qrService.generateQRCode(String(patientId));
+      if (!this.qrCodeData.startsWith('data:image')) {
+        this.qrCodeData = `data:image/png;base64,${this.qrCodeData}`;
+      }
     } catch (error) {
       console.error('Error generating QR code:', error);
+      alert('Failed to generate QR code. Please check the patient ID.');
     }
   }
+  
+  
 
   downloadQrCode(): void {
     if (this.qrCodeData) {

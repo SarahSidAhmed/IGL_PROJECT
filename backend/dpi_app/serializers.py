@@ -49,11 +49,6 @@ class MedicineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medicine
         fields = ['id', 'prescription', 'medication_name', 'dosage', 'duration', 'frequency']
-    #only doctors can add medicines
-    def validate_doctor(self, value):
-        if value.role != "Doctor":
-            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
-        return value
 
 
 class PrescriptionSerializer(serializers.ModelSerializer):
@@ -84,32 +79,28 @@ class RadiologicalExamSerializer(serializers.ModelSerializer):
 class NursingRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = NursingRecord
-        fields = '__all__'
+        fields = ['id', 'care_name']
 
 class StaffReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = ['id', 'name']
 
+
 class ConsultationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultation
         fields = '__all__'
-        read_only_fields = ['consultation_date']
+        read_only_fields = ['consultation_date', 'prescription']
 
 
-class ConsultationSerializer2(serializers.ModelSerializer):
+class ConsultationListSerializer(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)
     prescription = PrescriptionSerializer(read_only=True)
-    doctor = StaffReadSerializer()
 
-    #only doctors can add consultations
-    def validate_doctor(self, value):
-        if value.role != "Doctor":
-            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
-        return value
+    doctor = StaffReadSerializer(read_only=True)
 
     class Meta:
         model = Consultation

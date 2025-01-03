@@ -107,7 +107,9 @@ export class RechDoctorComponent implements OnInit {
       },
     });
   }
-
+  onPatientDeleted(deletedPatientId: number): void {
+    this.dpis = this.dpis.filter(dpi => dpi.id !== deletedPatientId);
+  }
   onSearchChange(query: string): void {
     this.searchInput.next(query);
   }
@@ -152,6 +154,6 @@ export class RechDoctorComponent implements OnInit {
   }
 
   onLogout(): void {
-    console.log('Logging out...');
+    this.router.navigate(['/']);
   }
 }

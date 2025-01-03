@@ -71,4 +71,8 @@ export class RechDoctorService {
       })
     );
   }
+  deletePatient(patientId: number): Observable<void> {
+    const url = `${this.baseUrl}/dpis/${patientId}/`;
+    return this.http.delete<void>(url);
+  }
 }
