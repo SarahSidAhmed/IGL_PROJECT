@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class ConsultationDetailDoctorComponent {
+  consultationId: number = 3;
+
   isEditing = false;
   resume = 'Lorem ipsum dolor sit amet...';
   tests = ['Test 1', 'Test 2', 'Test 3'];
@@ -35,28 +37,28 @@ export class ConsultationDetailDoctorComponent {
     this.newMedicament = { nom: '', dosage: '', duree: '', frequence: '' };
   }
 
-  addMedicament(consultationId: number) {
+  addMedicament() {
     if (
       this.newMedicament.nom &&
       this.newMedicament.dosage &&
       this.newMedicament.duree &&
       this.newMedicament.frequence
     ) {
-      // Step 1: Use the prescription endpoint to fetch or create the prescription
+      
       this.http
-        .get(`http://127.0.0.1:8000/api/prescription/${consultationId}/`)
+        .get(`http://127.0.0.1:8000/api/prescription/${this.consultationId}/`)
         .subscribe(
           (prescriptionResponse: any) => {
             const prescriptionId = prescriptionResponse.prescription_id;
   
-            // Step 2: Fetch prescription details (if necessary)
+            
             this.http
               .get(`http://127.0.0.1:8000/api/prescription/${prescriptionId}/`)
               .subscribe(
                 (prescriptionDetails: any) => {
                   console.log('Prescription details:', prescriptionDetails);
   
-                  // Step 3: Add the prescription ID to the medicine payload
+                  
                   const medicamentPayload = {
                     ...this.newMedicament,
                     prescription_id: prescriptionId,
