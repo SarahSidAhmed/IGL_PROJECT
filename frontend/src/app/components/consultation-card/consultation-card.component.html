@@ -1,79 +1,74 @@
 <div class="border rounded-lg shadow-md p-4 bg-white w-full">
-    <div class="flex justify-between items-center">
-      <h2 class="text-lg text-[#10217D] font-semibold">Visite Ordinaire</h2>
-      <button (click)="toggleExpand()" class="transition-transform duration-300">
-        <img 
-          *ngIf="!isExpanded" 
-          src="assets/expand.svg" 
-          alt="Expand" 
-          class="h-5 w-5"
-        />
-        <img 
-          *ngIf="isExpanded" 
-          src="assets/expand.svg" 
-          alt="Collapse" 
-          class="h-5 w-5"
-        />
-      </button>
-    </div>
-    <div class="pl-5 grid grid-flow-col items-center gap-4 mt-2">
-      <div class="flex items-center gap-2">
-        <img src="assets/hopital.svg" alt="Hospital" class="h-4 w-4" />
-        <span class="text-[#10217D] text-sm">Hospital Name</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <img src="assets/dr.svg" alt="Doctor" class="h-4 w-4" />
-        <span class="text-[#10217D] text-sm">Dr. Name</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <img src="assets/date.svg" alt="Date" class="h-4 w-4" />
-        <span class="text-[#10217D] text-sm">12/06/2024</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <img src="assets/hour.svg" alt="Time" class="h-4 w-4" />
-        <span class="text-[#10217D] test-sm">10:30 AM</span>
-      </div>
-    </div>
-    <div *ngIf="!isExpanded" class="flex items-center mt-4 flex-nowrap">
-        <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-          <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
-          <span class="list-disc text-[#10217D]">1 Bilan Biologique + Traitement antivirus...</span>
-        </div>
-        <button 
-          class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
-          (click)="seeMore()"
-        >
-          Voir plus
-        </button>
-      </div>
-    <div *ngIf="isExpanded" class="mt-4">
-        <div class="relative border-[1.5px] border-[#10217D] rounded-lg p-4 mb-4">
-          <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Résumé</h3>
-          <p class="text-gray-600">lorem ispum lorem ispum lorem ispum lorem ispumlorem ispum lorem ispum lorem ispumlorem ispumlorem ispumlorem ispumlorem ispumlorem ispumlorem ispum </p>
-        </div>
-        <div class="flex flex-wrap lg:flex-nowrap gap-4">
-          <div class="flex-1 relative border-[1.5px] border-[#10217D] rounded-lg p-4">
-            <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Ordonnance</h3>
-            <div *ngFor="let item of listItemsord" class="flex items-center gap-2">
-              <img src="assets/bullet.svg" alt="Time" class="h-1 w-1" />
-              <p class="text-gray-600">{{item}}</p>
-            </div>
-          </div>
-          <div class="flex-1 p-4 max-h-35 overflow-y-auto">
-            <div *ngFor="let item of listItems" class="flex justify-between items-center mb-2">
-              <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-                <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
-                <span class="list-disc text-[#10217D]">{{item}}</span>
-              </div>
-              <button 
-                class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
-              >
-                Ouvrir
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="flex justify-between items-center">
+    <h2 class="text-lg text-[#10217D] font-semibold">{{ consultation.title }}</h2>
+    <button (click)="toggleExpand()" class="transition-transform duration-300">
+      <img 
+        *ngIf="!isExpanded" 
+        src="assets/expand.svg" 
+        alt="Expand" 
+        class="h-5 w-5" 
+      />
+      <img 
+        *ngIf="isExpanded" 
+        src="assets/expand.svg" 
+        alt="Collapse" 
+        class="h-5 w-5" 
+      />
+    </button>
   </div>
-<router-outlet />
-  
+  <div class="pl-5 grid grid-flow-col items-center gap-4 mt-2">
+    <div class="flex items-center gap-2">
+      <img src="assets/hopital.svg" alt="Hospital" class="h-4 w-4" />
+      <span class="text-[#10217D] text-sm">CHU</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <img src="assets/dr.svg" alt="Doctor" class="h-4 w-4" />
+      <span class="text-[#10217D] text-sm">{{ consultation.doctor?.name }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <img src="assets/date.svg" alt="Date" class="h-4 w-4" />
+      <span class="text-[#10217D] text-sm">{{ consultation.consultation_date | date }}</span>
+    </div>
+    <div class="flex items-center gap-2"> 
+      <img src="assets/hour.svg" alt="Time" class="h-4 w-4" />
+      <span class="text-[#10217D] text-sm">{{ consultation.consultation_date | date: 'shortTime' }}</span>
+    </div>
+  </div>
+  <div *ngIf="!isExpanded" class="flex items-center mt-4 flex-nowrap">
+    <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+      <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
+      <span class="list-disc text-[#10217D]">
+        {{ consultation.consultation_summary }}
+      </span>
+    </div>
+    <button 
+      class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
+      (click)="seeMore()"
+    >
+      Voir plus
+    </button>
+  </div>
+  <div *ngIf="isExpanded" class="mt-4">
+    <div class="relative border-[1.5px] border-[#10217D] rounded-lg p-4 mb-4">
+      <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Résumé</h3>
+      <p class="text-gray-600">{{ consultation.consultation_summary }}</p>
+    </div>
+    <div class="flex flex-wrap lg:flex-nowrap gap-4">
+      <div class="flex-1 relative border-[1.5px] border-[#10217D] rounded-lg p-4">
+        <h3 class="absolute -top-3 left-4 bg-white px-2 font-semibold text-gray-800">Ordonnance</h3>
+        <div *ngFor="let exam of consultation.biological_exams" class="flex items-center gap-2">
+          <img src="assets/bullet.svg" alt="Time" class="h-1 w-1" />
+          <p class="text-gray-600">{{ exam.exam_name }}</p>
+        </div>
+      </div>
+      <div class="flex-1 p-4 max-h-35 overflow-y-auto">
+        <div *ngFor="let record of consultation.nursing_records" class="flex justify-between items-center mb-2">
+          <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+            <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
+            <span class="list-disc text-[#10217D]">{{ record.care_name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

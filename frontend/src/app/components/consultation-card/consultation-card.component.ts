@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-consultation-card',
@@ -10,23 +12,16 @@ import { RouterOutlet } from '@angular/router';
 })
 export class ConsultationCardComponent {
   isExpanded = false;
+  constructor(private router: Router) {}
 
-  listItems = [
-    'Radio',
-    'Bilan',
-    'Graph'
-  ];
-  listItemsord = [
-    'Paracetamol',
-    'anti virus'
-  ];
-
+  @Input() consultation: any;
   toggleExpand(): void {
     this.isExpanded = !this.isExpanded;
   }
-
+ 
   seeMore(): void {
-    console.log('Navigating to more details...');
+    this.router.navigate(['consultation-patient/', this.consultation.id]);
+    
   }
 
 }

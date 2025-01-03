@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { TestCardComponent } from '../../components/test-card/test-card.component';
 import { InfoCardComponent } from '../../components/info-card/info-card.component';
 import { ConsultationCardComponent } from '../../components/consultation-card/consultation-card.component';
 import { CommonModule } from '@angular/common';
+import { PatientInfoService } from '../../services/patient-info.service';
+import { ConsultationListService } from '../../services/consultation-list.service';
+import { Router } from '@angular/router';
+import { CreateConsultationService } from '../../services/create-consultation.service';
 
 @Component({
   selector: 'app-dpi-doctor',
@@ -13,41 +17,68 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dpi-doctor.component.html',
   styleUrl: './dpi-doctor.component.scss'
 })
-export class DpiDoctorComponent {
-  showAddConsultation = false;
-  showNotification: boolean = false;
-  notificationType: 'success' | 'error' = 'success'; 
-  notificationMessage: string = '';
-
-  consultations = [
-    { id: 1, title: 'Consultation 1', details: 'Details about consultation 1' },
-    { id: 2, title: 'Consultation 2', details: 'Details about consultation 2' },
-    { id: 3, title: 'Consultation 3', details: 'Details about consultation 3' },
-    
-  ];
+export class DpiDoctorComponent implements OnInit {
+  dpi: any = null;
+  consultations: any[] = [];
+  id: any;
   
+  constructor(
+    private route: ActivatedRoute,
+    private patientService: PatientInfoService,
+    private consultationService: ConsultationListService,
+    private consultation: CreateConsultationService,
 
-  toggleAddConsultationPopup() {
-    this.showAddConsultation = !this.showAddConsultation;
-  }
-
-  addConsultation() {
-    try{
-      this.consultations.push({ id: 4, title: 'Consultation 4', details: 'Details about consultation 4' });
-      this.showNotification = true;
-        this.notificationType = 'success';
-        this.notificationMessage = 'Consultation ajoutée avec succès !';
+    private router: Router
+  ) {}
   
-
-    }catch(error){
-      this.showNotification = true;
-      this.notificationType = 'error';
-      this.notificationMessage = 'Une erreur est survenue!';
+  toggleAddConsultation(): void {
+    const dpiId = this.route.snapshot.paramMap.get('id');
+    const dataconsultation = {
+      "prescription": {
+        "consultation": 0
+      },
+      "doctor": {
+        "name": "string"
+      },
+      "consultation_summary": "string",
+      "dpi": 0
     }
-    setTimeout(() => {
-      this.showNotification = false;
-    }, 3000);
-    this.showAddConsultation=false;
-    
+  
+    this.consultation.createConsultation(dataconsultation).subscribe({
+      next: (response) => {
+        const id = response.id; // Assuming the response contains the consultation ID
+        this.router.navigate(['dpi-doctor/', id]);
+      },
+      error: (error) => {
+        console.error('Error creating consultation:', error);
+      },
+    });
   }
+  ngOnInit(): void {
+    const dpiId = this.route.snapshot.paramMap.get('id');
+    if (dpiId) {
+      this.patientService.getDpiById(dpiId).subscribe({
+        next: (data) => {
+          this.dpi = data;
+          this.id=data.id;
+
+        },
+        error: (error) => {
+          console.error('Error fetching dpi:', error);
+          console.log(this.id);
+        }
+      });
+
+      this.consultationService.getConsultations(dpiId).subscribe({
+        next: (data2) => {
+          this.consultations = data2;
+        },
+        error: (error) => {
+          console.error('Error fetching consultations:', error);
+        }
+      });
+    }
+  }
+
+  
 }

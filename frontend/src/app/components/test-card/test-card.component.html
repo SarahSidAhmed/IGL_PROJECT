@@ -1,17 +1,42 @@
 <div class="max-w-sm mx-auto bg-white rounded-lg px-4 py-2 relative">
-    <h3 class="font-semibold text-[#10217D]">Tests</h3>
-    <div class="flex-1 p-4 overflow-y-auto">
-        <div *ngFor="let item of listItems" class="flex justify-between items-center mb-2">
-          <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-            <img src="assets/bullet.svg" alt="Time" class="h-2 w-2" />
-            <span class="list-disc text-[#10217D]">{{item}}</span>
+  <h3 class="font-semibold text-[#10217D]">Tests</h3>
+  <div class="flex-1 p-4 overflow-y-auto">
+    <div *ngFor="let exam of exams" class="flex justify-between items-center mb-2">
+      <div *ngIf="exam.showModal" class="fixed inset-0 bg-gray-500  flex justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg max-w-md w-full">
+          <h3 class="text-lg font-bold text-[#10217D] mb-4">Exam Result</h3>
+          <div *ngIf="exam.image">
+            <img [src]="exam.image" alt="Exam Image" class="mt-4 max-w-full h-auto rounded-lg">
           </div>
+          <div *ngIf="exam.parameters && exam.parameters.length > 0" class="mt-4">
+            <h4 class="font-semibold text-[#10217D]">Résultats du bilan:</h4>
+            <ul class="list-disc pl-5">
+              <li *ngFor="let parameter of exam.parameters">
+                <p>{{ parameter.param_name }}: {{ parameter.value }}</p>
+              </li>
+            </ul>
+          </div>
+          <h4 class="font-semibold text-[#10217D]">Compte rendu:</h4>
+          <p>{{ exam.result }}</p>
           <button 
-            class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
-          >
-            Ouvrir
+            (click)="toggleModal(exam)" 
+            class="mt-4 bg-[#10217D] text-white font-bold py-2 px-4 rounded">
+            Close
           </button>
         </div>
       </div>
+      <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+        <img src="assets/bullet.svg" alt="Exam" class="h-2 w-2" />
+        <span class="list-disc text-[#10217D]">{{ exam.exam_name }}</span>
+        <span class="text-[#10217D] ml-auto">{{ exam.exam_date | date:'dd/MM/yyyy' }}</span>
+      </div>
+
+      <button 
+        class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
+        (click)="toggleModal(exam)">
+        Ouvrir
+      </button>
     </div>
+  </div>
+</div>
 <router-outlet />
