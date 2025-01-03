@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-_n9$pw7bsznt-=hnz+(*d9wys)0)0x&-@-mb%5zw+u6e0#j&v=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['6325-197-202-25-12.ngrok-free.app','127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # CORS settings
 # frontend should be running on http://localhost:3001

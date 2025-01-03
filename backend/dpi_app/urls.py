@@ -20,6 +20,7 @@ urlpatterns = [
     path('consultation/all/<int:dpi_id>', GetAllConsultationsByDpiId.as_view(), name='get-all-consultations'),
     path('prescription/create', CreatePrescriptionAPIView.as_view(), name='create-prescription'),
     path('prescription/<int:prescription_id>', GetAllMedicinesByPrescriptionId.as_view(), name='get-all-medicines-by-prescription-id'),
+    path('prescription/<int:consultation_id>', GetPrescriptionByConsultationId.as_view(), name='get-prescription-by-consultation-id'),
     path('patient/login/', PatientLoginView.as_view(), name='patient-login'),
     path('doctors/', GetAllDoctorsStaffAPIView.as_view(), name='get-all-doctors'),
     path('staff/<int:id>/', GetStaffByIdAPIView.as_view(), name='get_staff_by_id'),
