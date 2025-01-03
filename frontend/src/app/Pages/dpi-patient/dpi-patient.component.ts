@@ -18,7 +18,7 @@ import { ConsultationListService } from '../../services/consultation-list.servic
 export class DpiComponent implements OnInit {
   dpi: any = null;
   consultations: any[] = [];
-  examResult: any = null;
+  id: any;
 
 
   constructor(
@@ -30,14 +30,17 @@ export class DpiComponent implements OnInit {
   ngOnInit(): void {
     const dpiId = this.route.snapshot.paramMap.get('id');
     if (dpiId) {
-      this.patientService.getDpiById(+dpiId).subscribe(
-        (data) => {
+      this.patientService.getDpiById(dpiId).subscribe({
+        next: (data) => {
           this.dpi = data;
+          this.id=data.id;
+
         },
-        (error) => {
-          console.error('Error fetching DPI:', error);
+        error: (error) => {
+          console.error('Error fetching dpi:', error);
+          console.log(this.id);
         }
-      );
+      });
 
       this.consultationService.getConsultations(dpiId).subscribe({
         next: (data2) => {
@@ -49,4 +52,6 @@ export class DpiComponent implements OnInit {
       });
     }
   }
+
+  
 }

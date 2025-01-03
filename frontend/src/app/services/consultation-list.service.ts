@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ConsultationListService {
 
-  private baseUrl = 'http://127.0.0.1:8000/api'; // Base URL for the API
+  private baseUrl = 'http://127.0.0.1:8000/api';
 
   constructor(private http: HttpClient) {}
 

@@ -31,7 +31,7 @@ export class SigninComponent {
     this.loginService.login(loginPayload).subscribe({
       next: (response) => {
         sessionStorage.setItem('userId',response.staff.id.toString()); 
-        this.router.navigate(['/dpi-patient/3']);
+        this.router.navigate(['/dpi-doctor/3']);
 
       const role = response.staff.role; 
       

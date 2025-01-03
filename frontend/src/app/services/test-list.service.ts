@@ -11,7 +11,7 @@ export class TestListService {
 
   constructor(private http: HttpClient) {}
 
-  getExams(dpiId: number): Observable<any[]> {
+  getExams(dpiId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/dpis/${dpiId}/exams`);
   }
 }

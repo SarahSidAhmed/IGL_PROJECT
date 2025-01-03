@@ -10,7 +10,7 @@ export class PatientInfoService {
 
   constructor(private http: HttpClient) {}
 
-  getDpiById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/dpis/${id}`);
+  getDpiById(dpiId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/dpis/${dpiId}`);
   }
 }
