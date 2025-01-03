@@ -64,12 +64,6 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['prescription_date', 'validated']
 
-    #only doctors can put an ordonnance
-    def validate_doctor(self, value):
-        if value.role != "Doctor":
-            raise serializers.ValidationError("The assigned staff must have the role 'Doctor'.")
-        return value
-
 class StaffSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -98,6 +92,13 @@ class StaffReadSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class ConsultationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Consultation
+        fields = '__all__'
+        read_only_fields = ['consultation_date']
+
+
+class ConsultationSerializer2(serializers.ModelSerializer):
     biological_exams = BiologicalExamSerializer(many=True, source='biologicalexam_set', read_only=True)
     radiological_exams = RadiologicalExamSerializer(many=True, source='radiologicalexam_set', read_only=True)
     nursing_records = NursingRecordSerializer(many=True, source='nursingrecord_set', read_only=True)

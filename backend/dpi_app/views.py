@@ -103,6 +103,23 @@ class GetAllMedicinesByPrescriptionId(APIView):
             )
         serializer = MedicineSerializer(medicines, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+class GetPrescriptionByConsultationId(APIView):
+    @swagger_auto_schema(responses={200: PrescriptionSerializer})
+    def get(self, request, consultation_id):
+        try:
+            prescription = Prescription.objects.get(consultation_id=consultation_id)
+        except Prescription.DoesNotExist:
+            return Response(
+                {"detail": "No prescription found for the given consultation ID."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serialized_prescription = PrescriptionSerializer(prescription)
+        return Response(serialized_prescription.data)
+
+
 
 #getting all the consultations of a patient to display them
 class GetAllConsultationsByDpiId(APIView):
