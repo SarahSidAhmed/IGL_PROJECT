@@ -56,3 +56,8 @@
     </div>
   </div>
 </div>
+<app-qr-scan
+  *ngIf="scanQrVisible"
+  (searchDpi)="searchDpi($event)"
+  (closePopup)="scanQrCode()"
+></app-qr-scan>

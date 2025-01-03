@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 interface DpiResponse {
-  count: number;
+  count: number ;
   next: string | null;
   previous: string | null;
   results: Dpi[];
@@ -57,6 +57,19 @@ export class DpiListService {
 
     return this.http.get<DpiResponse>(url, { headers, params });
   }
+
+ searchDpisQR(id: number): Observable<Dpi> {
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'X-CSRFTOKEN': 'dETXuon4FPIUMC7HPeK3Jp7A3AA2Ub2gb82escHmKrQumZYXcegSVW1CcozrGWJQ',
+  });
+
+  const url = `${this.baseUrl}/dpis/${id}/`; // Add `id` to the URL path
+
+  return this.http.get<Dpi>(url, { headers });
+}
+
 
   deleteDpi(dpiId: number): Observable<void> {
     const url = `${this.baseUrl}/dpis/${dpiId}/`;

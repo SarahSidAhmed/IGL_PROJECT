@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-_n9$pw7bsznt-=hnz+(*d9wys)0)0x&-@-mb%5zw+u6e0#j&v=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['6325-197-202-25-12.ngrok-free.app']
 
 # CORS settings
 # frontend should be running on http://localhost:3001
@@ -104,7 +104,7 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD', ''),
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '3306'),
-        'CONN_MAX_AGE': None,
+        'CONN_MAX_AGE': 600,
         # 'OPTIONS': {
         #     'ssl': {
         #         'ca': os.getenv('SSL_CA_PATH', None),

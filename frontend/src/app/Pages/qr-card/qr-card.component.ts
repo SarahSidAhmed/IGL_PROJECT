@@ -7,7 +7,7 @@ import { QrCodeService } from '../../services/qr-code.service';
 @Component({
   selector: 'app-qr-card',
   standalone: true,
-  imports: [RouterOutlet,CommonModule,NavbarComponent],
+  imports: [CommonModule,NavbarComponent],
   templateUrl: './qr-card.component.html',
   styleUrl: './qr-card.component.scss'
 })

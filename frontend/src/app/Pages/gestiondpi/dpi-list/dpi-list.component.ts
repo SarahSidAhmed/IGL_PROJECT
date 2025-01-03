@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DpiCardComponent } from '../dpi-card/dpi-card.component';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
@@ -35,7 +36,7 @@ interface Dpi {
 }
 @Component({
   selector: 'app-dpi-list',
-  imports: [CommonModule, DpiCardComponent, FormsModule, NavbarComponent],
+  imports: [CommonModule, DpiCardComponent, FormsModule, NavbarComponent, QrScanComponent],
   templateUrl: './dpi-list.component.html',
   styleUrls: ['./dpi-list.component.scss'],
 })
@@ -47,18 +48,24 @@ export class DpiListComponent implements OnInit {
   constructor(private router: Router, private dpiListService: DpiListService) {
     this.fetchDpis();
   }
+isQrCodeSearch: boolean = false;
+currentId: number = 0;
+
+scanQrVisible: boolean = false;
+scanQrCode() {
+  this.scanQrVisible = !this.scanQrVisible;
+}
 
   ngOnInit(): void {
     this.fetchDpis();
-
     this.searchInput
       .pipe(
         debounceTime(300),
         switchMap((query) => {
-          if (!query.trim()) {
-            return this.dpiListService.searchDpis();
-          }
-          return this.dpiListService.searchDpis(query.trim());
+            if(!query.trim()) {
+              return this.dpiListService.searchDpis();
+            }
+            return this.dpiListService.searchDpis(query.trim());
         })
       )
       .subscribe({
@@ -85,7 +92,8 @@ export class DpiListComponent implements OnInit {
     this.dpis = this.dpis.filter(dpi => dpi.id !== deletedDpiId);
   }
   onSearchChange(query: string): void {
-    this.searchInput.next(query);
+    if (!this.isQrCodeSearch){
+    this.searchInput.next(query);}
   }
 
   clearSearch(): void {
@@ -116,9 +124,6 @@ export class DpiListComponent implements OnInit {
     return age;
   }
 
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
 
   onCreateDpi(): void {
     this.router.navigate(['/create-dpi']);
@@ -128,4 +133,29 @@ export class DpiListComponent implements OnInit {
     console.log('Logging out...');
     // Add logout logic here
   }
+
+  searchDpi(id: string): void {
+  const numericId = parseInt(id, 10); // Convert the string to a number
+  if (isNaN(numericId)) {
+    console.error('Invalid ID: must be a number');
+    alert('Invalid ID: Please scan a valid QR code containing a numeric ID.');
+    return;
+  }
+
+  this.dpiListService.searchDpisQR(numericId).subscribe({
+    next: (response) => {
+      console.log('DPI Search Response:', response);
+      this.dpis = [response];
+      this.dpis.length = 1;
+      // this.dpis = response;
+      console.log('DPI Search Response.results:', response);
+    },
+    error: (error) => {
+      console.error('Error searching DPIs:', error);
+      alert('There is No DPI with that ID');
+    },
+  });
+}
+
+
 }
