@@ -56,6 +56,7 @@
           [socialSecurityNumber]="dpi.social_security_number"
           [contactNumber]="dpi.phone"
           [email]="dpi.email"
+          (patientDeleted)="onPatientDeleted($event)"
         ></app-patient-card>
       </div>
   
