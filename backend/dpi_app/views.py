@@ -62,29 +62,26 @@ class PatientLoginView(APIView):
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateConsultationAPIView(APIView):
-    @swagger_auto_schema(request_body=ConsultationSerializer, responses={201: ConsultationListSerializer})
+    @swagger_auto_schema(request_body=ConsultationSerializer, responses={201: ConsultationSerializer})
     def post(self, request, *args, **kwargs):
         serializer = ConsultationSerializer(data=request.data)
         if serializer.is_valid():
             consultation = serializer.save()
 
-            Prescription.objects.create(consultation=consultation)
+            prescription = Prescription.objects.create()
+            consultation.prescription = prescription
+            consultation.save()
 
-            response_serializer = ConsultationListSerializer(consultation)
-            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+            response_data = ConsultationSerializer(consultation)
+
+            return Response(response_data.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class UpdateConsultationAPIView(UpdateAPIView):
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
     lookup_field = 'id'
-
-
-#i want to create the prescription to get created when the consultation is created
-
-
 
 class AddMedicineAPIView(CreateAPIView):
     serializer_class = MedicineSerializer
@@ -95,52 +92,13 @@ class DeleteUpdateMedicineAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = MedicineSerializer
     lookup_field = 'id'
 
-#not sure yet
-
-class GetAllBiologicalExamsByConsultationId(ListCreateAPIView):
-    queryset = BiologicalExam.objects.all()
-    serializer_class = BiologicalExamSerializer
-
-class GetAllRadiologicalExamsByConsultationId(ListCreateAPIView):
-    queryset = RadiologicalExam.objects.all()
-    serializer_class = RadiologicalExamSerializer
-
-class GetAllMedicinesByPrescriptionId(APIView):
-    @swagger_auto_schema(responses={200: MedicineSerializer(many=True)})
-    def get(self, request, prescription_id, *args, **kwargs):
-        medicines = Medicine.objects.filter(prescription__id=prescription_id)
-        if not medicines.exists():
-            return Response(
-                {"detail": "No medicines found for the given prescription ID."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        serializer = MedicineSerializer(medicines, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    
-class GetPrescriptionByConsultationId(APIView):
-    @swagger_auto_schema(responses={200: PrescriptionSerializer})
-    def get(self, request, consultation_id):
-        try:
-            prescription = Prescription.objects.get(consultation_id=consultation_id)
-        except Prescription.DoesNotExist:
-            return Response(
-                {"detail": "No prescription found for the given consultation ID."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serialized_prescription = PrescriptionSerializer(prescription)
-        return Response(serialized_prescription.data)
-
-
-
 #getting all the consultations of a patient to display them
 class GetAllConsultationsByDpiId(APIView):
     pagination_class = ConsultationPagination
 
     @swagger_auto_schema(responses={200: ConsultationListSerializer(many=True)})
     def get(self, request, dpi_id, *args, **kwargs):
-        consultations = Consultation.objects.filter(dpi_id=dpi_id).select_related('doctor')
+        consultations = Consultation.objects.filter(dpi_id=dpi_id).select_related('doctor', 'prescription').prefetch_related('prescription__medicines')
         serializer = ConsultationListSerializer(consultations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
