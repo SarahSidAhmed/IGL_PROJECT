@@ -13,13 +13,19 @@ import { ConsultationDetailDoctorComponent } from './Pages/consultation-detail-d
 import { RechDoctorComponent } from './Pages/rech-doctor/rech-doctor/rech-doctor.component';
 import { QrCardComponent } from './Pages/qr-card/qr-card.component';
 import { EditDpiComponent } from './Pages/edit-dpi/edit-dpi.component';
+import { DpiComponent } from './Pages/dpi-patient/dpi-patient.component';
+import { ConsultationDetailComponent } from './Pages/consultation-detail/consultation-detail.component';
 import { DpiDoctorComponent } from './Pages/dpi-doctor/dpi-doctor.component';
-
 
 
 export const routes: Routes = [
   { path: '', component: SigninComponent },
   { path: 'dpilist', component: DpiListComponent },
+  { path: 'dpi-patient/:id', component: DpiComponent },
+  { path: 'dpi-doctor/:id', component: DpiDoctorComponent },
+
+  { path: 'consultation-patient/:id', component: ConsultationDetailComponent },
+  { path: 'rech-doctor', component: RechDoctorComponent },
   { path: 'create-dpi', component: CreateDpiComponent },
   { path: 'radio-list', component: RadioListComponent },
   { path: 'soin-list', component: SoinListComponent },
