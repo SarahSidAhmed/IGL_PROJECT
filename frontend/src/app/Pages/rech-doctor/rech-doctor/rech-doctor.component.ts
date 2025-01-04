@@ -85,7 +85,13 @@ export class RechDoctorComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.dpis = response.results;
+          if (Array.isArray(response)) {
+            this.dpis = response.filter((dpi) => dpi); // For multiple DPIs
+          } else if (response) {
+            this.dpis = [response]; // For single DPI
+          } else {
+            this.dpis = [];
+          }
         },
         error: (error) => {
           console.error('Error fetching DPIs:', error);
@@ -100,7 +106,7 @@ export class RechDoctorComponent implements OnInit {
     }
     this.patientListService.searchDpis('', this.doctorId).subscribe({
       next: (response) => {
-        this.dpis = response.results;
+        this.dpis = Array.isArray(response) ? response.filter(dpi => dpi) : [];
       },
       error: (error) => {
         console.error('Error fetching DPIs:', error);
@@ -111,6 +117,8 @@ export class RechDoctorComponent implements OnInit {
     this.dpis = this.dpis.filter(dpi => dpi.id !== deletedPatientId);
   }
   onSearchChange(query: string): void {
+    console.log('Search query:', query);
+    console.log('Before filtering:', this.dpis);
     this.searchInput.next(query);
   }
 
@@ -139,9 +147,7 @@ export class RechDoctorComponent implements OnInit {
       age--;
     }
 
-    console.log('Birthdate:', birthdate);
-    console.log('Calculated age:', age);
-
+  
     return age;
   }
 

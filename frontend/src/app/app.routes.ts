@@ -37,7 +37,7 @@ export const routes: Routes = [
   { path: 'doctor/:id',component: RechDoctorComponent},
   { path: 'qr-card', component: QrCardComponent },
   {path: 'edit-dpi/:id', component: EditDpiComponent},
-  {path: 'dpi-doctor', component: DpiDoctorComponent}
+  {path: 'dpi-doctor/:id', component: DpiDoctorComponent}
 
 ];
 

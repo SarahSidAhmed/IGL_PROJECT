@@ -43,7 +43,7 @@ export class DpiListService {
 
   constructor(private http: HttpClient) {}
 
-  searchDpis(ssnPrefix: string = ''): Observable<DpiResponse> {
+  searchDpis(ssnPrefix: string = ''): Observable<Dpi> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -55,7 +55,7 @@ export class DpiListService {
 
     const url = `${this.baseUrl}/dpis/search/`;
 
-    return this.http.get<DpiResponse>(url, { headers, params });
+    return this.http.get<Dpi>(url, { headers, params });
   }
 
  searchDpisQR(id: number): Observable<Dpi> {

@@ -26,7 +26,9 @@ export class DpiCardComponent {
   confirmAndDelete(): void {
     this.isModalOpen = true;
   }
-
+  onConsult(): void {
+    this.router.navigate(['/dpi-doctor', this.patientId]);
+  }
   closeModal(): void {
     this.isModalOpen = false;
   }
