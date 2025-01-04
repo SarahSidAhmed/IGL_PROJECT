@@ -242,7 +242,7 @@ class UnifiedExamRecordSerializer(serializers.Serializer):
 class DpiReaderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dpi
-        fields = ['first_name', 'last_name', 'birthdate', 'gender']
+        fields = ['id', 'first_name', 'last_name', 'birthdate', 'gender']
 
 # Serializers for List Views
 class BiologicalExamListSerializer(serializers.ModelSerializer):

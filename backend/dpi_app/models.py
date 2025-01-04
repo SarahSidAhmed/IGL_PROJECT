@@ -2,8 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password, check_password
 
-class Consultation(models.Model):
-    pass
+
 
 class Staff(models.Model):
     ROLE_CHOICES = [
@@ -65,7 +64,6 @@ class Dpi(models.Model):
 
 class Prescription(models.Model):
     id = models.AutoField(primary_key=True)
-    #consultation = models.ForeignKey('Consultation', on_delete=models.CASCADE)
     validated = models.BooleanField(default=False)
     prescription_date = models.DateField(default=timezone.now)
     
