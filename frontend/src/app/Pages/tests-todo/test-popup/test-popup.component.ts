@@ -151,7 +151,7 @@ export class TestPopupComponent {
   }
 
   onSubmit(): void {
-  const id = parseInt(this.patientId); // Assuming patientId is the test record ID.
+  // const id = parseInt(this.patientId); // Assuming patientId is the test record ID.
   const data = {
     result: this.report,
     exam_date: new Date().toISOString().split('T')[0], // Example date format.
@@ -166,7 +166,7 @@ export class TestPopupComponent {
     ],
   };
 
-  this.updateTestService.updateTest(id, data).subscribe({
+  this.updateTestService.updateTest(this.testId, data).subscribe({
     next: (response) => {
       console.log('Update successful', response);
       this.onClose();

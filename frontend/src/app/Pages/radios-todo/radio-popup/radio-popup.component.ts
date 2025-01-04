@@ -42,9 +42,8 @@ export class RadioPopupComponent {
       radiologist: null, 
     };
 
-    const patientId = parseInt(this.patientId, 10).toString();
     console.log('Radiological Exam Data:', examData);
-    this.radioUpdateService.updateRadiologicalExam(patientId, examData).subscribe({
+    this.radioUpdateService.updateRadiologicalExam(this.radioId.toString(), examData).subscribe({
       next: (response) => {
         console.log('Update successful:', response);
         this.onClose();

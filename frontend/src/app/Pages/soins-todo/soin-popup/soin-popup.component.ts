@@ -35,9 +35,7 @@ export class SoinPopupComponent {
       nurse: null,
     };
 
-    const patientId = parseInt(this.patientId, 10); // Convert patientId to a number
-
-    this.soinUpdateService.updateNursingRecord(patientId, nursingRecord).subscribe({
+    this.soinUpdateService.updateNursingRecord(this.soinId, nursingRecord).subscribe({
       next: (response) => {
         console.log('Record updated successfully:', response);
         this.onClose(); // Close the popup on success
