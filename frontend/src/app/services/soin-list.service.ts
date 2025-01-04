@@ -29,7 +29,7 @@ export class SoinListService {
 
   constructor(private http: HttpClient) {}
 
-  searchNursingRecords(searchQuery: string = ''): Observable<NursingRecordResponse> {
+  searchNursingRecords(searchQuery: string = ''): Observable<NursingRecord[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -43,14 +43,9 @@ export class SoinListService {
 
     console.log('Request Parameters:', params.toString());
     const url = `${this.baseUrl}/nursing-records/search/`;
-    console.log('Request URL:', url);
+   
 
-    return this.http.get<NursingRecordResponse>(url, { headers, params }).pipe(
-      tap({
-        next: (response) => console.log('API Response:', response),
-        error: (error) => console.error('API Error:', error)
-      })
-    );
+    return this.http.get<NursingRecord[]>(url, { headers, params });
   }
   searchSoinQR(id: number): Observable<NursingRecordResponse> {
   const headers = new HttpHeaders({

@@ -69,7 +69,13 @@ export class TestListComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.biologicalExams = response.results;
+          if (Array.isArray(response)) {
+            this.biologicalExams = response.filter((dpi) => dpi); // For multiple DPIs
+          } else if (response) {
+            this.biologicalExams = [response]; // For single DPI
+          } else {
+            this.biologicalExams = [];
+          }
         },
         error: (error) => {
           console.error('Error fetching biological exams:', error);
@@ -101,7 +107,7 @@ export class TestListComponent implements OnInit {
   fetchBioExams(): void {
     this.biologicalExamService.searchBiologicalExams('').subscribe({
       next: (response) => {
-        this.biologicalExams = response.results;
+        this.biologicalExams = Array.isArray(response) ? response.filter(dpi => dpi) : [];
       },
       error: (error) => {
         console.error('Error fetching biological exams:', error);

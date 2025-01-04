@@ -26,7 +26,7 @@ export class RadioListService {
 
   searchRadiologicalExams(
     searchQuery: string = ''
-  ): Observable<RadiologicalExamsResponse> {
+  ): Observable<RadiologicalExam[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -41,13 +41,8 @@ export class RadioListService {
 
     const url = `${this.baseUrl}/radiological-exams/search/`;
     return this.http
-      .get<RadiologicalExamsResponse>(url, { headers, params })
-      .pipe(
-        tap({
-          next: (response) => console.log('API response:', response),
-          error: (error) => console.error('API error:', error),
-        })
-      );
+      .get<RadiologicalExam[]>(url, { headers, params })
+      ;
   }
 
   searchRadioQR(id: number): Observable<RadiologicalExamsResponse> {

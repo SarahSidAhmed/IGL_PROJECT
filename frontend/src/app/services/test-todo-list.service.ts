@@ -32,7 +32,7 @@ export class TestTodoListService {
 
    constructor(private http: HttpClient) {}
   
-    searchBiologicalExams(searchQuery: string = ''): Observable<BiologicalExamResponse> {
+    searchBiologicalExams(searchQuery: string = ''): Observable<BiologicalExam[]> {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -48,12 +48,7 @@ export class TestTodoListService {
       const url = `${this.baseUrl}/biological-exams/search/`;
       console.log('Request URL:', url);
   
-      return this.http.get<BiologicalExamResponse>(url, { headers, params }).pipe(
-        tap({
-          next: (response) => console.log('API Response:', response),
-          error: (error) => console.error('API Error:', error)
-        })
-      );
+      return this.http.get<BiologicalExam[]>(url, { headers, params });
     }
     searchTestQR(id: number): Observable<BiologicalExamResponse> {
       const headers = new HttpHeaders({
