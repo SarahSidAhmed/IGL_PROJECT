@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-consultation-card',
-  imports: [RouterOutlet,CommonModule],
+  imports: [CommonModule],
   templateUrl: './consultation-card.component.html',
   styleUrl: './consultation-card.component.scss'
 })
