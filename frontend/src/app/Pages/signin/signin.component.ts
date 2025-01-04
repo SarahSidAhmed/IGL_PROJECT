@@ -22,7 +22,6 @@ export class SigninComponent {
   constructor(private loginService: LoginService, private router: Router) {}
 
   login(): void {
-    // Ensure payload conforms to API documentation
     const loginPayload = {
       email: this.email.trim(),
       password: this.password.trim(),
@@ -30,23 +29,12 @@ export class SigninComponent {
 
     this.loginService.login(loginPayload).subscribe({
       next: (response) => {
-        sessionStorage.setItem('userId', response.staff.id.toString());
+        sessionStorage.setItem('userId',response.staff.id.toString()); 
+        this.router.navigate(['/dpi-patient/3']);
 
-        const role = response.staff.role;
-        if (role === 'Nurse') {
-          this.router.navigate(['/soin-list']);
-        } else if (role === 'Radiologist') {
-          this.router.navigate(['/radio-list']);
-        } else if (role === 'Admin') {
-          this.router.navigate(['/dpilist']);
-        } else if (role === 'Doctor') {
-          const userId = response.staff.id;
-          this.router.navigate([`/doctor/${userId}`]);
-        } else if (role === 'LabTechnician') {
-          this.router.navigate(['/tests-list']);
-        } else {
-          console.error('role non trouvé:', role);
-        }
+      const role = response.staff.role; 
+      
+        
       },
       error: (error) => {
         if (error.error.email) {

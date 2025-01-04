@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { TestCardComponent } from '../../components/test-card/test-card.component';
@@ -11,7 +11,7 @@ import { ConsultationListService } from '../../services/consultation-list.servic
 
 @Component({
   selector: 'app-dpi-patient',
-  imports: [RouterOutlet,CommonModule,NavbarComponent,TestCardComponent,InfoCardComponent,ConsultationCardComponent],
+  imports: [CommonModule,NavbarComponent,TestCardComponent,InfoCardComponent,ConsultationCardComponent],
   templateUrl: './dpi-patient.component.html',
   styleUrl: './dpi-patient.component.scss'
 })
@@ -24,7 +24,8 @@ export class DpiComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private patientService: PatientInfoService,
-    private consultationService: ConsultationListService
+    private consultationService: ConsultationListService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -34,11 +35,14 @@ export class DpiComponent implements OnInit {
         next: (data) => {
           this.dpi = data;
           this.id=data.id;
+          console.log(this.dpi);
 
         },
         error: (error) => {
           console.error('Error fetching dpi:', error);
           console.log(this.id);
+          this.triggerRefresh();
+          this.cdRef.detectChanges();
         }
       });
 
@@ -51,7 +55,12 @@ export class DpiComponent implements OnInit {
         }
       });
     }
+    
   }
 
-  
+  private triggerRefresh(): void {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000); 
+  }
 }

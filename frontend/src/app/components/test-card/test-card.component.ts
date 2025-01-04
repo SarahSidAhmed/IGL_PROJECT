@@ -5,12 +5,12 @@ import { TestListService } from '../../services/test-list.service';
 
 @Component({
   selector: 'app-test-card',
-  imports: [RouterOutlet,CommonModule],
+  imports: [CommonModule],
   templateUrl: './test-card.component.html',
   styleUrl: './test-card.component.scss'
 })
 export class TestCardComponent implements OnInit {
-  @Input() dpiId!: string;
+  @Input() dpiId!: string ;
   exams: any[] = [];
 
   constructor(private examService: TestListService) {}
@@ -18,6 +18,7 @@ export class TestCardComponent implements OnInit {
   ngOnInit(): void {
     this.loadExams();
   }
+  
 
   loadExams(): void {
     this.examService.getExams(this.dpiId).subscribe({

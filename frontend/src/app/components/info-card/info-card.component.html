@@ -4,17 +4,17 @@
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-2">
         <span class="text-gray-800 font-medium text-sm">Nom et Prénom:</span>
-        <span class="text-gray-600 text-sm">{{ patient.first_name }}</span>
+        <span class="text-gray-600 text-sm">{{ patient?.first_name }}</span>
       </div>
       <div class="flex items-center gap-2">
         <span class="text-gray-800 font-medium text-sm">Age:</span>
-        <span class="text-gray-600 text-sm">{{ patient.last_name }}</span>
+        <span class="text-gray-600 text-sm">{{ patient?.last_name }}</span>
       </div>
     </div>
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-2">
         <span class="text-gray-800 font-medium text-sm">Genre:</span>
-        <span class="text-gray-600 text-sm">{{ patient.gender }}</span>
+        <span class="text-gray-600 text-sm">{{ patient?.gender }}</span>
       </div>
     </div>
   </div>
@@ -24,21 +24,21 @@
         <img src="assets/numero.svg" alt="Social Number Icon" class="h-4 w-4">
         <div>
           <span class="text-gray-800 font-medium text-sm">Numéro social:</span>
-          <p class="text-gray-600 text-sm">{{ patient.social_security_number }}</p>
+          <p class="text-gray-600 text-sm">{{ patient?.social_security_number }}</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <img src="assets/phone.svg" alt="Phone Icon" class="h-4 w-4">
         <div>
           <span class="text-gray-800 font-medium text-sm">Téléphone:</span>
-          <p class="text-gray-600 text-sm">{{ patient.phone }}</p>
+          <p class="text-gray-600 text-sm">{{ patient?.phone }}</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <img src="assets/email.svg" alt="Email Icon" class="h-4 w-4">
         <div>
           <span class="text-gray-800 font-medium text-sm">E-mail:</span>
-          <p class="text-gray-600 text-sm">{{ patient.email }}</p>
+          <p class="text-gray-600 text-sm">{{ patient?.email }}</p>
         </div>
       </div>
     </div>
@@ -47,4 +47,3 @@
     </div>
     </div>
   </div>
-  <router-outlet />  

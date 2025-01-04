@@ -16,6 +16,9 @@ import { EditDpiComponent } from './Pages/edit-dpi/edit-dpi.component';
 import { DpiComponent } from './Pages/dpi-patient/dpi-patient.component';
 import { ConsultationDetailComponent } from './Pages/consultation-detail/consultation-detail.component';
 import { DpiDoctorComponent } from './Pages/dpi-doctor/dpi-doctor.component';
+import { TestCardComponent } from './components/test-card/test-card.component';
+import { ConsultationCardComponent } from './components/consultation-card/consultation-card.component';
+import { InfoCardComponent } from './components/info-card/info-card.component';
 
 
 export const routes: Routes = [
@@ -23,7 +26,6 @@ export const routes: Routes = [
   { path: 'dpilist', component: DpiListComponent },
   { path: 'dpi-patient/:id', component: DpiComponent },
   { path: 'dpi-doctor/:id', component: DpiDoctorComponent },
-
   { path: 'consultation-patient/:id', component: ConsultationDetailComponent },
   { path: 'rech-doctor', component: RechDoctorComponent },
   { path: 'create-dpi', component: CreateDpiComponent },
@@ -31,7 +33,7 @@ export const routes: Routes = [
   { path: 'soin-list', component: SoinListComponent },
   { path: 'tests-list', component: TestListComponent},
   { path: 'qr', component: QrCardComponent},
-  { path: 'consultation-detail-doctor', component: ConsultationDetailDoctorComponent},
+  { path: 'consultation-detail-doctor/:id', component: ConsultationDetailDoctorComponent},
   { path: 'doctor/:id',component: RechDoctorComponent},
   { path: 'qr-card', component: QrCardComponent },
   {path: 'edit-dpi/:id', component: EditDpiComponent},
