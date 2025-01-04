@@ -7,21 +7,21 @@
 
     <!-- Header -->
     <h1 class="text-lg text-center font-poppins text-primaryBlue font-bold mb-2">
-      Scan QR
+      Scanner le Code QR
     </h1>
 
     <!-- Instructions -->
-    <h2 class="text-center text-gray-700 mb-4">Click below to start scanning</h2>
+    <h2 class="text-center text-gray-700 mb-4">Choisir Votre Option:</h2>
 
     <!-- Start Scan Button -->
     <div class="flex justify-center mb-4">
   <button
     (click)="startScan()"
     class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg">
-    Scan via Webcam
+    Scanner via la Webcam
   </button>
   <label for="uploadInput" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg ml-5 cursor-pointer">
-    Upload Image
+    Scanner via Une Image
   </label>
   <input
     id="uploadInput"
@@ -43,7 +43,7 @@
 
     <!-- Output Text Field -->
     <div>
-      <label for="qrOutput" class="block text-gray-600 mb-2">Scanned QR Code:</label>
+      <label for="qrOutput" class="block text-gray-600 mb-2">Code Qr Obtenu:</label>
       <input
         id="qrOutput"
         type="text"
@@ -53,7 +53,7 @@
     <div class="flex justify-center mb-4 mt-4">
       <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg"
         (click)="onSearchClick()">
-        Search
+        Rechercher
       </button>
     </div>
   </div>

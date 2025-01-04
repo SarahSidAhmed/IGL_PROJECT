@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.hashers import make_password, check_password
 
 
+
 class Staff(models.Model):
     ROLE_CHOICES = [
         ('Doctor', 'Doctor'),
@@ -61,6 +62,15 @@ class Dpi(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
+class Prescription(models.Model):
+    id = models.AutoField(primary_key=True)
+    validated = models.BooleanField(default=False)
+    prescription_date = models.DateField(default=timezone.now)
+    
+
+    def __str__(self):
+        return f'Prescription for {self.consultation}'
+
 
 class Consultation(models.Model):
     id = models.AutoField(primary_key=True)
@@ -68,24 +78,14 @@ class Consultation(models.Model):
     doctor = models.ForeignKey(Staff, on_delete=models.CASCADE)
     consultation_summary = models.TextField()
     consultation_date = models.DateTimeField(default=timezone.now)
+    prescription = models.OneToOneField(Prescription, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f'Consultation for {self.dpi}'
 
-
-class Prescription(models.Model):
-    id = models.AutoField(primary_key=True)
-    consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    validated = models.BooleanField(default=False)
-    prescription_date = models.DateField(default=timezone.now)
-
-    def __str__(self):
-        return f'Prescription for {self.consultation}'
-
-
 class Medicine(models.Model):
     id = models.AutoField(primary_key=True)
-    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE)
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, related_name='medicines')
     medication_name = models.CharField(max_length=100)
     dosage = models.CharField(max_length=50)
     duration = models.CharField(max_length=50)

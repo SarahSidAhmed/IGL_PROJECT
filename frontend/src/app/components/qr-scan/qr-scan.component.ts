@@ -38,7 +38,7 @@ export class QrScanComponent {
       navigator.mediaDevices.enumerateDevices().then(devices => {
         const videoDevices = devices.filter(device => device.kind === 'videoinput');
         if (videoDevices.length === 0) {
-          alert('No camera found.');
+          alert('Aucune caméra trouvée.');
         }
       });
     }
@@ -53,15 +53,15 @@ export class QrScanComponent {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
-          console.log('Camera access granted');
+          console.log('Accès à la caméra accordé');
           this.isScanning = true;
         })
         .catch((err) => {
-          console.error('Camera access error:', err);
-          alert('Camera access is denied or unavailable. Please check your permissions and try again.');
+          console.error('Erreur d\'accès à la caméra:', err);
+          alert('L\'accès à la caméra est refusé ou indisponible. Veuillez vérifier vos autorisations et réessayer.');
         });
     } else {
-      alert('Your browser does not support camera access.');
+      alert('Votre navigateur ne prend pas en charge l\'accès à la caméra.');
     }
   }
 
@@ -71,40 +71,36 @@ export class QrScanComponent {
     this.isScanning = false;
   }
 
-  // Reads QR code from an uploaded image
-async ReadQr(event: Event): Promise<void> {
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files[0]) {
-    const file = input.files[0];
-    const reader = new FileReader();
+  async ReadQr(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
 
-    reader.onload = async () => {
-      if (reader.result) {
-        const qrReader = new BrowserQRCodeReader();
-        try {
-          // Decode QR code from the image URL
-          const result = await qrReader.decodeFromImageUrl(reader.result as string);
-          this.scannedCode = result.getText(); 
-        } catch (error) {
-          console.error('Error reading QR code from image:', error);
-          alert('Failed to read QR code from the image. Please try anotther image.');
+      reader.onload = async () => {
+        if (reader.result) {
+          const qrReader = new BrowserQRCodeReader();
+          try {
+            const result = await qrReader.decodeFromImageUrl(reader.result as string);
+            this.scannedCode = result.getText(); 
+          } catch (error) {
+            console.error('Erreur lors de la lecture du code QR depuis l\'image:', error);
+            alert("Échec de la lecture du code QR à partir de l'image. Veuillez essayer une autre image.");
+          }
         }
-      }
-    };
+      };
 
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    }
   }
-}
   
   onSearchClick(): void {
     if (!this.scannedCode.trim()) {
-      alert('No QR code scanned.');
+      alert('Pas de Code QR scanné');
       this.onClose();
       return;
     }
     this.searchDpi.emit(this.scannedCode);
     this.onClose();
   }
-
-
 }

@@ -12,7 +12,7 @@ export class RadioCardComponent {
   @Input() patientName!: string;
   @Input() gender!: string;
   @Input() age!: number;
-  @Input() patientId!: string;
+  @Input() radioId!: number;
   @Input() radioNeeded!: string;
   isPopupVisible: boolean = false;
 

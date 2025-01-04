@@ -10,7 +10,7 @@ import * as QRCode from 'qrcode';
 export class QrCodeService {
 
   constructor(private http: HttpClient) { }
-  generateQRCode(ssn: string): Promise<string> {
-    return QRCode.toDataURL(ssn);
+  generateQRCode(patientId: string): Promise<string> {
+    return QRCode.toDataURL(patientId);
   }
 }

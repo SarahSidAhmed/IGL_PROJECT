@@ -9,10 +9,15 @@ import {
 import { CreateDpiService } from '../../../services/create-dpi.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { NavbarComponent } from '../../../components/navbar/navbar.component';
+interface ValidationMessages {
+  [key: string]: {
+    [key: string]: string;
+  };
+}
 @Component({
   selector: 'app-create-dpi',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, NavbarComponent],
   providers: [CreateDpiService],
 
   templateUrl: './create-dpi.component.html',
@@ -29,6 +34,73 @@ export class CreateDpiComponent implements OnInit {
   isSubmitting = false;
   errorMessage: string = '';
   successMessage: string = '';
+
+  validationMessages: ValidationMessages = {
+    social_security_number: {
+      required: 'Le numéro de sécurité sociale est requis',
+      minlength: 'Minimum 10 caractère',
+      maxlength: 'Maximum 10 caractères',
+    },
+    password: {
+      required: 'Le mot de passe est requis',
+      minlength: 'Minimum 8 caractères',
+      pattern:
+        'Doit contenir: majuscule, minuscule, chiffre, caractère spécial',
+    },
+    confirm_password: {
+      required: 'Confirmation du mot de passe requise',
+      passwordMismatch: 'Les mots de passe ne correspondent pas',
+    },
+    email: {
+      required: "L'email est requis",
+      email: 'Format email invalide',
+      maxlength: 'Maximum 100 caractères',
+    },
+    phone: {
+      required: 'Le numéro de téléphone est requis',
+      minlength: 'Minimum 10 caractères',
+      maxlength: 'Maximum 20 caractères',
+    },
+    first_name: {
+      required: 'Le prénom est requis',
+      minlength: 'Minimum 1 caractère',
+      maxlength: 'Maximum 50 caractères',
+    },
+    last_name: {
+      required: 'Le nom est requis',
+      minlength: 'Minimum 1 caractère',
+      maxlength: 'Maximum 50 caractères',
+    },
+    address: {
+      required: "L'adresse est requise",
+      minlength: 'Minimum 1 caractère',
+      maxlength: 'Maximum 200 caractères',
+    },
+    emergency_contact_name: {
+      required: "Le nom du contact d'urgence est requis",
+      minlength: 'Minimum 10 caractère',
+      maxlength: 'Maximum 10 caractères',
+    },
+    emergency_contact_phone: {
+      required: "Le téléphone du contact d'urgence est requis",
+      minlength: 'Minimum 10 caractères',
+      maxlength: 'Maximum 20 caractères',
+    },
+    emergency_contact_relationship: {
+      required: "La relation avec le contact d'urgence est requise",
+      minlength: 'Minimum 1 caractère',
+      maxlength: 'Maximum 30 caractères',
+    },
+    mutuelle_name: {
+      required: 'Le nom de la mutuelle est requis',
+      minlength: 'Minimum 1 caractère',
+      maxlength: 'Maximum 255 caractères',
+    },
+    mutuelle_policy_number: {
+      minlength: 'Minimum 6 caractère',
+      maxlength: 'Maximum 100 caractères',
+    },
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -56,14 +128,42 @@ export class CreateDpiComponent implements OnInit {
       },
     });
   }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.createDpiForm.get(controlName);
+    if (control?.errors && control.touched) {
+      const firstError = Object.keys(control.errors)[0];
+      return this.validationMessages[controlName]?.[firstError] || '';
+    }
+    return '';
+  }
+
+  showRequirements(controlName: string): string[] {
+    const requirements: { [key: string]: string[] } = {
+      password: [
+        'Minimum 8 caractères',
+        'Au moins une lettre majuscule',
+        'Au moins une lettre minuscule',
+        'Au moins un chiffre',
+        'Au moins un caractère spécial (!@#$%^&*)',
+      ],
+      social_security_number: ['10 caractères numériques'],
+      phone: ['Entre 10 et 20 caractères numériques'],
+      emergency_contact_phone: ['Entre 10 et 20 caractères numériques'],
+
+      mutuelle_policy_number: ['Entre 6 et 100 caractères'],
+    };
+
+    return requirements[controlName] || [];
+  }
   private initializeForm(): void {
     this.createDpiForm = this.fb.group({
       social_security_number: [
         '',
         [
           Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(20),
+          Validators.minLength(10),
+
           // Validators.pattern('^[0-9]+$'),
         ],
       ],
@@ -71,8 +171,8 @@ export class CreateDpiComponent implements OnInit {
         '',
         [
           Validators.required,
-          //Validators.minLength(8),
-          /* Validators.pattern(
+          Validators.minLength(8),
+          /*Validators.pattern(
               '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'
             ),*/
         ],
@@ -113,7 +213,7 @@ export class CreateDpiComponent implements OnInit {
           Validators.required,
           // Validators.pattern('^[0-9]+$'),
           Validators.minLength(10),
-          Validators.maxLength(20),
+          Validators.maxLength(10),
         ],
       ],
       emergency_contact_name: [
@@ -219,28 +319,25 @@ export class CreateDpiComponent implements OnInit {
           ?.value, // Mutuelle Policy Number
         medical_history: this.createDpiForm.get('medical_history')?.value, // Medical History
         hospital: this.createDpiForm.get('hospital')?.value, // Hospital Name
-        doctor: this.createDpiForm.get('doctor')?.value, // Doctor ID (ensure only the ID is passed)
+        doctor: this.createDpiForm.get('doctor')?.value,
       };
 
       this.isSubmitting = true;
       this.errorMessage = '';
       this.successMessage = '';
 
-      // Pass the `formData` instead of `this.createDpiForm.value`
       this.createDpiService.createDpi(formData).subscribe({
         next: (response) => {
           console.log('DPI created successfully', response);
-          
+
           this.successMessage = 'DPI créé avec succès!';
           this.router.navigate(['/qr-card'], {
-            state: { 
-              ssn: formData.social_security_number,
-              patientId: response.id 
-            }
+            state: {
+              patientId: response.id,
+            },
           });
           setTimeout(() => {
             this.createDpiForm.reset();
-            
           }, 2000);
         },
         error: (error) => {

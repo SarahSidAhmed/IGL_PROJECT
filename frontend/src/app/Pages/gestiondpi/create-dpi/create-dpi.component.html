@@ -1,15 +1,5 @@
 <div class="bg-teal-50">
-  <header class="flex justify-between bg-white p-4 rounded-md shadow-sm">
-    <img class="h-10 w-15" src="./assets/logo.png" alt="" />
-
-    <button
-      class="bg-white text-primaryBlue font-poppins font-bold px-4 py-2 rounded-md hover:bg-gray-200 flex items-center"
-      (click)="onLogout()"
-    >
-      <img class="h-5 w-5 mr-3" src="./assets/icons/logout.png" />
-      <span>Se déconnecter</span>
-    </button>
-  </header>
+  <app-navbar></app-navbar>
   <form [formGroup]="createDpiForm" (ngSubmit)="onSubmit()">
     <div
       class="flex flex-col md:flex-col lg:flex-row gap-7 px-20 sm:px-32 py-10"
@@ -44,16 +34,23 @@
               placeholder="Nom"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
+            <div
+              class="text-xs text-gray-600 mt-1"
+              *ngFor="let req of showRequirements('last_name')"
+            >
+              {{ req }}
+            </div>
 
             <span
               *ngIf="
+                getErrorMessage('last_name') &&
                 createDpiForm.get('last_name')?.invalid &&
                 createDpiForm.get('last_name')?.touched
               "
-              class="text-xs font-poppins text-red-600 hidden"
-              id="error"
-              >Le champ nom est réquis</span
+              class="text-xs font-poppins text-red-600"
             >
+              {{ getErrorMessage("last_name") }}
+            </span>
           </div>
           <div class="relative z-0 w-full">
             <h1
@@ -70,15 +67,23 @@
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
+            <div
+              class="text-xs text-gray-600 mt-1"
+              *ngFor="let req of showRequirements('first_name')"
+            >
+              {{ req }}
+            </div>
+
             <span
               *ngIf="
+                getErrorMessage('first_name') &&
                 createDpiForm.get('first_name')?.invalid &&
                 createDpiForm.get('first_name')?.touched
               "
-              class="text-sm text-red-600 hidden"
-              id="error"
-              >Le champ prénom est réquis</span
+              class="text-xs font-poppins text-red-600"
             >
+              {{ getErrorMessage("first_name") }}
+            </span>
           </div>
         </div>
         <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
@@ -151,15 +156,23 @@
             class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
           />
 
+          <div
+            class="text-xs text-gray-600 mt-1"
+            *ngFor="let req of showRequirements('social_security_number')"
+          >
+            {{ req }}
+          </div>
+
           <span
             *ngIf="
+              getErrorMessage('social_security_number') &&
               createDpiForm.get('social_security_number')?.invalid &&
               createDpiForm.get('social_security_number')?.touched
             "
-            class="text-sm text-red-600 hidden"
-            id="error"
-            >le NSS est réquis</span
+            class="text-xs font-poppins text-red-600"
           >
+            {{ getErrorMessage("social_security_number") }}
+          </span>
         </div>
         <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
           <div class="relative z-0 w-full">
@@ -304,9 +317,23 @@
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
-            <span class="text-sm text-red-600 hidden" id="error"
-              >numero de tel réquis</span
+            <div
+              class="text-xs text-gray-600 mt-1 ml-1"
+              *ngFor="let req of showRequirements('phone')"
             >
+              {{ req }}
+            </div>
+
+            <span
+              *ngIf="
+                getErrorMessage('phone') ||
+                createDpiForm.get('phone')?.invalid ||
+                createDpiForm.get('phone')?.touched
+              "
+              class="text-xs font-poppins text-red-600"
+            >
+              {{ getErrorMessage("phone") }}
+            </span>
           </div>
           <div class="relative z-0 w-full">
             <h1
@@ -323,15 +350,23 @@
               class="py-1 w-full pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
+            <div
+              class="text-xs text-gray-600 mt-1 ml-1"
+              *ngFor="let req of showRequirements('email')"
+            >
+              {{ req }}
+            </div>
+
             <span
               *ngIf="
-                createDpiForm.get('email')?.invalid &&
+                getErrorMessage('email') ||
+                createDpiForm.get('email')?.invalid ||
                 createDpiForm.get('email')?.touched
               "
-              class="text-sm text-red-600 hidden"
-              id="error"
-              >required</span
+              class="text-xs font-poppins text-red-600"
             >
+              {{ getErrorMessage("email") }}
+            </span>
           </div>
         </div>
         <div class="sm:grid sm:grid-cols-2 flex-col gap-4 mb-3">
@@ -353,13 +388,14 @@
 
             <span
               *ngIf="
-                createDpiForm.get('password')?.invalid &&
+                getErrorMessage('password') ||
+                createDpiForm.get('password')?.invalid ||
                 createDpiForm.get('password')?.touched
               "
-              class="text-sm text-red-600 hidden"
-              id="error"
-              >required</span
+              class="text-xs font-poppins text-red-600"
             >
+              {{ getErrorMessage("password") }}
+            </span>
           </div>
           <div class="relative z-0 w-full">
             <h1
@@ -383,8 +419,7 @@
               "
             >
               <small class="text-red-500">Passwords do not match.</small>
-              class="text-sm text-red-600 hidden" id="error">required</span
-            >
+            </span>
           </div>
         </div>
       </div>
@@ -410,15 +445,23 @@
               placeholder="Nom complet"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
+            <div
+              class="text-xs text-gray-600 mt-1 ml-1"
+              *ngFor="let req of showRequirements('emergency_contact_name')"
+            >
+              {{ req }}
+            </div>
+
             <span
               *ngIf="
-                createDpiForm.get('emergency_contact_name')?.invalid &&
+                getErrorMessage('emergency_contact_name') ||
+                createDpiForm.get('emergency_contact_name')?.invalid ||
                 createDpiForm.get('emergency_contact_name')?.touched
               "
-              class="text-sm text-red-600 hidden"
-              id="error"
-              >Champ requis</span
+              class="text-xs font-poppins text-red-600"
             >
+              {{ getErrorMessage("emergency_contact_name") }}
+            </span>
           </div>
           <div class="relative z-0 w-full mb-3">
             <h1
@@ -434,15 +477,23 @@
               placeholder="Numéro de téléphone"
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
+            <div
+              class="text-xs text-gray-600 mt-1 ml-1"
+              *ngFor="let req of showRequirements('emergency_contact_phone')"
+            >
+              {{ req }}
+            </div>
+
             <span
               *ngIf="
-                createDpiForm.get('emergency_contact_phone')?.invalid &&
+                getErrorMessage('emergency_contact_phone') ||
+                createDpiForm.get('emergency_contact_phone')?.invalid ||
                 createDpiForm.get('emergency_contact_phone')?.touched
               "
-              class="text-sm text-red-600 hidden"
-              id="error"
-              >Champ requis</span
+              class="text-xs font-poppins text-red-600"
             >
+              {{ getErrorMessage("emergency_contact_phone") }}
+            </span>
           </div>
           <div class="relative z-0 w-full mb-4">
             <h1
@@ -514,15 +565,23 @@
               class="w-full py-1 pl-3 mt-0 rounded appearance-none focus:outline-none focus:ring-0 focus:bg-gray-100 bg-slate-200 placeholder:text-xs placeholder:font-poppins"
             />
 
+            <div
+              class="text-xs text-gray-600 mt-1 ml-1"
+              *ngFor="let req of showRequirements(' mutuelle_policy_number')"
+            >
+              {{ req }}
+            </div>
+
             <span
               *ngIf="
-                createDpiForm.get('mutuelle_policy_number')?.invalid &&
-                createDpiForm.get('mutuelle_policy_number')?.touched
+                getErrorMessage(' mutuelle_policy_number') ||
+                createDpiForm.get(' mutuelle_policy_number')?.invalid ||
+                createDpiForm.get(' mutuelle_policy_number')?.touched
               "
-              class="text-xs font-poppins text-red-600 hidden"
-              id="error"
-              >Le champ nom est réquis</span
+              class="text-xs font-poppins text-red-600"
             >
+              {{ getErrorMessage(" mutuelle_policy_number") }}
+            </span>
           </div>
           <div class="relative z-0 w-full mb-3">
             <h1
@@ -554,7 +613,7 @@
           <button
             class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#0F766E] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#0F766E] items-center flex rounded-md hover:bg-primaryBlue-dark focus:outline-none focus:ring-0"
             type="submit"
-            [disabled]="createDpiForm.invalid "
+            [disabled]="createDpiForm.invalid"
             [ngClass]="{
               'opacity-50 cursor-not-allowed':
                 createDpiForm.invalid || isSubmitting
@@ -593,7 +652,6 @@
                 alt="save"
               />
 
-            
               <span>{{
                 isSubmitting ? "En cours..." : "Confirmer et ajouter"
               }}</span>
