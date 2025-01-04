@@ -19,6 +19,8 @@ interface NursingRecord {
   consultation: number;
 }
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -50,4 +52,15 @@ export class SoinListService {
       })
     );
   }
+  searchSoinQR(id: number): Observable<NursingRecordResponse> {
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'X-CSRFTOKEN': 'dETXuon4FPIUMC7HPeK3Jp7A3AA2Ub2gb82escHmKrQumZYXcegSVW1CcozrGWJQ',
+  });
+
+  const url = `http://127.0.0.1:8000/api/nursing-records/search/?dpi_id=${id}`;
+
+  return this.http.get<NursingRecordResponse>(url, { headers });
+}
 }

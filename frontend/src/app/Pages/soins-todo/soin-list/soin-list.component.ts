@@ -5,9 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { NgModule } from '@angular/core';
 import { debounceTime, Subject, switchMap } from 'rxjs';
-import { SoinListService } from '../../../services/soin-list.service';
 import { Router } from '@angular/router';
 import { NavbarComponent } from "../../../components/navbar/navbar.component";
+import { SoinListService } from '../../../services/soin-list.service';
 
 interface NursingRecord {
   id: number;
@@ -20,6 +20,8 @@ interface NursingRecord {
   };
   consultation: number;
 }
+
+
 @Component({
   selector: 'app-soin-list',
   imports: [SoinCardComponent, CommonModule, FormsModule, NavbarComponent, QrScanComponent],
@@ -130,17 +132,16 @@ export class SoinListComponent implements OnInit {
     console.log("looking for the soin with id :");
     console.log(id);
 
-    // this.dpiListService.searchDpisQR(numericId).subscribe({
-    //   next: (response) => {
-    //     console.log('DPI Search Response:', response);
-    //     this.dpis = [response];
-    //     this.dpis.length = 1;
-    //     console.log('DPI Search Response.results:', response);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error searching DPIs:', error);
-    //     alert('Il n\'y a pas de DPI avec cet ID');
-    //   },
-    // });
+     this.nursingRecordService.searchSoinQR(numericId).subscribe({
+      next: (response) => {
+        console.log('DPI Search Response:', response);
+        this.nursingRecords = response.results;
+        console.log('DPI Search Response.results:', response);
+      },
+      error: (error) => {
+        console.error('Error searching DPIs:', error);
+        alert('Il n\'y a pas de DPI avec cet ID');
+      },
+    });
   }
 }

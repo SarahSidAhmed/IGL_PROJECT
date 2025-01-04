@@ -39,7 +39,7 @@
   </div>
   <app-qr-scan
     *ngIf="scanQrVisible"
-
+    (searchDpi)="searchRadio($event)"
     (closePopup)="scanQrCode()"
   ></app-qr-scan>
 </div>
