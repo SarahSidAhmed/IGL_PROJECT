@@ -37,4 +37,9 @@
       [radioNeeded]="radio.exam_name"
     ></app-radio-card>
   </div>
+  <app-qr-scan
+    *ngIf="scanQrVisible"
+
+    (closePopup)="scanQrCode()"
+  ></app-qr-scan>
 </div>
