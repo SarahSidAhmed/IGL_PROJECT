@@ -155,14 +155,14 @@ export class TestPopupComponent {
   const data = {
     result: this.report,
     exam_date: new Date().toISOString().split('T')[0], // Example date format.
-    lab_technician: 123, // Replace with the actual technician ID if available.
+    lab_technician: 7, 
     parameters: [
-      { id: 1, value: this.results.glucose || 0 },
-      { id: 2, value: this.results.crp || 0 },
-      { id: 3, value: this.results.creatinine || 0 },
-      { id: 4, value: this.results.cholesterol || 0 },
-      { id: 5, value: this.results.sodium || 0 },
-      { id: 6, value: this.results.potassium || 0 },
+      // { id: 0, value: this.results.glucose || 0 },
+      // { id: 2, value: this.results.crp || 0 },
+      // { id: 3, value: this.results.creatinine || 0 },
+      // { id: 4, value: this.results.cholesterol || 0 },
+      // { id: 5, value: this.results.sodium || 0 },
+      // { id: 6, value: this.results.potassium || 0 },
     ],
   };
 
