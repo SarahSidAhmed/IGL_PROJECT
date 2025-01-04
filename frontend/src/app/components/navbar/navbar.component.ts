@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,8 +9,12 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  onLogout(): void {
-    console.log('Déconnexion...');
-  }
 
+  constructor(private router: Router) { }
+  onLogout(): void {
+    sessionStorage.removeItem('userId');
+    
+    this.router.navigate(['']); 
+  }
+  
 }

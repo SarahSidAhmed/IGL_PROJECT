@@ -6,7 +6,6 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from .pagination import *
 
 #this will be used so that when the backend needs to retrived the infos of the person
 class GetStaffByIdAPIView(RetrieveUpdateDestroyAPIView):
@@ -94,7 +93,6 @@ class DeleteUpdateMedicineAPIView(RetrieveUpdateDestroyAPIView):
 
 #getting all the consultations of a patient to display them
 class GetAllConsultationsByDpiId(APIView):
-    pagination_class = ConsultationPagination
 
     @swagger_auto_schema(responses={200: ConsultationListSerializer(many=True)})
     def get(self, request, dpi_id, *args, **kwargs):
@@ -108,7 +106,6 @@ class DpiCreateView(CreateAPIView):
 
 class DpiSearchBySSNView(ListAPIView):
     serializer_class = DpiSerializer
-    pagination_class = DpiPagination
 
     def get_queryset(self):
         queryset = Dpi.objects.all().select_related('doctor').order_by('-id')
@@ -171,7 +168,6 @@ class RadiologicalExamUpdateView(UpdateAPIView):
 
 class BiologicalExamListView(ListAPIView):
     serializer_class = BiologicalExamListSerializer
-    pagination_class = ExamsRecordsPagination
 
     def get_queryset(self):
         dpi_id = self.request.query_params.get('dpi_id', None)
@@ -188,7 +184,6 @@ class BiologicalExamListView(ListAPIView):
 
 class RadiologicalExamListView(ListAPIView):
     serializer_class = RadiologicalExamListSerializer
-    pagination_class = ExamsRecordsPagination
 
     def get_queryset(self):
         dpi_id = self.request.query_params.get('dpi_id', None)
@@ -205,7 +200,6 @@ class RadiologicalExamListView(ListAPIView):
 
 class NursingRecordListView(ListAPIView):
     serializer_class = NursingRecordListSerializer
-    pagination_class = ExamsRecordsPagination
 
     def get_queryset(self):
         dpi_id = self.request.query_params.get('dpi_id', None)

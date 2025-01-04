@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { TestCardComponent } from '../../components/test-card/test-card.component';
@@ -9,6 +9,7 @@ import { PatientInfoService } from '../../services/patient-info.service';
 import { ConsultationListService } from '../../services/consultation-list.service';
 import { Router } from '@angular/router';
 import { CreateConsultationService } from '../../services/create-consultation.service';
+
 
 @Component({
   selector: 'app-dpi-doctor',
@@ -27,27 +28,22 @@ export class DpiDoctorComponent implements OnInit {
     private patientService: PatientInfoService,
     private consultationService: ConsultationListService,
     private consultation: CreateConsultationService,
-
+    private cdRef: ChangeDetectorRef,
     private router: Router
   ) {}
   
   toggleAddConsultation(): void {
+    const drId = sessionStorage.getItem('userId');
     const dpiId = this.route.snapshot.paramMap.get('id');
     const dataconsultation = {
-      "prescription": {
-        "consultation": 0
-      },
-      "doctor": {
-        "name": "string"
-      },
       "consultation_summary": "string",
-      "dpi": 0
+      "dpi": dpiId,
+      "doctor": drId
     }
-  
     this.consultation.createConsultation(dataconsultation).subscribe({
       next: (response) => {
         const id = response.id; // Assuming the response contains the consultation ID
-        this.router.navigate(['dpi-doctor/', id]);
+        this.router.navigate(['consultation-detail-doctor/', id]);
       },
       error: (error) => {
         console.error('Error creating consultation:', error);
@@ -56,28 +52,40 @@ export class DpiDoctorComponent implements OnInit {
   }
   ngOnInit(): void {
     const dpiId = this.route.snapshot.paramMap.get('id');
+  
     if (dpiId) {
+      
       this.patientService.getDpiById(dpiId).subscribe({
         next: (data) => {
           this.dpi = data;
           this.id=data.id;
+          console.log(this.dpi);
 
         },
         error: (error) => {
           console.error('Error fetching dpi:', error);
-          console.log(this.id);
+          this.triggerRefresh();
+          this.cdRef.detectChanges();
         }
       });
 
       this.consultationService.getConsultations(dpiId).subscribe({
         next: (data2) => {
           this.consultations = data2;
+          console.log('Consultations:', this.consultations);
+
         },
         error: (error) => {
           console.error('Error fetching consultations:', error);
         }
       });
     }
+  
+  }
+  private triggerRefresh(): void {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000); 
   }
 
   
