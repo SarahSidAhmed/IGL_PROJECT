@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SoinCardComponent } from '../soin-card/soin-card.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
+import { NgModule } from '@angular/core';
 import { debounceTime, Subject, switchMap } from 'rxjs';
 import { SoinListService } from '../../../services/soin-list.service';
 import { Router } from '@angular/router';
@@ -20,7 +22,7 @@ interface NursingRecord {
 }
 @Component({
   selector: 'app-soin-list',
-  imports: [SoinCardComponent, CommonModule, FormsModule, NavbarComponent],
+  imports: [SoinCardComponent, CommonModule, FormsModule, NavbarComponent, QrScanComponent],
   templateUrl: './soin-list.component.html',
   styleUrl: './soin-list.component.scss',
 })
@@ -29,6 +31,10 @@ export class SoinListComponent implements OnInit {
   searchInput = new Subject<string>();
   searchQuery: string = '';
   isQrCodeSearch: boolean = false;
+  scanQrVisible: boolean = false;
+  scanQrCode() {
+    this.scanQrVisible = !this.scanQrVisible;
+  }
 
   constructor(
     private router: Router,
@@ -86,9 +92,6 @@ export class SoinListComponent implements OnInit {
     this.onSearchChange('');
   }
 
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
 
   onLogout() {
     console.log('Logging out...');

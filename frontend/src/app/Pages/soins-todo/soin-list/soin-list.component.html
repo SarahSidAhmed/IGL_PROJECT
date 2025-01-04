@@ -36,4 +36,9 @@
       [soinNeeded]="soin.care_name"
     ></app-soin-card>
   </div>
+  <app-qr-scan
+    *ngIf="scanQrVisible"
+
+    (closePopup)="scanQrCode()"
+  ></app-qr-scan>
 </div>
