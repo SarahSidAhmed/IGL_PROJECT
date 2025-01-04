@@ -26,7 +26,7 @@ export class QrScanComponent {
   @Output() closePopup = new EventEmitter<void>();
 
   isScanning: boolean = false; 
-  scannedCode: string = '4';
+  scannedCode: string = '';
 
   ngOnInit() {
     this.checkCameraPermissions();
