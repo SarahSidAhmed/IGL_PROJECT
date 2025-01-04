@@ -49,36 +49,35 @@
         </p>
       </div>
     </div>
-    <form>
-      <div class="flex flex-row items-center mb-3 space-x-2">
-        <h1 class="font-poppins font-bold text-sm text-primaryBlue">
-          Observation
-        </h1>
-        <div class="flex-grow border-t-2 border-primaryBlue"></div>
-      </div>
-      <input
-        type="text"
-        placeholder="Observation"
-        class="w-full h-28 mb-4 p-2 rounded bg-slate-200 placeholder:font-poppins placeholder:text-xs placeholder:text-start"
-      />
-     
-      
-      <div class="flex flex-row sm:justify-end gap-6 mt-10 -space-x-4">
-        <button
-          class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#0F766E] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#0F766E] items-center flex rounded-md hover:bg-primaryBlue-dark focus:outline-none focus:ring-0"
-          type="submit"
-        >
-          <img class="sm:h-5 sm:w-6 size-3 mr-3" src="./assets/icons/save.png" />
-          <span>Confirmer et ajouter</span>
-        </button>
-        <button
-          class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#F87171] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#F87171] rounded-md hover:bg-primaryBlue-dark items-center flex focus:outline-none focus:ring-0"
-          type="reset"
-        >
-          <img class="sm:h-5 sm:w-5 size-3 mr-3" src="./assets/icons/cancel.png" />
-          Annuler
-        </button>
-      </div>
-    </form>
+      <form (ngSubmit)="onSubmit()">
+        <div class="flex flex-row items-center mb-3 space-x-2">
+          <h1 class="font-poppins font-bold text-sm text-primaryBlue">Observation</h1>
+          <div class="flex-grow border-t-2 border-primaryBlue"></div>
+        </div>
+        <textarea
+          [(ngModel)]="patientObservation"
+          name="patientObservation"
+          placeholder="Observation"
+          class="w-full h-28 mb-4 p-2 rounded bg-slate-200 placeholder:font-poppins placeholder:text-xs placeholder:text-start"
+        ></textarea>
+
+        <div class="flex flex-row sm:justify-end gap-6 mt-10 -space-x-4">
+          <button
+            class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#0F766E] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#0F766E] items-center flex rounded-md hover:bg-primaryBlue-dark focus:outline-none focus:ring-0"
+            type="submit"
+          >
+            <img class="sm:h-5 sm:w-6 size-3 mr-3" src="./assets/icons/save.png" />
+            <span>Confirmer et ajouter</span>
+          </button>
+          <button
+            class="sm:px-4 sm:py-2 px-5 font-semibold font-poppins text-[#F87171] transition-all duration-300 sm:text-sm text-xs bg-white border-2 border-[#F87171] rounded-md hover:bg-primaryBlue-dark items-center flex focus:outline-none focus:ring-0"
+            type="reset"
+            (click)="onClose()"
+          >
+            <img class="sm:h-5 sm:w-5 size-3 mr-3" src="./assets/icons/cancel.png" />
+            Annuler
+          </button>
+        </div>
+      </form>
   </div>
 </div>
