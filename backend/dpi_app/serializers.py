@@ -66,10 +66,17 @@ class StaffSerializer(serializers.ModelSerializer):
         model = Staff
         fields = '__all__'
 
+class BiologicalExamReadParamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BiologicalExamParam
+        fields = '__all__'
+
 class BiologicalExamSerializer(serializers.ModelSerializer):
+    parameters = BiologicalExamReadParamSerializer(many=True, source='biologicalexamparam_set', read_only=True)
+
     class Meta:
         model = BiologicalExam
-        fields = '__all__'
+        fields =[ 'id', 'exam_name', 'parameters', 'result', 'exam_date', 'lab_technician']
         
 class RadiologicalExamSerializer(serializers.ModelSerializer):
     class Meta:
