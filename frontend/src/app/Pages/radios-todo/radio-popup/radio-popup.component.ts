@@ -1,12 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RadioUpdateService } from '../../../services/update-radio.service';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'radio-popup',
-  imports : [FormsModule], 
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './radio-popup.component.html',
   styleUrls: ['./radio-popup.component.scss'],
+  providers: [DatePipe],
 })
 export class RadioPopupComponent {
   @Input() patientName!: string;
@@ -14,15 +17,15 @@ export class RadioPopupComponent {
   @Input() age!: number;
   @Input() radioId!: number;
   @Input() radioNeeded!: string;
-  
+
   @Output() closePopup = new EventEmitter<void>();
-  
-  selectedFileName: any;
+
+  selectedFileName: string | null = null;
   result: string = '';
   examDate: string = '';
   file: File | null = null;
-  
-  constructor(private radioUpdateService: RadioUpdateService) {}
+  formData = new FormData();
+  constructor(private radioUpdateService: RadioUpdateService, private datePipe: DatePipe) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -33,24 +36,34 @@ export class RadioPopupComponent {
   }
 
   onSubmit(): void {
-    this.examDate = new Date().toISOString(); // Format it as a string
+    const formattedDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.examDate = formattedDate || '';
 
-    const examData = {
-      image: null, 
-      result: this.result,
-      exam_date: this.examDate, 
-      radiologist: null, 
-    };
+    if (this.file) {
+      this.formData.append('image', this.file); // Append the selected file
+    }else{
+      this.formData.append('image', '');
+    }
+    this.formData.append('exam_date', this.examDate);
+    this.formData.append('radiologist', ''); // Add additional fields if required
+    this.formData.append('result', this.result);
 
-    console.log('Radiological Exam Data:', examData);
-    this.radioUpdateService.updateRadiologicalExam(this.radioId.toString(), examData).subscribe({
+    console.log(this.formData);
+    console.log('Submitting FormData:', {
+    image: this.file,
+    exam_date: this.examDate,
+    radiologist: 7,
+    result: this.result,
+  });
+
+    this.radioUpdateService.updateRadiologicalExam(this.radioId.toString(), this.formData).subscribe({
       next: (response) => {
         console.log('Update successful:', response);
         this.onClose();
       },
       error: (err) => {
         console.error('Error updating radiological exam:', err);
-      }
+      },
     });
   }
 

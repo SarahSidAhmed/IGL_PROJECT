@@ -2,12 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError  } from 'rxjs';
 
-export interface RadiologicalExamUpdate {
-  result: string;
-  exam_date: string;
-  radiologist: number | null;
-  image: string | null;
-}
 
 @Injectable({
   providedIn: 'root',
@@ -17,14 +11,13 @@ export class RadioUpdateService {
 
   constructor(private http: HttpClient) {}
 
-  updateRadiologicalExam(id: string, data: RadiologicalExamUpdate): Observable<any> {
+  updateRadiologicalExam(id: string, formData: FormData): Observable<any> {
     const url = `${this.baseUrl}/${id}/update/`;
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
       'Accept': 'application/json',
     });
 
-    return this.http.patch(url, data, { headers }).
+    return this.http.patch(url, formData, { headers }).
     pipe(catchError(this.handleError));
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError  } from 'rxjs';
 
 interface BiologicalExamUpdate {
@@ -16,11 +16,28 @@ interface BiologicalExamUpdate {
   providedIn: 'root',
 })
 export class UpdateTestService {
-  private apiUrl = '/biological-records';
-
+  private baseUrl = 'http://127.0.0.1:8000/api/biological-exams';
   constructor(private http: HttpClient) {}
 
   updateTest(id: number, data: BiologicalExamUpdate): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}/update/`, data);
+    const url = `${this.baseUrl}/update/${id}/`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
+    return this.http.patch(url, data, { headers }).
+    pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: any) {
+    let errorMessage = 'An error occurred';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    return throwError(() => errorMessage);
   }
 }
