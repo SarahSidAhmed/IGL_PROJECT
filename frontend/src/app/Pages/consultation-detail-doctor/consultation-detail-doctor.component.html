@@ -142,9 +142,9 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
                 Ajouter médicament
               </button>
             </div>
-            <div *ngFor="let item of listItemsord; let i = index" class="flex items-center gap-2">
+            <div *ngFor="let item of medicaments; let i = index" class="flex items-center gap-2">
               <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
-              <button *ngIf="isEditing" (click)="deleteItem(listItemsord, i)" class="text-[#FF5252]">
+              <button *ngIf="isEditing" (click)="deleteItem(medicaments, i)" class="text-[#FF5252]">
                 <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
               </button>
               <p class="text-gray-600">{{ item.nom }} - {{ item.duree }} - {{ item.dosage }} - {{ item.frequence }}</p>
