@@ -14,6 +14,7 @@ export interface NursingRecordUpdate {
 export class SoinUpdateService {
   private baseUrl = 'http://127.0.0.1:8000/api/nursing-records';
   private headers = new HttpHeaders({
+    'Content-Type': 'application/json',
     Accept: 'application/json',
   });
 
