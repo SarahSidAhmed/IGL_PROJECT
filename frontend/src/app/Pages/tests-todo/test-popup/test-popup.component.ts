@@ -157,7 +157,7 @@ export class TestPopupComponent {
     exam_date: new Date().toISOString().split('T')[0], // Example date format.
     lab_technician: 7, 
     parameters: [
-      { id: 0, value: this.results.glucose || 0 },
+      // { id: 0, value: this.results.glucose || 0 },
       // { id: 2, value: this.results.crp || 0 },
       // { id: 3, value: this.results.creatinine || 0 },
       // { id: 4, value: this.results.cholesterol || 0 },
