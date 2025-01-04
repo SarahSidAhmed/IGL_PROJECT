@@ -1,36 +1,36 @@
 <div
-  class="flex sm:flex-row flex-col justify-between bg-white shadow-md rounded-lg p-5 mb-4"
+  class="flex lg:flex-row flex-col lg:justify-between justify-center bg-white shadow-md rounded-lg p-5 mb-4"
 >
-  <h2 class="text-2xl w-36 font-bold font-poppins text-primaryBlue">
+  <h2 class="text-2xl lg:w-36 w-full font-bold font-poppins text-primaryBlue lg:mb-0 mb-5">
     {{ patientName }}
   </h2>
-  <div class="flex flex-col justify-start">
+  <div class="flex lg:space-x-0 space-x-2 lg:flex-col flex-row justify-start">
     <p class="font-bold font-poppins text-primaryBlue text-xs">Nom Complet:</p>
-    <p class="text-gray-500 mt-1 font-poppins text-xs">
+    <p class="text-gray-500 lg:lg:mt-1 font-poppins text-xs">
       {{ patientName }}
     </p>
   </div>
-  <div class="flex flex-col justify-start">
+  <div class="flex lg:space-x-0 space-x-2 lg:flex-col flex-row justify-start">
     <p class="text-xs font-bold font-poppins text-primaryBlue">Sexe:</p>
-    <p class="text-gray-500 mt-1 font-poppins text-xs">{{ gender }}</p>
+    <p class="text-gray-500 lg:mt-1 font-poppins text-xs">{{ gender }}</p>
   </div>
-  <div class="flex flex-col justify-start">
+  <div class="flex lg:space-x-0 space-x-2 lg:flex-col flex-row justify-start">
     <p class="text-xs font-bold font-poppins text-primaryBlue">Age:</p>
-    <p class="text-gray-500 mt-1 font-poppins text-xs">{{ age }}</p>
+    <p class="text-gray-500 lg:mt-1 font-poppins text-xs">{{ age }}</p>
   </div>
-  <div class="flex flex-col justify-start">
+  <div class="flex lg:space-x-0 space-x-2 lg:flex-col flex-row justify-start">
     <p class="text-xs font-bold font-poppins text-primaryBlue">
       Identificateur:
     </p>
-    <p class="text-gray-500 mt-1 font-poppins text-xs">{{ soinId }}</p>
+    <p class="text-gray-500 lg:mt-1 font-poppins text-xs">{{ soinId }}</p>
   </div>
 
-  <div class="flex flex-col justify-start">
+  <div class="flex lg:space-x-0 space-x-2 lg:flex-col flex-row justify-start">
     <p class="text-xs font-bold font-poppins text-primaryBlue">
       Soin à soumettre:
     </p>
     <p
-      class="text-white w-fit px-3 mt-1 font-poppins text-xs font-semibold mb-4 text-center rounded-sm py-0.5 bg-[#0F766E]"
+      class="text-white w-fit px-3 lg:mt-1 font-poppins text-xs font-semibold mb-4 text-center rounded-sm py-0.5 bg-[#0F766E]"
     >
       {{ soinNeeded }}
     </p>

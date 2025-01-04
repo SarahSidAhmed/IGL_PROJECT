@@ -26,12 +26,19 @@ export class PatientCardComponent {
   constructor(
     private patientListService: RechDoctorService,
     private router: Router
-  ) {}
+  ) {console.log('Patient ID in Card:', this.patientId);}
 
   confirmAndDelete(): void {
     this.isModalOpen = true;
   }
-
+  onConsult(patientId: string) {
+    if (patientId) {
+      this.router.navigate(['/dpi-doctor', patientId]);
+    } else {
+      console.error('Patient ID is undefined');
+    }
+  }
+  
   closeModal(): void {
     this.isModalOpen = false;
   }

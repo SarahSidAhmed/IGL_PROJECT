@@ -51,6 +51,7 @@
         <app-patient-card
           *ngFor="let dpi of dpis"
           [patientName]="dpi.first_name + ' ' + dpi.last_name"
+          [patientId]="dpi?.id?.toString() || ''"
           [gender]="dpi.gender"
           [age]="calculateAge(dpi.birthdate)"
           [socialSecurityNumber]="dpi.social_security_number"

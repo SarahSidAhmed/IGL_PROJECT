@@ -43,7 +43,7 @@
         [patientName]="dpi.first_name + ' ' + dpi.last_name"
         [gender]="dpi.gender"
         [age]="calculateAge(dpi.birthdate)"
-        [patientId]="dpi.id.toString()"
+        [patientId]="dpi?.id?.toString() || ''"
         [socialSecurityNumber]="dpi.social_security_number"
         [contactNumber]="dpi.phone"
         [email]="dpi.email"
@@ -56,6 +56,7 @@
     </div>
   </div>
 </div>
+
 <app-qr-scan
   *ngIf="scanQrVisible"
   (searchDpi)="searchDpi($event)"

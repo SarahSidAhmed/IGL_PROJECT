@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TestTodoListService } from '../../../services/test-todo-list.service';
 import { Router } from '@angular/router';
 import { debounceTime, Subject, switchMap } from 'rxjs';
+import { NavbarComponent } from "../../../components/navbar/navbar.component";
 interface BiologicalExam {
   id: number;
   exam_name: string;
@@ -24,7 +25,7 @@ interface Parameter {
 }
 @Component({
   selector: 'app-test-list',
-  imports: [CommonModule, TestCardComponent, FormsModule],
+  imports: [CommonModule, TestCardComponent, FormsModule, NavbarComponent],
   templateUrl: './test-list.component.html',
   styleUrl: './test-list.component.scss',
 })

@@ -2,12 +2,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
-interface DpiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Dpi[];
-}
 
 interface Dpi {
   id: number;
@@ -42,7 +36,7 @@ export class RechDoctorService {
   
   constructor(private http: HttpClient) {}
   
-  searchDpis(ssnPrefix: string = '', doctorId?: number): Observable<DpiResponse> {
+  searchDpis(ssnPrefix: string = '', doctorId?: number): Observable<Dpi[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -55,24 +49,22 @@ export class RechDoctorService {
   
     const url = `${this.baseUrl}/dpis/search/`;
     
-    return this.http.get<DpiResponse>(url, { headers, params }).pipe(
+    return this.http.get<Dpi[]>(url, { headers, params }).pipe(
       map(response => {
         console.log('Raw API response:', response);
-        return {
-          ...response,
-          results: response.results.filter(dpi => {
-            if (!dpi.doctor) {
-              console.warn('DPI missing doctor:', dpi);
-              return false;
-            }
-            return doctorId ? dpi.doctor.id === doctorId : true;
-          })
-        };
+        return response.filter(dpi => {
+          if (!dpi.doctor) {
+            console.warn('DPI missing doctor:', dpi);
+            return false; // Exclude DPI missing doctor
+          }
+          return doctorId ? dpi.doctor.id === doctorId : true;
+        });
       })
     );
   }
-  deletePatient(patientId: number): Observable<void> {
-    const url = `${this.baseUrl}/dpis/${patientId}/`;
+
+  deletePatient(dpiId: number): Observable<void> {
+    const url = `${this.baseUrl}/dpis/${dpiId}/`;
     return this.http.delete<void>(url);
   }
 }
