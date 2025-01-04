@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { TestCardComponent } from '../test-card/test-card.component';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { TestTodoListService } from '../../../services/test-todo-list.service';
 import { Router } from '@angular/router';
 import { debounceTime, Subject, switchMap } from 'rxjs';
@@ -24,7 +26,7 @@ interface Parameter {
 }
 @Component({
   selector: 'app-test-list',
-  imports: [CommonModule, TestCardComponent, FormsModule],
+  imports: [CommonModule, TestCardComponent, FormsModule, QrScanComponent],
   templateUrl: './test-list.component.html',
   styleUrl: './test-list.component.scss',
 })
@@ -34,15 +36,17 @@ export class TestListComponent implements OnInit {
   searchQuery: string = '';
   isQrCodeSearch: boolean = false;
 
+  scanQrVisible: boolean = false;
+  scanQrCode() {
+    this.scanQrVisible = !this.scanQrVisible;
+  }
   constructor(
     private router: Router,
     private biologicalExamService: TestTodoListService
   ) {
     this.fetchBioExams();
   }
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
+
 
   onLogout() {
     console.log('Logging out...');

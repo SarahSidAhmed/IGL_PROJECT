@@ -120,4 +120,27 @@ export class SoinListComponent implements OnInit {
 
     return age;
   }
+  searchSoin(id: string): void {
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      console.error('Invalid ID: must be a number');
+      alert('ID invalide : Veuillez scanner un code QR valide contenant un ID numérique.');
+      return;
+    }
+    console.log("looking for the soin with id :");
+    console.log(id);
+
+    // this.dpiListService.searchDpisQR(numericId).subscribe({
+    //   next: (response) => {
+    //     console.log('DPI Search Response:', response);
+    //     this.dpis = [response];
+    //     this.dpis.length = 1;
+    //     console.log('DPI Search Response.results:', response);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error searching DPIs:', error);
+    //     alert('Il n\'y a pas de DPI avec cet ID');
+    //   },
+    // });
+  }
 }

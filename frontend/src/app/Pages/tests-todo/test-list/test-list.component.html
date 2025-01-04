@@ -46,4 +46,9 @@
       [testsNeeded]="test.exam_name"
     ></app-test-card>
   </div>
+  <app-qr-scan
+    *ngIf="scanQrVisible"
+
+    (closePopup)="scanQrCode()"
+  ></app-qr-scan>
 </div>
