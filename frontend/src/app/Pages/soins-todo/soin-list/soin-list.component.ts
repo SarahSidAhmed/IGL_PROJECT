@@ -53,8 +53,13 @@ export class SoinListComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('Search response:', response);
-          this.nursingRecords = response.results;
+          if (Array.isArray(response)) {
+            this.nursingRecords = response.filter((dpi) => dpi); // For multiple DPIs
+          } else if (response) {
+            this.nursingRecords = [response]; // For single DPI
+          } else {
+            this.nursingRecords = [];
+          }
         },
         error: (error) => {
           console.error('Search error:', error);
@@ -63,11 +68,10 @@ export class SoinListComponent implements OnInit {
   }
 
   fetchNursingRecords(): void {
-    console.log('Fetching nursing records');
+    //console.log('Fetching nursing records');
     this.nursingRecordService.searchNursingRecords('').subscribe({
       next: (response) => {
-        console.log('Fetch response:', response);
-        this.nursingRecords = response.results;
+        this.nursingRecords = Array.isArray(response) ? response.filter(dpi => dpi) : [];
       },
       error: (error) => {
         console.error('Fetch error:', error);

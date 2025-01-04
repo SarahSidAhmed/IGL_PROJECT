@@ -55,8 +55,13 @@ export class RadioListComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('Search response:', response);
-          this.radiologicalExams = response.results;
+          if (Array.isArray(response)) {
+            this.radiologicalExams = response.filter((dpi) => dpi); // For multiple DPIs
+          } else if (response) {
+            this.radiologicalExams = [response]; // For single DPI
+          } else {
+            this.radiologicalExams = [];
+          }
         },
         error: (error) => {
           console.error('Search error:', error);
@@ -67,8 +72,7 @@ export class RadioListComponent implements OnInit {
     console.log('Fetching radios');
     this.radiologicalExamService.searchRadiologicalExams('').subscribe({
       next: (response) => {
-        console.log('Fetch response:', response);
-        this.radiologicalExams = response.results;
+        this.radiologicalExams = Array.isArray(response) ? response.filter(dpi => dpi) : [];
       },
       error: (error) => {
         console.error('Fetch error:', error);
