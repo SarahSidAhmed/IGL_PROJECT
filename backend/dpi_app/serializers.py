@@ -150,12 +150,11 @@ class BiologicalExamParamUpdateSerializer(serializers.ModelSerializer):
 
 # Serializers for Biological Exam
 class BiologicalExamCreateSerializer(serializers.ModelSerializer):
-    dpi = DpiSerializer(source='consultation.dpi', read_only=True)  
     parameters = BiologicalExamParamSerializer(many=True, write_only=True)
 
     class Meta:
         model = BiologicalExam
-        fields = ['id', 'consultation', 'exam_name', 'parameters', 'dpi']
+        fields = ['id', 'consultation', 'exam_name', 'parameters']
 
     def create(self, validated_data):
         parameters_data = validated_data.pop('parameters', [])
