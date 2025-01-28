@@ -67,4 +67,16 @@ export class RechDoctorService {
     const url = `${this.baseUrl}/dpis/${dpiId}/`;
     return this.http.delete<void>(url);
   }
+
+  searchDpisQR(id: number): Observable<Dpi> {
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'X-CSRFTOKEN': 'dETXuon4FPIUMC7HPeK3Jp7A3AA2Ub2gb82escHmKrQumZYXcegSVW1CcozrGWJQ',
+  });
+
+  const url = `${this.baseUrl}/dpis/${id}/`; // Add `id` to the URL path
+
+  return this.http.get<Dpi>(url, { headers });
+}
 }

@@ -1,7 +1,7 @@
 <div class="flex flex-col h-screen bg-backGround">
  <app-navbar></app-navbar>
   <div class="flex justify-center mt-4 mb-4">
-    <h1 class="text-primaryBlue font-poppins text-xl font-bold">GESTION DPIIIII</h1>
+    <h1 class="text-primaryBlue font-poppins text-xl font-bold">GESTION DPIIIIIIIIIIIIII</h1>
   </div>
   <div class="flex flex-row justify-center">
     <div
@@ -51,14 +51,14 @@
       ></app-dpi-card>
     </div>
 
-    <div  class="text-center">
+    <div *ngIf="!dpis.length" class="text-center">
       <p>No results found.</p>
     </div>
   </div>
 </div>
 
 <app-qr-scan
-
+  *ngIf="scanQrVisible"
   (searchDpi)="searchDpi($event)"
   (closePopup)="scanQrCode()"
 ></app-qr-scan>

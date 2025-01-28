@@ -60,41 +60,48 @@ export class DpiListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchDpis();
     this.searchInput
-      .pipe(
-        debounceTime(300),
-        switchMap((query) => {
-            if(!query.trim()) {
-              return this.dpiListService.searchDpis();
-            }
-            return this.dpiListService.searchDpis(query.trim());
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          this.dpis = response.results;
-        },
-        error: (error) => {
-          console.error('Error fetching DPIs:', error);
-        },
-      });
+  .pipe(
+    debounceTime(300),
+    switchMap((query) => {
+      return this.dpiListService.searchDpis(query.trim());
+    })
+  )
+  .subscribe({
+    next: (response) => {
+      if (Array.isArray(response)) {
+        this.dpis = response.filter((dpi) => dpi); // For multiple DPIs
+      } else if (response) {
+        this.dpis = [response]; // For single DPI
+      } else {
+        this.dpis = [];
+      }
+    },
+    error: (error) => {
+      console.error('Error fetching DPIs:', error);
+    },
+  });
+
   }
 
   fetchDpis(): void {
     this.dpiListService.searchDpis('').subscribe({
       next: (response) => {
-        this.dpis = response.results;
+        this.dpis = Array.isArray(response) ? response.filter(dpi => dpi) : [];
       },
       error: (error) => {
         console.error('Error fetching DPIs:', error);
       },
     });
   }
+  
 
   onDpiDeleted(deletedDpiId: number): void {
     this.dpis = this.dpis.filter(dpi => dpi.id !== deletedDpiId);
   }
 
   onSearchChange(query: string): void {
+    console.log('Search query:', query);
+    console.log('Before filtering:', this.dpis);
     if (!this.isQrCodeSearch){
     this.searchInput.next(query);}
   }

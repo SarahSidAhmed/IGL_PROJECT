@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 
 import { debounceTime, Subject, switchMap } from 'rxjs';
 import { PatientCardComponent } from '../patient-card/patient-card/patient-card.component';
@@ -36,7 +37,7 @@ interface Dpi {
 }
 @Component({
   selector: 'app-rech-doctor',
-  imports: [CommonModule, FormsModule, PatientCardComponent],
+  imports: [CommonModule, FormsModule, PatientCardComponent, QrScanComponent],
   templateUrl: './rech-doctor.component.html',
   styleUrl: './rech-doctor.component.scss',
 })
@@ -45,6 +46,16 @@ export class RechDoctorComponent implements OnInit {
   searchInput = new Subject<string>();
   searchQuery: string = '';
   doctorId: number | null = null;
+
+
+  isQrCodeSearch: boolean = false;
+  currentId: number = 0;
+
+  scanQrVisible: boolean = false;
+  scanQrCode() {
+    this.scanQrVisible = !this.scanQrVisible;
+  }
+
   constructor(
     private route: ActivatedRoute,
 
@@ -151,15 +162,32 @@ export class RechDoctorComponent implements OnInit {
     return age;
   }
 
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
-
   onCreateDpi(): void {
     this.router.navigate(['/create-dpi']);
   }
 
   onLogout(): void {
     this.router.navigate(['/']);
+  }
+  searchDpi(id: string): void {
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      console.error('Invalid ID: must be a number');
+      alert('ID invalide : Veuillez scanner un code QR valide contenant un ID numérique.');
+      return;
+    }
+
+    this.patientListService.searchDpisQR(numericId).subscribe({
+      next: (response) => {
+        console.log('DPI Search Response:', response);
+        this.dpis = [response];
+        this.dpis.length = 1;
+        console.log('DPI Search Response.results:', response);
+      },
+      error: (error) => {
+        console.error('Error searching DPIs:', error);
+        alert('Il n\'y a pas de DPI avec cet ID');
+      },
+    });
   }
 }
