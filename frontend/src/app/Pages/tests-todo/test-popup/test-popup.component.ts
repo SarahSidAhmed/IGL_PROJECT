@@ -69,12 +69,12 @@ export class TestPopupComponent {
   // Chart.js data and configuration
   chartData: ChartData<'bar'> = {
     labels: [
-      param1[1],
-      param2[1],
-      param3[1],
-      param4[1],
-      param5[1],
-      param6[1],
+      this.param1[1],
+      this.param2[1],
+      this.param3[1],
+      this.param4[1],
+      this.param5[1],
+      this.param6[1],
     ],
     datasets: [
       {

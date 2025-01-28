@@ -91,10 +91,10 @@
                 type="number"
                 [(ngModel)]="results.glucose"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
-                (input)="onInputChange('glucose', $event)"
+                (input)="onInputChange('param1[2]', $event)"
                 placeholder="00.00"
               />
-              <span class="ml-2 text-gray-600">g/l</span>
+              <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
 
@@ -107,7 +107,7 @@
                 [(ngModel)]="results.crp"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('crp', $event)"
+                 (input)="onInputChange('param2[2]', $event)"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
             </div>
@@ -122,7 +122,7 @@
                 [(ngModel)]="results.creatinine"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('creatinine', $event)"
+                 (input)="onInputChange('param3[2]', $event)"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
             </div>
@@ -137,9 +137,9 @@
                 [(ngModel)]="results.cholesterol"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('cholesterol', $event)"
+                 (input)="onInputChange('param4[2]', $event)"
               />
-              <span class="ml-2 text-gray-600">g/l</span>
+              <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
 
@@ -152,9 +152,9 @@
                 [(ngModel)]="results.sodium"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('sodium', $event)"
+                 (input)="onInputChange('param5[2]', $event)"
               />
-              <span class="ml-2 text-gray-600">mEq/l</span>
+              <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
 
@@ -167,9 +167,9 @@
                 [(ngModel)]="results.potassium"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('potassium', $event)"
+                 (input)="onInputChange('param6[2]', $event)"
               />
-              <span class="ml-2 text-gray-600">mEq/l</span>
+              <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
         </div>
