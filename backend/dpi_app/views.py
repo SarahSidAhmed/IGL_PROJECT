@@ -38,6 +38,21 @@ class StaffLoginAPIView(APIView):
                 "access": str(refresh.access_token),
                 "staff": staff_serialized.data
             }, status=status.HTTP_200_OK)
+        else:
+            #search in patient
+            serializer_class = PatientLoginSerializer(data=request.data)
+            if serializer_class.is_valid():
+                patient = Dpi.objects.get(id=serializer_class.validated_data["id"])
+
+                # Generate JWT tokens
+                refresh = RefreshToken.for_user(patient)
+                patient_serialized = DpiSerializer(patient)
+
+                return Response({
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "dpi": patient_serialized.data
+                }, status=status.HTTP_200_OK)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
