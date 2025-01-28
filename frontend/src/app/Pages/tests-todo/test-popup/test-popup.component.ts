@@ -56,12 +56,12 @@ export class TestPopupComponent {
 
   report: string = '';
   results: MedicalResults = {
-    glucose: 0,
-    crp: 0,
-    creatinine: 0,
-    cholesterol: 0,
-    sodium: 0,
-    potassium: 0,
+    param1: 0,
+    param2: 0,
+    param3: 0,
+    param4: 0,
+    param5: 0,
+    param6: 0,
   };
 
   showGraph: boolean = false;
@@ -69,23 +69,23 @@ export class TestPopupComponent {
   // Chart.js data and configuration
   chartData: ChartData<'bar'> = {
     labels: [
-      'Glucose',
-      'CRP',
-      'Creatinine',
-      'Cholesterol',
-      'Sodium',
-      'Potassium',
+      param1[1],
+      param2[1],
+      param3[1],
+      param4[1],
+      param5[1],
+      param6[1],
     ],
     datasets: [
       {
         label: 'Test Results',
         data: [
-          this.results.glucose,
-          this.results.crp,
-          this.results.creatinine,
-          this.results.cholesterol,
-          this.results.sodium,
-          this.results.potassium,
+          this.results.param1,
+          this.results.param2,
+          this.results.param3,
+          this.results.param4,
+          this.results.param5,
+          this.results.param6,
         ],
         backgroundColor: Array(6).fill('#0F766E'),
       },
@@ -136,12 +136,12 @@ export class TestPopupComponent {
 
   onGenerateGraph(): void {
     this.chartData.datasets[0].data = [
-      this.results.glucose || 0,
-      this.results.crp || 0,
-      this.results.creatinine || 0,
-      this.results.cholesterol || 0,
-      this.results.sodium || 0,
-      this.results.potassium || 0,
+      this.results.param1 || 0,
+      this.results.param2 || 0,
+      this.results.param3 || 0,
+      this.results.param4 || 0,
+      this.results.param5 || 0,
+      this.results.param6 || 0,
     ];
     this.showGraph = true;
     this.cdr.detectChanges();
