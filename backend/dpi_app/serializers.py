@@ -216,10 +216,9 @@ class RadiologicalExamUpdateSerializer(serializers.ModelSerializer):
 
 # Serializers for Nursing Record
 class NursingRecordCreateSerializer(serializers.ModelSerializer):
-    dpi = DpiSerializer(source='consultation.dpi', read_only=True)  
     class Meta:
         model = NursingRecord
-        fields = ['id', 'consultation', 'care_name', 'dpi']
+        fields = ['id', 'consultation', 'care_name']
 
 
 class NursingRecordUpdateSerializer(serializers.ModelSerializer):
