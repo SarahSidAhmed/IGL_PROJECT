@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ConsultationListService } from '../../services/consultation-list.service';
 import { UpdatesummaryService } from '../../services/updatesummary.service';
+import { AddMedicamentService } from '../../services/add-medicament.service';
 
 interface newMedicament {
   nom: string;
@@ -37,7 +38,8 @@ export class ConsultationDetailDoctorComponent {
   constructor(
       private route: ActivatedRoute,
       private consultationService: ConsultationListService,
-      private updateSummary: UpdatesummaryService
+      private updateSummary: UpdatesummaryService,
+      private addmedicament: AddMedicamentService
     ) {}
     
   consultations: any[] = [];
@@ -144,44 +146,33 @@ addMedicament() {
   ) {
     // Prepare data to match the API structure
     const data = {
-      prescription: this.consultation.prescription, // Replace with the actual prescription ID
+      prescription: this.consult.prescription.id, // Replace with the actual prescription ID
       medication_name: this.newMedicament.nom,
       dosage: this.newMedicament.dosage,
       duration: this.newMedicament.duree,
-      frequency: this.newMedicament.frequence,
+      frequency: this.newMedicament.frequence
     };
+    this.addmedicament.addMedicament(data).subscribe({
+      next: (data5) => {
 
-    // API call
-    fetch('http://127.0.0.1:8000/api/medicine/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+        this.consult.prescription.medicines.push({medication_name: this.newMedicament.nom,
+          dosage: this.newMedicament.dosage,
+          duration: this.newMedicament.duree,
+          frequency: this.newMedicament.frequence});
+        this.showNotificationMessage('success', 'Les changements ont été enregistrés!');
       },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (response.ok) {
-          this.showNotificationMessage('success', 'Medicament ajouté!');
-          return response.json();
-        } else {
-          throw new Error('Failed to add medicine');
-        } 
-      })
-      .then((responseData) => {
-        // Add the medicine to the local list
-        this.medicaments.push({ ...this.newMedicament });
-        this.toggleAddMedicamentPopup();
-      })
-      .catch((error) => {
-        alert('Error: ' + error.message);
-        this.showNotificationMessage(
-          'error',
-          'Une erreur s\'est produite. Veuillez réessayer.'
-        );
-      });
+      error: (error) => {
+        
+        this.showNotificationMessage('error', 'Les changements n\'ont pas été enregistré!');
+      }
+    });
+
+    
   } else {
     alert('Veuillez remplir tous les champs du médicament.');
   }
+
+  this.showAddMedicament = false;
 }
 
 addSoin() {
@@ -298,7 +289,7 @@ addSoin() {
     }
     this.updateSummary.updateSummary(this.consult.id, data4).subscribe({
       next: (data5) => { console.log(data5);
-        
+        this.consult.consultation_summary = this.resume;
         this.showNotificationMessage('success', 'Les changements ont été enregistrés!');
       },
       error: (error) => {
