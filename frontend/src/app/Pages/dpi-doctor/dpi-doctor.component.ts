@@ -85,7 +85,7 @@ export class DpiDoctorComponent implements OnInit {
   private triggerRefresh(): void {
     setTimeout(() => {
       window.location.reload();
-    }, 2000); 
+    }, 500); 
   }
 
   

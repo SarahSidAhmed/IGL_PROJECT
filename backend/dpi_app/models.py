@@ -16,7 +16,7 @@ class Staff(models.Model):
     ]
     id = models.AutoField(primary_key=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    email = models.EmailField(max_length=100, unique=True)
+    email = models.EmailField(max_length=100, db_index=True)
     password = models.CharField(max_length=255)
     name = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
@@ -34,12 +34,12 @@ class Staff(models.Model):
 
 class Dpi(models.Model):
     id = models.AutoField(primary_key=True)
-    social_security_number = models.CharField(max_length=20, unique=True, null=True)
+    social_security_number = models.CharField(max_length=20, unique=True, null=True, db_index=True)
     password = models.CharField(max_length=128, null=False)    
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birthdate = models.DateField()
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, db_index=True)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
     doctor = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True)
@@ -78,7 +78,7 @@ class Consultation(models.Model):
     doctor = models.ForeignKey(Staff, on_delete=models.CASCADE)
     consultation_summary = models.TextField()
     consultation_date = models.DateTimeField(default=timezone.now)
-    prescription = models.OneToOneField(Prescription, on_delete=models.SET_NULL, null=True, blank=True)
+    prescription = models.OneToOneField(Prescription, on_delete=models.SET_NULL, null=True, blank=True, db_index=True)
 
     def __str__(self):
         return f'Consultation for {self.dpi}'
