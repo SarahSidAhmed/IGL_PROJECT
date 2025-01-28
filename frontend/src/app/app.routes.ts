@@ -33,7 +33,7 @@ export const routes: Routes = [
   { path: 'soin-list', component: SoinListComponent },
   { path: 'tests-list', component: TestListComponent},
   { path: 'qr', component: QrCardComponent},
-  { path: 'consultation-detail-doctor/:id', component: ConsultationDetailDoctorComponent},
+  { path: 'consultation-detail-doctor/:id/:dpiid', component: ConsultationDetailDoctorComponent},
   { path: 'doctor/:id',component: RechDoctorComponent},
   { path: 'qr-card', component: QrCardComponent },
   {path: 'edit-dpi/:id', component: EditDpiComponent},

@@ -20,7 +20,7 @@ export class ConsultationCardComponent {
   }
  
   seeMore(): void {
-    this.router.navigate(['consultation-patient/', this.consultation.id]);
+    this.router.navigate(['consultation-detail-doctor/', this.consultation.id,this.consultation.dpi]);
     
   }
 

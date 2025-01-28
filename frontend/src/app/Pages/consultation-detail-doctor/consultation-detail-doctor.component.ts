@@ -1,9 +1,12 @@
 
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { ConsultationListService } from '../../services/consultation-list.service';
+import { UpdatesummaryService } from '../../services/updatesummary.service';
+
 interface newMedicament {
   nom: string;
   dosage: string;
@@ -31,14 +34,22 @@ interface Consultation{
 })
 
 export class ConsultationDetailDoctorComponent {
+  constructor(
+      private route: ActivatedRoute,
+      private consultationService: ConsultationListService,
+      private updateSummary: UpdatesummaryService
+    ) {}
+    
+  consultations: any[] = [];
+  consult: any;
+  consultation = { id: 1, prescription: 1, doctor: 1 ,dpi: 1};
   prescriptionId = 1; 
   consultationId = 1;
-  consultation = { id: 40, dpi: 3, prescription: 1, doctor: 1 };
   dpi_id = 3;
   isEditing = false;
-  resume = 'Lorem ipsum dolor sit amet...';
+  resume = '';
   newTest = { name: '', type: '' };
-  tests = [{ name: 'Test 1', type: 'bilan' }, { name: 'Test 2', type: 'bilan' }, { name: 'Test 3', type: 'radio' }];
+  tests: any[] = [];
   soins = ['Soin 1', 'Soin 2', 'Soin 3'];
   medicaments = [ { nom: 'Medicament 1', dosage: '10mg', duree: '1 semaine', frequence: '3 fois par jour' }, { nom: 'Medicament 2', dosage: '20mg', duree: '2 semaines', frequence: '2 fois par jour' }, { nom: 'Medicament 3', dosage: '30mg', duree: '3 semaines', frequence: '1 fois par jour' }];
   showAddMedicament = false;
@@ -255,43 +266,49 @@ addSoin() {
   // }
 
   ngOnInit() {
+      const dpiId = this.route.snapshot.paramMap.get('dpiid');
+      const consultationId = this.route.snapshot.paramMap.get('id');
+      console.log('Consultation:', dpiId, consultationId);
+      if (dpiId) {
+        
+  
+        this.consultationService.getConsultations(dpiId).subscribe({
+          next: (data2) => {
+            this.consultations = data2;
+            console.log('Consultations:', this.consultations);
+            this.consult = this.consultations.find(c => c.id == consultationId);
+            console.log('Consultation:', this.consult);
+            this.resume= this.consult.consultation_summary;
+
+  
+          },
+          error: (error) => {
+            console.error('Error fetching consultations:', error);
+          }
+        });
+      }
+  
     this.fetchMedicationsByConsultation();
   }
   saveChanges() {
-    this.isEditing = false; // Disable editing state
-  
-    // Define the API URL and payload
-    const apiUrl = `http://127.0.0.1:8000/api/consultation/update/${this.consultation.id}`;
-    const payload = {
-      consultation_summary: this.resume, // Updated summary value
-      dpi: this.consultation.dpi, // Required DPI ID
-      doctor: this.consultation.doctor, // Required doctor ID
-    };
-  
-    // Make the PUT request
-    fetch(apiUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to update consultation');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // Handle successful save
+    const data4={
+      consultation_summary: this.resume,
+      dpi: this.consult.dpi.id,
+      doctor: this.consult.doctor.id
+    }
+    this.updateSummary.updateSummary(this.consult.id, data4).subscribe({
+      next: (data5) => { console.log(data5);
+        
         this.showNotificationMessage('success', 'Les changements ont été enregistrés!');
-        console.log('Updated consultation:', data);
-      })
-      .catch((error) => {
-        // Handle errors
-        this.showNotificationMessage('error', 'Une erreur s\'est produite. Veuillez réessayer.');
-        console.error('Error updating consultation:', error);
-      });
+      },
+      error: (error) => {
+        console.error('Error updating summary:', error);
+        this.showNotificationMessage('error', 'Les changements n\'ont pas été enregistré!');
+      }
+    });
+    this.isEditing = false; // Disable editing state
+    
+    
   }
   
 }
