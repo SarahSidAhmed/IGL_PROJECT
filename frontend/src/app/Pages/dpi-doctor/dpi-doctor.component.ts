@@ -43,7 +43,7 @@ export class DpiDoctorComponent implements OnInit {
     this.consultation.createConsultation(dataconsultation).subscribe({
       next: (response) => {
         const id = response.id; // Assuming the response contains the consultation ID
-        this.router.navigate(['consultation-detail-doctor/', id,'/',dpiId]);
+        this.router.navigate(['consultation-detail-doctor/', id,dpiId]);
       },
       error: (error) => {
         console.error('Error creating consultation:', error);

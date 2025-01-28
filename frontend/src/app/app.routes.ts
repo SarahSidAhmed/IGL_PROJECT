@@ -26,7 +26,7 @@ export const routes: Routes = [
   { path: 'dpilist', component: DpiListComponent },
   { path: 'dpi-patient/:id', component: DpiComponent },
   { path: 'dpi-doctor/:id', component: DpiDoctorComponent },
-  { path: 'consultation-patient/:id', component: ConsultationDetailComponent },
+  { path: 'consultation-patient/:id/:dpiid', component: ConsultationDetailComponent },
   { path: 'rech-doctor', component: RechDoctorComponent },
   { path: 'create-dpi', component: CreateDpiComponent },
   { path: 'radio-list', component: RadioListComponent },

@@ -31,6 +31,7 @@ export class SigninComponent {
     this.loginService.login(loginPayload).subscribe({
       next: (response) => {
         sessionStorage.setItem('userId', response.staff.id.toString());
+        sessionStorage.setItem('role', response.staff.role.toString());
 
         const role = response.staff.role;
         if (role === 'Nurse') {
@@ -45,7 +46,8 @@ export class SigninComponent {
         } else if (role === 'LabTechnician') {
           this.router.navigate(['/tests-list']);
         } else {
-          console.error('role non trouvé:', role);
+          console.error('Unknown role:', role);
+          
         }
       },
       error: (error) => {
