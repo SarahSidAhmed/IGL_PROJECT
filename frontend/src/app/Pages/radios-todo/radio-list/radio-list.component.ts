@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RadioCardComponent } from '../radio-card/radio-card.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { debounceTime, Subject, switchMap } from 'rxjs';
-
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { RadioListService } from '../../../services/radio-list.service';
 import { Router } from '@angular/router';
 import { NavbarComponent } from "../../../components/navbar/navbar.component";
@@ -22,7 +23,7 @@ interface RadiologicalExam {
 
 @Component({
   selector: 'app-radio-list',
-  imports: [RadioCardComponent, CommonModule, FormsModule, NavbarComponent],
+  imports: [RadioCardComponent, CommonModule, FormsModule, NavbarComponent, QrScanComponent],
   templateUrl: './radio-list.component.html',
   styleUrl: './radio-list.component.scss',
 })
@@ -31,6 +32,10 @@ export class RadioListComponent implements OnInit {
   searchInput = new Subject<string>();
   searchQuery: string = '';
   isQrCodeSearch: boolean = false;
+  scanQrVisible: boolean = false;
+  scanQrCode() {
+    this.scanQrVisible = !this.scanQrVisible;
+  }
   constructor(
     private router: Router,
     private radiologicalExamService: RadioListService
@@ -90,10 +95,6 @@ export class RadioListComponent implements OnInit {
     this.searchQuery = '';
     this.onSearchChange('');
   }
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
-
   onLogout() {
     console.log('Logging out...');
     // Add logout logic here
@@ -119,5 +120,28 @@ export class RadioListComponent implements OnInit {
     }
 
     return age;
+  }
+  
+  searchRadio(id: string): void {
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      console.error('Invalid ID: must be a number');
+      alert('ID invalide : Veuillez scanner un code QR valide contenant un ID numérique.');
+      return;
+    }
+    console.log("looking for the soin with id :");
+    console.log(id);
+
+     this.radiologicalExamService.searchRadioQR(numericId).subscribe({
+      next: (response) => {
+        console.log('DPI Search Response:', response);
+        this.radiologicalExams = response.results;
+        console.log('DPI Search Response.results:', response);
+      },
+      error: (error) => {
+        console.error('Error searching DPIs:', error);
+        alert('Il n\'y a pas de DPI avec cet ID');
+      },
+    });
   }
 }

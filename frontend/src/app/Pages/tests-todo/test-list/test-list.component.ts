@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { TestCardComponent } from '../test-card/test-card.component';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
 import { TestTodoListService } from '../../../services/test-todo-list.service';
 import { Router } from '@angular/router';
 import { debounceTime, Subject, switchMap } from 'rxjs';
 import { NavbarComponent } from "../../../components/navbar/navbar.component";
+
 interface BiologicalExam {
   id: number;
   exam_name: string;
@@ -25,7 +28,7 @@ interface Parameter {
 }
 @Component({
   selector: 'app-test-list',
-  imports: [CommonModule, TestCardComponent, FormsModule, NavbarComponent],
+  imports: [CommonModule, TestCardComponent, FormsModule, NavbarComponent, QrScanComponent],
   templateUrl: './test-list.component.html',
   styleUrl: './test-list.component.scss',
 })
@@ -35,15 +38,17 @@ export class TestListComponent implements OnInit {
   searchQuery: string = '';
   isQrCodeSearch: boolean = false;
 
+  scanQrVisible: boolean = false;
+  scanQrCode() {
+    this.scanQrVisible = !this.scanQrVisible;
+  }
   constructor(
     private router: Router,
     private biologicalExamService: TestTodoListService
   ) {
     this.fetchBioExams();
   }
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
+
 
   onLogout() {
     console.log('Logging out...');
@@ -117,5 +122,27 @@ export class TestListComponent implements OnInit {
   clearSearch(): void {
     this.searchQuery = '';
     this.onSearchChange('');
+  }
+    searchTest(id: string): void {
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      console.error('Invalid ID: must be a number');
+      alert('ID invalide : Veuillez scanner un code QR valide contenant un ID numérique.');
+      return;
+    }
+    console.log("looking for the soin with id :");
+    console.log(id);
+
+     this.biologicalExamService.searchTestQR(numericId).subscribe({
+      next: (response) => {
+        console.log('DPI Search Response:', response);
+        this.biologicalExams = response.results;
+        console.log('DPI Search Response.results:', response);
+      },
+      error: (error) => {
+        console.error('Error searching DPIs:', error);
+        alert('Il n\'y a pas de DPI avec cet ID');
+      },
+    });
   }
 }

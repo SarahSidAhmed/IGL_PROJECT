@@ -13,7 +13,7 @@ import { CreateConsultationService } from '../../services/create-consultation.se
 
 @Component({
   selector: 'app-dpi-doctor',
-    imports: [RouterOutlet,CommonModule,NavbarComponent,TestCardComponent,InfoCardComponent,ConsultationCardComponent],
+    imports: [CommonModule,NavbarComponent,TestCardComponent,InfoCardComponent,ConsultationCardComponent],
   
   templateUrl: './dpi-doctor.component.html',
   styleUrl: './dpi-doctor.component.scss'

@@ -50,4 +50,14 @@ export class TestTodoListService {
   
       return this.http.get<BiologicalExam[]>(url, { headers, params });
     }
+    searchTestQR(id: number): Observable<BiologicalExamResponse> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-CSRFTOKEN': 'dETXuon4FPIUMC7HPeK3Jp7A3AA2Ub2gb82escHmKrQumZYXcegSVW1CcozrGWJQ',
+      });
+
+      const url = `http://127.0.0.1:8000/api/biological-exams/search/?dpi_id=${id}`;
+      return this.http.get<BiologicalExamResponse>(url, { headers });
+    }
 }

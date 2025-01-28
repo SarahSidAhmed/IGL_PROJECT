@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { SoinCardComponent } from '../soin-card/soin-card.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { QrScanComponent } from '../../../components/qr-scan/qr-scan.component';
+import { NgModule } from '@angular/core';
 import { debounceTime, Subject, switchMap } from 'rxjs';
-import { SoinListService } from '../../../services/soin-list.service';
 import { Router } from '@angular/router';
 import { NavbarComponent } from "../../../components/navbar/navbar.component";
+import { SoinListService } from '../../../services/soin-list.service';
 
 interface NursingRecord {
   id: number;
@@ -18,9 +20,11 @@ interface NursingRecord {
   };
   consultation: number;
 }
+
+
 @Component({
   selector: 'app-soin-list',
-  imports: [SoinCardComponent, CommonModule, FormsModule, NavbarComponent],
+  imports: [SoinCardComponent, CommonModule, FormsModule, NavbarComponent, QrScanComponent],
   templateUrl: './soin-list.component.html',
   styleUrl: './soin-list.component.scss',
 })
@@ -29,6 +33,10 @@ export class SoinListComponent implements OnInit {
   searchInput = new Subject<string>();
   searchQuery: string = '';
   isQrCodeSearch: boolean = false;
+  scanQrVisible: boolean = false;
+  scanQrCode() {
+    this.scanQrVisible = !this.scanQrVisible;
+  }
 
   constructor(
     private router: Router,
@@ -90,9 +98,6 @@ export class SoinListComponent implements OnInit {
     this.onSearchChange('');
   }
 
-  scanQrCode() {
-    throw new Error('Method not implemented.');
-  }
 
   onLogout() {
     console.log('Logging out...');
@@ -120,5 +125,27 @@ export class SoinListComponent implements OnInit {
     }
 
     return age;
+  }
+  searchSoin(id: string): void {
+    const numericId = parseInt(id, 10);
+    if (isNaN(numericId)) {
+      console.error('Invalid ID: must be a number');
+      alert('ID invalide : Veuillez scanner un code QR valide contenant un ID numérique.');
+      return;
+    }
+    console.log("looking for the soin with id :");
+    console.log(id);
+
+     this.nursingRecordService.searchSoinQR(numericId).subscribe({
+      next: (response) => {
+        console.log('DPI Search Response:', response);
+        this.nursingRecords = response.results;
+        console.log('DPI Search Response.results:', response);
+      },
+      error: (error) => {
+        console.error('Error searching DPIs:', error);
+        alert('Il n\'y a pas de DPI avec cet ID');
+      },
+    });
   }
 }
