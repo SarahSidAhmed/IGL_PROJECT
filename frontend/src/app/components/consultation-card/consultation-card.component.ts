@@ -20,8 +20,13 @@ export class ConsultationCardComponent {
   }
  
   seeMore(): void {
-    this.router.navigate(['consultation-patient/', this.consultation.id]);
-    
+    const id= sessionStorage.getItem('userId');
+    console.log(id);
+    console.log(this.consultation.doctor.id);
+    if (id !== null && parseInt(id, 10) === this.consultation.doctor.id) {
+      this.router.navigate(['consultation-detail-doctor/', this.consultation.id,this.consultation.dpi]);
+    } else {
+    this.router.navigate(['consultation-patient/', this.consultation.id,this.consultation.dpi]);
   }
-
+  }
 }
