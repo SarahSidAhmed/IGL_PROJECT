@@ -14,6 +14,17 @@ export class TestCardComponent {
   @Input() age!: number;
   @Input() testId!: number;
   @Input() testsNeeded!: string;
+  @Input() param1!: [boolean, string, number];
+  @Input() param2!: [boolean, string, number];
+  @Input() param3!: [boolean, string, number];
+  @Input() param4!: [boolean, string, number];
+  @Input() param5!: [boolean, string, number];
+  @Input() param6!: [boolean, string, number];
+
+  ngOnInit(): void {
+    console.log(this.param1); // Moved to ngOnInit lifecycle hook
+  }
+
   isPopupVisible: boolean = false;
 
   togglePopup(): void {

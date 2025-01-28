@@ -145,4 +145,14 @@ export class TestListComponent implements OnInit {
       },
     });
   }
+
+  getParam(parameters: Parameter[], i: number): [boolean, string, number] | null {
+    if (!parameters || parameters.length === 0 || i < 0 || i >= parameters.length) {
+      // Return default structure if the index is invalid or the array is empty
+      return [false, '', 0];
+    }
+
+    const param = parameters[i];
+    return [true, param.param_name, param.id];
+  }
 }
