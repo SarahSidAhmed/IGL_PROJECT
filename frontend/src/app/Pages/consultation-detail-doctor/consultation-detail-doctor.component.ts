@@ -1,9 +1,15 @@
 
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { ConsultationListService } from '../../services/consultation-list.service';
+import { UpdatesummaryService } from '../../services/updatesummary.service';
+import { AddMedicamentService } from '../../services/add-medicament.service';
+import { AddTestsService } from '../../services/add-tests.service';
+import { DeletemedecineService } from '../../services/deletemedecine.service';
+
 interface newMedicament {
   nom: string;
   dosage: string;
@@ -31,14 +37,27 @@ interface Consultation{
 })
 
 export class ConsultationDetailDoctorComponent {
+  constructor(
+      private route: ActivatedRoute,
+      private router: Router,
+      private consultationService: ConsultationListService,
+      private updateSummary: UpdatesummaryService,
+      private addmedicament: AddMedicamentService,
+      private addsoin: AddTestsService,
+      private deletemedecine: DeletemedecineService
+    ) {}
+    
+  consultations: any[] = [];
+  consult: any;
+  bilanParameters = ['Glucose', 'Créatinine', 'Sodium', 'CRP', 'Cholestérol', 'Potassium'];
+  consultation = { id: 1, prescription: 1, doctor: 1 ,dpi: 1};
   prescriptionId = 1; 
   consultationId = 1;
-  consultation = { id: 40, dpi: 3, prescription: 1, doctor: 1 };
   dpi_id = 3;
   isEditing = false;
-  resume = 'Lorem ipsum dolor sit amet...';
-  newTest = { name: '', type: '' };
-  tests = [{ name: 'Test 1', type: 'bilan' }, { name: 'Test 2', type: 'bilan' }, { name: 'Test 3', type: 'radio' }];
+  resume = '';
+
+  tests: any[] = [];
   soins = ['Soin 1', 'Soin 2', 'Soin 3'];
   medicaments = [ { nom: 'Medicament 1', dosage: '10mg', duree: '1 semaine', frequence: '3 fois par jour' }, { nom: 'Medicament 2', dosage: '20mg', duree: '2 semaines', frequence: '2 fois par jour' }, { nom: 'Medicament 3', dosage: '30mg', duree: '3 semaines', frequence: '1 fois par jour' }];
   showAddMedicament = false;
@@ -49,24 +68,76 @@ export class ConsultationDetailDoctorComponent {
   showNotification = false;
   notificationType: 'success' | 'error' = 'success';
   notificationMessage = '';
+  newTest = {
+    name: '',
+    type: '',
+    parameters: {} as Record<string, boolean>,
+  };
 toggleAddMedicamentPopup() {
   this.showAddMedicament = !this.showAddMedicament;
   this.newMedicament = { nom: '', dosage: '', duree: '', frequence: '' };
 }
 addTest() {
   if (this.newTest.name.trim() && this.newTest.type.trim()) {
-    this.tests.push({ name: this.newTest.name.trim(), type: this.newTest.type.trim() });
-    this.newTest = { name: '', type: '' };
-    this.toggleAddTestPopup(); 
-    this.showNotificationMessage('success', 'Test ajouté!');
+    if (this.newTest.type === 'bilan') {
+      const parameters = Object.keys(this.newTest.parameters)
+        .filter(key => this.newTest.parameters[key])
+        .map(paramName => ({ param_name: paramName }));
+
+      const payload = {
+        consultation: this.consult.id,
+        exam_name: this.newTest.name.trim(),
+        parameters: parameters
+      };
+
+      this.addsoin.addbilan(payload).subscribe(
+        response => {
+          this.consult.biological_exams.push(response); // Optionally update local list
+          this.newTest = { name: '', type: '', parameters: {} };
+          this.toggleAddTestPopup();
+          this.showNotificationMessage('success', 'Test ajouté!');
+        },
+        error => {
+          console.error(error);
+          this.showNotificationMessage('error', 'Erreur lors de l’ajout du test.');
+        }
+      );
+    }else if (this.newTest.type === 'radio'){
+      const payload = {
+        consultation: this.consult.id,
+        exam_name: this.newTest.name.trim(),
+      };
+
+      this.addsoin.addradio(payload).subscribe(
+        response => {
+          this.consult.radiological_exams.push(response); // Optionally update local list
+          this.newTest = { name: '', type: '', parameters: {} };
+          this.toggleAddTestPopup();
+          this.showNotificationMessage('success', 'Test ajouté!');
+        },
+        error => {
+          console.error(error);
+          this.showNotificationMessage('error', 'Erreur lors de l’ajout du test.');
+        }
+      );
+
+    
+    } else {
+      this.showNotificationMessage('error', 'Type de test non pris en charge.');
+    }
   } else {
-    this.showNotificationMessage('error', 'Une erreur s\'est produite. Veuillez remplir tous les champs.');
+    this.showNotificationMessage('error', 'Veuillez remplir tous les champs.');
   }
 }
 toggleAddSoinPopup() {
   this.showAddSoin = !this.showAddSoin;
 }
-
+toggleModal(exam: any): void {
+  exam.showModal = !exam.showModal;
+}
+goBack() {
+  this.router.navigate(['dpi-doctor/',this.consult.dpi]);
+}
 toggleAddTestPopup() {
   this.showAddTest = !this.showAddTest;
 }
@@ -133,90 +204,56 @@ addMedicament() {
   ) {
     // Prepare data to match the API structure
     const data = {
-      prescription: this.consultation.prescription, // Replace with the actual prescription ID
+      prescription: this.consult.prescription.id, // Replace with the actual prescription ID
       medication_name: this.newMedicament.nom,
       dosage: this.newMedicament.dosage,
       duration: this.newMedicament.duree,
-      frequency: this.newMedicament.frequence,
+      frequency: this.newMedicament.frequence
     };
+    this.addmedicament.addMedicament(data).subscribe({
+      next: (data5) => {
 
-    // API call
-    fetch('http://127.0.0.1:8000/api/medicine/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+        this.consult.prescription.medicines.push({medication_name: this.newMedicament.nom,
+          dosage: this.newMedicament.dosage,
+          duration: this.newMedicament.duree,
+          frequency: this.newMedicament.frequence});
+        this.showNotificationMessage('success', 'Les changements ont été enregistrés!');
       },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (response.ok) {
-          this.showNotificationMessage('success', 'Medicament ajouté!');
-          return response.json();
-        } else {
-          throw new Error('Failed to add medicine');
-        } 
-      })
-      .then((responseData) => {
-        // Add the medicine to the local list
-        this.medicaments.push({ ...this.newMedicament });
-        this.toggleAddMedicamentPopup();
-      })
-      .catch((error) => {
-        alert('Error: ' + error.message);
-        this.showNotificationMessage(
-          'error',
-          'Une erreur s\'est produite. Veuillez réessayer.'
-        );
-      });
+      error: (error) => {
+        
+        this.showNotificationMessage('error', 'Les changements n\'ont pas été enregistré!');
+      }
+    });
+
+    
   } else {
     alert('Veuillez remplir tous les champs du médicament.');
   }
+
+  this.showAddMedicament = false;
 }
 
 addSoin() {
   if (this.newSoin.trim()) {
     // Prepare the data to send to the API
     const data = {
-      consultation: this.consultation.id, // Replace with the actual consultation ID
+      consultation: this.consult.id, // Replace with the actual consultation ID
       care_name: this.newSoin.trim(),
     };
-
-    // Call the Django API
-    fetch('http://127.0.0.1:8000/api/nursing-records/create/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    this.addsoin.addSoin(data).subscribe({
+      next: (data5) => {
+        this.consult.nursing_records.push({id: data5.id, care_name: this.newSoin.trim()});
+        this.showNotificationMessage('success', 'Les changements ont été enregistrés!');
       },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((responseData) => {
-        // Update local state with the new soin
-        this.soins.push(this.newSoin.trim());
-        this.newSoin = ''; 
-        this.toggleAddSoinPopup();
-        this.showNotificationMessage('success', 'Soin ajouté!');
+      error: (error) => {
+        
+        this.showNotificationMessage('error', 'Les changements n\'ont pas été enregistré!');
+      }
+    });
 
-        console.log('Response data:', responseData); // Optional: Log the response
-      })
-      .catch((error) => {
-        console.error('Error adding soin:', error);
-        this.showNotificationMessage(
-          'error',
-          'Une erreur s\'est produite. Veuillez réessayer.'
-        );
-      });
-  } else {
-    this.showNotificationMessage(
-      'error',
-      'Une erreur s\'est produite. Veuillez réessayer.'
-    );
+    
   }
+  this.showAddSoin = false;
 }
 
 
@@ -230,9 +267,19 @@ addSoin() {
     this.isEditing = false;
   }
 
-  deleteItem(list: any[], index: number) {
-    list.splice(index, 1);
-  }
+  deleteItem(index: number) {
+   const id = this.consult.prescription.medicines[index].id;
+   this.deletemedecine.delete(id).subscribe({
+    next: (data5) => {
+      this.consult.prescription.medicines.splice(index, 1);
+      this.showNotificationMessage('success', 'Les changements ont été enregistrés!');
+    },
+    error: (error) => {
+      this.showNotificationMessage('error', 'Les changements n\'ont pas été enregistré!');
+    }
+  });
+}
+
   showNotificationMessage(type: 'success' | 'error', message: string) {
     this.notificationType = type;
     this.notificationMessage = message;
@@ -255,43 +302,49 @@ addSoin() {
   // }
 
   ngOnInit() {
+      const dpiId = this.route.snapshot.paramMap.get('dpiid');
+      const consultationId = this.route.snapshot.paramMap.get('id');
+      console.log('Consultation:', dpiId, consultationId);
+      if (dpiId) {
+        
+  
+        this.consultationService.getConsultations(dpiId).subscribe({
+          next: (data2) => {
+            this.consultations = data2;
+            console.log('Consultations:', this.consultations);
+            this.consult = this.consultations.find(c => c.id == consultationId);
+            console.log('Consultation:', this.consult);
+            this.resume= this.consult.consultation_summary;
+
+  
+          },
+          error: (error) => {
+            console.error('Error fetching consultations:', error);
+          }
+        });
+      }
+  
     this.fetchMedicationsByConsultation();
   }
   saveChanges() {
-    this.isEditing = false; // Disable editing state
-  
-    // Define the API URL and payload
-    const apiUrl = `http://127.0.0.1:8000/api/consultation/update/${this.consultation.id}`;
-    const payload = {
-      consultation_summary: this.resume, // Updated summary value
-      dpi: this.consultation.dpi, // Required DPI ID
-      doctor: this.consultation.doctor, // Required doctor ID
-    };
-  
-    // Make the PUT request
-    fetch(apiUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to update consultation');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // Handle successful save
+    const data4={
+      consultation_summary: this.resume,
+      dpi: this.consult.dpi.id,
+      doctor: this.consult.doctor.id
+    }
+    this.updateSummary.updateSummary(this.consult.id, data4).subscribe({
+      next: (data5) => { console.log(data5);
+        this.consult.consultation_summary = this.resume;
         this.showNotificationMessage('success', 'Les changements ont été enregistrés!');
-        console.log('Updated consultation:', data);
-      })
-      .catch((error) => {
-        // Handle errors
-        this.showNotificationMessage('error', 'Une erreur s\'est produite. Veuillez réessayer.');
-        console.error('Error updating consultation:', error);
-      });
+      },
+      error: (error) => {
+        console.error('Error updating summary:', error);
+        this.showNotificationMessage('error', 'Les changements n\'ont pas été enregistré!');
+      }
+    });
+    this.isEditing = false; // Disable editing state
+    
+    
   }
   
 }

@@ -17,7 +17,7 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
   <app-navbar></app-navbar>
   <div class="p-6">
     <div class="flex items-center justify-center mb-6 relative">
-      <div class="absolute left-0 w-8 h-8 flex items-center justify-center bg-white shadow-md rounded">
+      <div class="absolute left-0 w-8 h-8 flex items-center justify-center bg-white shadow-md rounded" (click)="goBack()">
         <img src="assets/arrow.svg" alt="Back Arrow" class="h-4 w-4" />
       </div>
       <h1 class="text-2xl font-bold text-[#10217D]">
@@ -65,19 +65,19 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
             <div class="flex items-center text-sm text-gray-700 mb-6">
                 <div class="flex items-center gap-2 mr-4">
                   <img src="assets/hopital.svg" alt="Hospital Icon" class="h-4 w-4" />
-                  <span>Hopital El Harrache</span>
+                  <span>CHU</span>
                 </div>
                 <div class="flex items-center gap-2 mr-4">
                   <img src="assets/dr.svg" alt="Doctor Icon" class="h-4 w-4" />
-                  <span>Dr. Mohamed Bouzekri</span>
+                  <span>{{ consult?.doctor.name }}</span>
                 </div>
                 <div class="flex items-center gap-2 mr-4">
                   <img src="assets/date.svg" alt="Date Icon" class="h-4 w-4" />
-                  <span>15/06/2021</span>
+                  <span>{{ consult?.consultation_date | date }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <img src="assets/hour.svg" alt="Time Icon" class="h-4 w-4" />
-                  <span>12:15 PM</span>
+                  <span>{{ consult?.consultation_date | date: 'shortTime' }}</span>
                 </div>
               </div>
               <div class="relative border-[1.5px] border-[#10217D] rounded-lg p-4 mb-4">
@@ -89,7 +89,7 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
                 ></textarea>
                 <div class="max-w-lg">
                   <p *ngIf="!isEditing" class="text-gray-600 break-words">
-                    {{ resume }}
+                    {{ consult?.consultation_summary}}
                   </p>
                 </div>
               </div>
@@ -106,25 +106,77 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
               </div>
             </div>
             <div class="mt-4">
-              <div *ngFor="let item of tests; let i = index" class="flex justify-between items-center mb-2">
-                <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-                  <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
-                  <button *ngIf="isEditing" (click)="deleteItem(tests, i)" class="text-[#FF5252]">
-                    <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
-                  </button>
-                  <span class="list-disc text-[#10217D]">{{ item.name }}</span>
+              <div *ngFor="let item of consult?.biological_exams; let i = index" class="flex justify-between items-center mb-2">
+                <div *ngIf="item.showModal" class="fixed inset-0 bg-gray-500  flex justify-center items-center z-50">
+                  <div class="bg-white p-6 rounded-lg max-w-md w-full">
+                    <h3 class="text-lg font-bold text-[#10217D] mb-4">Exam Result</h3>
+                    <div *ngIf="item.image">
+                      <img [src]="item.image" alt="Exam Image" class="mt-4 max-w-full h-auto rounded-lg">
+                    </div>
+                    <div *ngIf="item.parameters && item.parameters.length > 0" class="mt-4">
+                      <h4 class="font-semibold text-[#10217D]">Résultats du bilan:</h4>
+                      <ul class="list-disc pl-5">
+                        <li *ngFor="let parameter of item.parameters">
+                          <p>{{ parameter.param_name }}: {{ parameter.value }}</p>
+                        </li>
+                      </ul>
+                    </div>
+                    <h4 class="font-semibold text-[#10217D]">Compte rendu:</h4>
+                    <p>{{ item.result }}</p>
+                    <button 
+                      (click)="toggleModal(item)" 
+                      class="mt-4 bg-[#10217D] text-white font-bold py-2 px-4 rounded">
+                      Close
+                    </button>
+                  </div>
                 </div>
-                <button class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0">
+                <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+                  <img src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
+    
+                  <span class="list-disc text-[#10217D]">{{ item.exam_name }}</span>
+                </div>
+                <button class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0"
+                (click)="toggleModal(item)" 
+                >
                   Open
                 </button>
               </div>
-              <div *ngFor="let item of soins; let i = index" class="flex items-center mb-2">
+              <div *ngFor="let item of consult?.radiological_exams; let i = index" class="flex justify-between items-center mb-2">
+                <div *ngIf="item.showModal" class="fixed inset-0 bg-gray-500  flex justify-center items-center z-50">
+                  <div class="bg-white p-6 rounded-lg max-w-md w-full">
+                    <h3 class="text-lg font-bold text-[#10217D] mb-4">Exam Result</h3>
+                    <div *ngIf="item.image">
+                      <img [src]="item.image" alt="Exam Image" class="mt-4 max-w-full h-auto rounded-lg">
+                    </div>
+                    <div *ngIf="item.parameters && item.parameters.length > 0" class="mt-4">
+                      <h4 class="font-semibold text-[#10217D]">Résultats du bilan:</h4>
+                      <ul class="list-disc pl-5">
+                        <li *ngFor="let parameter of item.parameters">
+                          <p>{{ parameter.param_name }}: {{ parameter.value }}</p>
+                        </li>
+                      </ul>
+                    </div>
+                    <h4 class="font-semibold text-[#10217D]">Compte rendu:</h4>
+                    <p>{{ item.result }}</p>
+                    <button 
+                      (click)="toggleModal(item)" 
+                      class="mt-4 bg-[#10217D] text-white font-bold py-2 px-4 rounded">
+                      Close
+                    </button>
+                  </div>
+                </div>
                 <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
-                  <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
-                  <button *ngIf="isEditing" (click)="deleteItem(soins, i)" class="text-[#FF5252]">
-                    <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
-                  </button>
-                  <span class="list-disc text-[#10217D]">{{ item }}</span>
+                  <img src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
+                  <span class="list-disc text-[#10217D]">{{ item.exam_name }}</span>
+                </div>
+                <button class="bg-[#10217D] text-sm text-white font-bold rounded-md ml-2 px-4 py-2 shrink-0" (click)="toggleModal(item)" >
+                  Open
+                </button>
+              </div>
+              <div *ngFor="let item of consult?.nursing_records; let i = index" class="flex items-center mb-2">
+                <div class="flex items-center gap-2 border-[1.5px] border-[#1BA9B5] rounded-md p-2 w-full">
+                  <img src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
+                  <span class="list-disc text-[#10217D]">{{ item.care_name }}</span>
                 </div>
               </div>
             </div>
@@ -142,12 +194,12 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
                 Ajouter médicament
               </button>
             </div>
-            <div *ngFor="let item of medicaments; let i = index" class="flex items-center gap-2">
+            <div *ngFor="let item of consult?.prescription?.medicines; let i = index" class="flex items-center gap-2">
               <img *ngIf="!isEditing" src="assets/bullet.svg" alt="Bullet Icon" class="h-2 w-2" />
-              <button *ngIf="isEditing" (click)="deleteItem(medicaments, i)" class="text-[#FF5252]">
+              <button *ngIf="isEditing" (click)="deleteItem(i)" class="text-[#FF5252]">
                 <img src="assets/minus.svg" alt="Delete" class="h-4 w-4" />
               </button>
-              <p class="text-gray-600">{{ item.nom }} - {{ item.duree }} - {{ item.dosage }} - {{ item.frequence }}</p>
+              <p class="text-gray-600">{{ item?.medication_name }} - {{ item?.dosage }} - {{ item?.duration }} - {{ item?.frequency }}</p>
             </div>
           </div>
 
@@ -263,61 +315,99 @@ class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
 
 
 <div
-class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-*ngIf="showAddTest"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+  *ngIf="showAddTest"
 >
-<div class="bg-white w-[90%] max-w-lg rounded-lg p-6">
-  <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Ajouter Test</h2>
-  <div class="flex items-center justify-between mb-4">
-    <hr class="flex-1 border-t-[1.5px] border-[#10217D]" />
-    <h3 class="ml-4 text-[#10217D] font-medium">Informations</h3>
-  </div>
-  <div class="flex gap-4 mb-4">
-    <div class="flex-1">
-      <label class="block text-sm font-medium text-[#10217D] mb-1">Nom test:</label>
-      <input
-        type="text"
-        class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
-        [(ngModel)]="newTest.name"  
-      />
+  <div class="bg-white w-[90%] max-w-lg rounded-lg p-6">
+    <h2 class="text-xl text-center font-bold text-[#10217D] mb-4">Ajouter Test</h2>
+    <div class="flex items-center justify-between mb-4">
+      <hr class="flex-1 border-t-[1.5px] border-[#10217D]" />
+      <h3 class="ml-4 text-[#10217D] font-medium">Informations</h3>
     </div>
-    <div class="flex-1">
-      <label class="block text-sm font-medium text-[#10217D] mb-1">Type test:</label>
-      <div class="relative">
-        <select 
-          id="test" 
-          name="test" 
-          [(ngModel)]="newTest.type"
-          class="mt-1 pl-5 w-full px-2 py-2 border border-[#10217D] rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm appearance-none pr-10 text-[#10217D] font-medium mb-4"
-        >
-          <option value="bilan" class="text-[#10217D]">Bilan</option>
-          <option value="radio" class="text-[#10217D]">Radio</option>
-        </select>
-        <svg class="absolute right-3 top-1/2 transform -translate-y-3 w-4 h-4 text-[#10217D]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
+    <div class="flex gap-4 mb-4">
+      <div class="flex-1">
+        <label class="block text-sm font-medium text-[#10217D] mb-1">Nom test:</label>
+        <input
+          type="text"
+          class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#10217D] bg-gray-300 p-2"
+          [(ngModel)]="newTest.name"
+        />
+      </div>
+      <div class="flex-1">
+        <label class="block text-sm font-medium text-[#10217D] mb-1">Type test:</label>
+        <div class="relative">
+          <select
+            id="test"
+            name="test"
+            [(ngModel)]="newTest.type"
+            class="mt-1 pl-5 w-full px-2 py-2 border border-[#10217D] rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm appearance-none pr-10 text-[#10217D] font-medium mb-4"
+          >
+            <option value="bilan" class="text-[#10217D]">Bilan</option>
+            <option value="radio" class="text-[#10217D]">Radio</option>
+          </select>
+          <svg
+            class="absolute right-3 top-1/2 transform -translate-y-3 w-4 h-4 text-[#10217D]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            ></path>
+          </svg>
+        </div>
       </div>
     </div>
-    
-  </div>
-  <div class="flex justify-end gap-4">
-    <button
-      class="bg-white text-[#008080] border-[1.5px] border-[#008080] px-4 py-2 rounded-md flex items-center gap-2"
-      (click)="addTest()"
-    >
-      <img src="assets/check.svg" alt="Add" class="h-4 w-4" />
-      Ajouter
-    </button>
-    <button
-      class="bg-white text-[#FF7373] border-[1.5px] border-[#FF7373] px-4 py-2 rounded-md flex items-center gap-2"
-      (click)="toggleAddTestPopup()"
-    >
-      <img src="assets/cross.svg" alt="Cancel" class="h-4 w-4" />
-      Annuler
-    </button>
+
+    <!-- Conditional section for "bilan" -->
+    <div *ngIf="newTest.type === 'bilan'" class="mb-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div *ngFor="let parameter of bilanParameters.slice(0, 3)">
+          <label class="flex items-center gap-2">
+            <input
+              type="checkbox"
+              [(ngModel)]="newTest.parameters[parameter]"
+              class="h-4 w-4 text-[#008080] border-gray-300 rounded"
+            />
+            <span class="text-sm font-medium text-[#008080]">{{ parameter }}</span>
+          </label>
+        </div>
+        <div *ngFor="let parameter of bilanParameters.slice(3)">
+          <label class="flex items-center gap-2">
+            <input
+              type="checkbox"
+              [(ngModel)]="newTest.parameters[parameter]"
+              class="h-4 w-4 text-[#008080] border-gray-300 rounded"
+            />
+            <span class="text-sm font-medium text-[#008080]">{{ parameter }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-4">
+      <button
+        class="bg-white text-[#008080] border-[1.5px] border-[#008080] px-4 py-2 rounded-md flex items-center gap-2"
+        (click)="addTest()"
+      >
+        <img src="assets/check.svg" alt="Add" class="h-4 w-4" />
+        Ajouter
+      </button>
+      <button
+        class="bg-white text-[#FF7373] border-[1.5px] border-[#FF7373] px-4 py-2 rounded-md flex items-center gap-2"
+        (click)="toggleAddTestPopup()"
+      >
+        <img src="assets/cross.svg" alt="Cancel" class="h-4 w-4" />
+        Annuler
+      </button>
+    </div>
   </div>
 </div>
-</div>
+
   </div>
 </div>
 <router-outlet />
