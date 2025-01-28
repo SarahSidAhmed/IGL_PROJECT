@@ -13,12 +13,12 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 interface MedicalResults {
-  glucose: number | null;
-  crp: number | null;
-  creatinine: number | null;
-  cholesterol: number | null;
-  sodium: number | null;
-  potassium: number | null;
+  param1: number | null;
+  param2: number | null;
+  param3: number | null;
+  param4: number | null;
+  param5: number | null;
+  param6: number | null;
 }
 
 
@@ -35,6 +35,12 @@ export class TestPopupComponent {
   @Input() age!: number;
   @Input() testId!: number;
   @Input() testsNeeded!: string;
+  @Input() param1!: [boolean, string, number];
+  @Input() param2!: [boolean, string, number];
+  @Input() param3!: [boolean, string, number];
+  @Input() param4!: [boolean, string, number];
+  @Input() param5!: [boolean, string, number];
+  @Input() param6!: [boolean, string, number];
 
   @Output() closePopup = new EventEmitter<void>();
 

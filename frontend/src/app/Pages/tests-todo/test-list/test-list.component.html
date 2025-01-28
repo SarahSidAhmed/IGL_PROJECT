@@ -34,6 +34,12 @@
       [age]="calculateAge(test.dpi.birthdate)"
       [testId]="test.id"
       [testsNeeded]="test.exam_name"
+      [param1]= "getParam(test.parameters, 1)"
+      [param2]= "getParam(test.parameters, 2)"
+      [param3]= "getParam(test.parameters, 3)"
+      [param4]= "getParam(test.parameters, 4)"
+      [param5]= "getParam(test.parameters, 5)"
+      [param6]= "getParam(test.parameters, 6)"
     ></app-test-card>
   </div>
   <app-qr-scan

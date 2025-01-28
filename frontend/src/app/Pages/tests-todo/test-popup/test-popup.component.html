@@ -84,8 +84,8 @@
           <div class="flex-grow border-t-2 border-primaryBlue"></div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-          <div class="flex items-center pl-2">
-            <span class="text-teal-600 w-24 font-semibold font-poppins">Glucose:</span>
+          <div *ngIf= "param1[0]" class="flex items-center pl-2">
+            <span class="text-teal-600 w-24 font-semibold font-poppins">{{ param1[1] }}</span>
             <div class="relative flex items-center">
               <input
                 type="number"
