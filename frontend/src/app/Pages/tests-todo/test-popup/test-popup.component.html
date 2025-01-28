@@ -85,13 +85,13 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
           <div *ngIf= "param1[0]" class="flex items-center pl-2">
-            <span class="text-teal-600 w-24 font-semibold font-poppins">Glucose:</span>
+            <span class="text-teal-600 w-24 font-semibold font-poppins">{{ param1[1] + ' :' }}</span>
             <div class="relative flex items-center">
               <input
                 type="number"
-                [(ngModel)]="results.glucose"
+                [(ngModel)]="results.param1"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
-                (input)="onInputChange('param1[2]', $event)"
+                (input)="onInputChange('param1', $event)"
                 placeholder="00.00"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
@@ -99,75 +99,75 @@
           </div>
 
           <!-- CRP -->
-          <div class="flex items-center">
-            <span class="text-teal-600 font-semibold font-poppins w-24 mr-1">CRP:</span>
+          <div *ngIf= "param2[0]" class="flex items-center">
+            <span class="text-teal-600 font-semibold font-poppins w-24 mr-1">{{ param2[1] + ' :' }}</span>
             <div class="relative flex items-center">
               <input
                 type="number"
-                [(ngModel)]="results.crp"
+                [(ngModel)]="results.param2"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('param2[2]', $event)"
+                 (input)="onInputChange('param2', $event)"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
 
           <!-- Creatinine -->
-          <div class="flex items-center pl-2">
-            <span class="text-teal-600 font-semibold font-poppins w-24">Créatinine:</span>
+          <div *ngIf= "param3[0]" class="flex items-center pl-2">
+            <span class="text-teal-600 font-semibold font-poppins w-24">{{ param3[1] + ' :' }}</span>
             <div class="relative flex items-center">
               <input
                 type="number"
-                [(ngModel)]="results.creatinine"
+                [(ngModel)]="results.param3"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('param3[2]', $event)"
+                 (input)="onInputChange('param3', $event)"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
 
           <!-- Cholesterol -->
-          <div class="flex items-center">
-            <span class="text-teal-600 font-semibold font-poppins w-24 mr-1">Cholesterol:</span>
+          <div *ngIf= "param4[0]" class="flex items-center">
+            <span class="text-teal-600 font-semibold font-poppins w-24 mr-1">{{ param4[1] + ' :' }}</span>
             <div class="relative flex items-center">
               <input
                 type="number"
-                [(ngModel)]="results.cholesterol"
+                [(ngModel)]="results.param4"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('param4[2]', $event)"
+                 (input)="onInputChange('param4', $event)"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
 
           <!-- Sodium -->
-          <div class="flex items-center pl-2">
-            <span class="text-teal-600 font-semibold font-poppins w-24">Sodium:</span>
+          <div *ngIf= "param5[0]" class="flex items-center pl-2">
+            <span class="text-teal-600 font-semibold font-poppins w-24">{{ param5[1] + ' :' }}</span>
             <div class="relative flex items-center">
               <input
                 type="number"
-                [(ngModel)]="results.sodium"
+                [(ngModel)]="results.param5"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('param5[2]', $event)"
+                 (input)="onInputChange('param5', $event)"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
             </div>
           </div>
 
           <!-- Potassium -->
-          <div class="flex items-center">
-            <span class="text-teal-600 font-semibold font-poppins w-24 mr-1">Potassium:</span>
+          <div *ngIf= "param6[0]" class="flex items-center">
+            <span class="text-teal-600 font-semibold font-poppins w-24 mr-1">{{ param6[1] + ' :' }}</span>
             <div class="relative flex items-center">
               <input
                 type="number"
-                [(ngModel)]="results.potassium"
+                [(ngModel)]="results.param6"
                 class="w-24 h-8 px-2 border rounded bg-gray-50"
                 placeholder="00.00"
-                 (input)="onInputChange('param6[2]', $event)"
+                 (input)="onInputChange('param6', $event)"
               />
               <span class="ml-2 text-gray-600">mg/l</span>
             </div>

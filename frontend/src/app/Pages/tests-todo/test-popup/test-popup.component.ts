@@ -42,6 +42,7 @@ export class TestPopupComponent {
   @Input() param5!: [boolean, string, number];
   @Input() param6!: [boolean, string, number];
 
+
   @Output() closePopup = new EventEmitter<void>();
 
   @Output() submitResults = new EventEmitter<{
@@ -49,10 +50,17 @@ export class TestPopupComponent {
     report: string;
   }>();
 
+
+
   constructor(
   private cdr: ChangeDetectorRef,
   private updateTestService: UpdateTestService
 ) {}
+
+  ngOnInit(): void {
+    console.log(this.param1); // Moved to ngOnInit lifecycle hook
+  }
+
 
   report: string = '';
   results: MedicalResults = {
@@ -69,12 +77,12 @@ export class TestPopupComponent {
   // Chart.js data and configuration
   chartData: ChartData<'bar'> = {
     labels: [
-      this.param1[1],
-      this.param2[1],
-      this.param3[1],
-      this.param4[1],
-      this.param5[1],
-      this.param6[1],
+      "param1",
+      "param2",
+      "param3",
+      "param4",
+      "param5",
+      "param6",
     ],
     datasets: [
       {
@@ -122,6 +130,7 @@ export class TestPopupComponent {
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
 
+  // console.log(this.param1);
   /**
    * Updates the `results` object when input values change.
    * @param field The field name being updated.
@@ -156,20 +165,38 @@ export class TestPopupComponent {
     this.closePopup.emit();
   }
 
-  onSubmit(): void {
-  // const id = parseInt(this.patientId); // Assuming patientId is the test record ID.
+onSubmit(): void {
+  const parameters = [];
+
+  if (this.param1[0]) {
+    parameters.push({ id: this.param1[2], value: this.results.param1 || 0 });
+  }
+
+  if (this.param2[0]) {
+    parameters.push({ id: this.param2[2], value: this.results.param2 || 0 });
+  }
+
+  if (this.param3[0]) {
+    parameters.push({ id: this.param3[2], value: this.results.param3 || 0 });
+  }
+
+  if (this.param4[0]) {
+    parameters.push({ id: this.param4[2], value: this.results.param4 || 0 });
+  }
+
+  if (this.param5[0]) {
+    parameters.push({ id: this.param5[2], value: this.results.param5 || 0 });
+  }
+
+  if (this.param6[0]) {
+    parameters.push({ id: this.param6[2], value: this.results.param6 || 0 });
+  }
+
   const data = {
     result: this.report,
-    exam_date: new Date().toISOString().split('T')[0], // Example date format.
+    exam_date: new Date().toISOString().split('T')[0],
     lab_technician: 7, 
-    parameters: [
-      // { id: 0, value: this.results.glucose || 0 },
-      // { id: 2, value: this.results.crp || 0 },
-      // { id: 3, value: this.results.creatinine || 0 },
-      // { id: 4, value: this.results.cholesterol || 0 },
-      // { id: 5, value: this.results.sodium || 0 },
-      // { id: 6, value: this.results.potassium || 0 },
-    ],
+    parameters: parameters,
   };
 
   this.updateTestService.updateTest(this.testId, data).subscribe({
@@ -186,12 +213,12 @@ export class TestPopupComponent {
 
   onReset(): void {
     this.results = {
-      glucose: null,
-      crp: null,
-      creatinine: null,
-      cholesterol: null,
-      sodium: null,
-      potassium: null,
+      param1: null,
+      param2: null,
+      param3: null,
+      param4: null,
+      param5: null,
+      param6: null,
     };
     this.report = '';
     this.closePopup.emit();
