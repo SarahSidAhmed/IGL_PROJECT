@@ -21,39 +21,112 @@ class GetAllDoctorsStaffAPIView(APIView):
         serializer = StaffSerializer(doctors, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
   
+# #this is for the login of the staff
+# class StaffLoginAPIView(APIView):
+#     @swagger_auto_schema(request_body=StaffLoginSerializer)
+#     def post(self, request, *args, **kwargs):
+#         serializer_class = StaffLoginSerializer(data=request.data)
+#         if serializer_class.is_valid():
+#             staff = Staff.objects.get(email=serializer_class.validated_data["email"])
+
+#             # Generate JWT tokens
+#             refresh = RefreshToken.for_user(staff)
+#             staff_serialized = StaffSerializer(staff)
+
+#             return Response({
+#                 "refresh": str(refresh),
+#                 "access": str(refresh.access_token),
+#                 "staff": staff_serialized.data
+#             }, status=status.HTTP_200_OK)
+#         else:
+#             #search in patient
+#             serializer_class = PatientLoginSerializer(data=request.data)
+#             if serializer_class.is_valid():
+#                 patient = Dpi.objects.get(id=serializer_class.validated_data["id"])
+
+#                 # Generate JWT tokens
+#                 refresh = RefreshToken.for_user(patient)
+#                 patient_serialized = DpiSerializer(patient)
+
+#                 return Response({
+#                     "refresh": str(refresh),
+#                     "access": str(refresh.access_token),
+#                     "dpi": patient_serialized.data
+#                 }, status=status.HTTP_200_OK)
+#         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 #this is for the login of the staff
+# class StaffLoginAPIView(APIView):
+#     @swagger_auto_schema(request_body=StaffLoginSerializer)
+#     def post(self, request, *args, **kwargs):
+#         serializer_class = StaffLoginSerializer(data=request.data)
+#         serializer_class.is_valid()
+#         staff = Staff.objects.get(email=serializer_class.validated_data["email"])
+        
+
+#         if staff is None: 
+#             #search in patient
+#             serializer_class = PatientLoginSerializer(data=request.data)
+#             if serializer_class.is_valid():
+#                 patient = Dpi.objects.get(id=serializer_class.validated_data["id"])
+
+#                 # Generate JWT tokens
+#                 refresh = RefreshToken.for_user(patient)
+#                 patient_serialized = DpiSerializer(patient)
+
+#                 return Response({
+#                     "refresh": str(refresh),
+#                     "access": str(refresh.access_token),
+#                     "dpi": patient_serialized.data
+#                 }, status=status.HTTP_200_OK)
+
+#             # Generate JWT tokens
+#         refresh = RefreshToken.for_user(staff)
+#         staff_serialized = StaffSerializer(staff)
+
+#         return Response({
+#             "refresh": str(refresh),
+#             "access": str(refresh.access_token),
+#             "staff": staff_serialized.data
+#         }, status=status.HTTP_200_OK)
+
+from django.core.exceptions import ObjectDoesNotExist
+
 class StaffLoginAPIView(APIView):
     @swagger_auto_schema(request_body=StaffLoginSerializer)
     def post(self, request, *args, **kwargs):
+        # First, try authenticating staff
         serializer_class = StaffLoginSerializer(data=request.data)
         if serializer_class.is_valid():
-            staff = Staff.objects.get(email=serializer_class.validated_data["email"])
+            try:
+                staff = Staff.objects.get(email=serializer_class.validated_data["email"])
+                refresh = RefreshToken.for_user(staff)
+                staff_serialized = StaffSerializer(staff)
+                return Response({
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "staff": staff_serialized.data
+                }, status=status.HTTP_200_OK)
+            except ObjectDoesNotExist:
+                pass  # If staff doesn't exist, continue to patient login
 
-            # Generate JWT tokens
-            refresh = RefreshToken.for_user(staff)
-            staff_serialized = StaffSerializer(staff)
-
-            return Response({
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-                "staff": staff_serialized.data
-            }, status=status.HTTP_200_OK)
-        else:
-            #search in patient
-            serializer_class = PatientLoginSerializer(data=request.data)
-            if serializer_class.is_valid():
+        # If staff login fails, try authenticating as a patient
+        serializer_class = PatientLoginSerializer(data=request.data)
+        if serializer_class.is_valid():
+            try:
                 patient = Dpi.objects.get(id=serializer_class.validated_data["id"])
-
-                # Generate JWT tokens
                 refresh = RefreshToken.for_user(patient)
                 patient_serialized = DpiSerializer(patient)
 
                 return Response({
                     "refresh": str(refresh),
                     "access": str(refresh.access_token),
-                    "dpi": patient_serialized.data
+                    "staff": patient_serialized.data
                 }, status=status.HTTP_200_OK)
-        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+            except ObjectDoesNotExist:
+                return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 #this is for the login of the patient with the QR code

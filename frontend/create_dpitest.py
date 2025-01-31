@@ -6,8 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-chrome_driver_path = 'C:\\Program Files (x86)\\chromedriver.exe'
-url_to_open = 'http://localhost:4200/create-dpi/'
+chrome_driver_path = 'C:\\Users\\DELL\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe'
+url_to_open = 'http://localhost:4200/'
 
 
 chrome_options = webdriver.ChromeOptions()
@@ -47,6 +47,26 @@ data = {
 
 wait = WebDriverWait(driver, 10)
 
+email = "staff3@example.com"
+password = "password123"
+
+email_input = wait.until(EC.presence_of_element_located((By.ID, 'email')))
+email_input.send_keys(email)
+
+driver.find_element(By.ID, 'password').send_keys(password)
+
+login_button = driver.find_element(By.XPATH, "//button[@type='submit']")
+login_button.click()
+
+time.sleep(5)  # Give some time for navigation
+current_url = driver.current_url
+if current_url.startswith("http://localhost:4200/doctor/"):
+    print("Login successful!")
+else:
+    raise Exception("Login failed! Halting execution.")
+
+driver.find_element(By.XPATH, "//button[span[text()='Créer un nouveau DPI']]").click()
+
 full_name_input = wait.until(EC.presence_of_element_located((By.ID, 'last_name')))
 full_name_input.send_keys(data['last_name'])
 driver.find_element(By.ID, 'first_name').send_keys(data['first_name'])
@@ -73,7 +93,7 @@ driver.find_element(By.ID, 'medical_history').send_keys(data['medical_history'])
 confirm_button = driver.find_element(By.XPATH, '//button[@type="submit"]')
 confirm_button.click()
 
-time.sleep(5)
+time.sleep(10)
 
 print("Page Title:", driver.title)
 
