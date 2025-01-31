@@ -19,6 +19,7 @@ def test_create_dpi(api_client):
     payload = {
         "social_security_number": "999-88-7777",
         "password": "secure_password",
+        "email": "email@gmail.com",
         "first_name": "Alice",
         "last_name": "Smith",
         "birthdate": "1990-02-02",
@@ -41,7 +42,7 @@ def test_create_dpi(api_client):
 
     # Verify DPI was inserted
     dpi_id = response.data["id"]
-    response_verify = api_client.get(f"/api/dpis/qr/{dpi_id}/")
+    response_verify = api_client.get(f"/api/dpis/{dpi_id}/")
     assert response_verify.status_code == 200
     assert response_verify.data["first_name"] == payload["first_name"]
     assert response_verify.data["last_name"] == payload["last_name"]
@@ -62,6 +63,7 @@ def test_update_dpi(api_client):
         "password": "password123",
         "first_name": "John",
         "last_name": "Doe",
+        "email": "email@gmail.com",
         "birthdate": "1985-05-15",
         "address": "123 Main St",
         "phone": "5555555555",
@@ -81,11 +83,11 @@ def test_update_dpi(api_client):
 
     # Update DPI record
     update_payload = {"first_name": "James", "last_name": "Smith"}
-    response_update = api_client.patch(f"/api/dpis/qr/{dpi_id}/", data=update_payload, format="json")
+    response_update = api_client.patch(f"/api/dpis/{dpi_id}/", data=update_payload, format="json")
     assert response_update.status_code == 200
 
     # Verify updated DPI values
-    response_verify = api_client.get(f"/api/dpis/qr/{dpi_id}/")
+    response_verify = api_client.get(f"/api/dpis/{dpi_id}/")
     assert response_verify.status_code == 200
     assert response_verify.data["first_name"] == update_payload["first_name"]
     assert response_verify.data["last_name"] == update_payload["last_name"]
@@ -119,6 +121,7 @@ class DpiModelSerializerTestCase(TestCase):
             "password": "password123",
             "first_name": "Mahmoud",
             "last_name": "Kho",
+            "email": "3abd@example.com",
             "birthdate": "2004-09-06",
             "address": "Din Naadja, Alger",
             "phone": "0777796966",
@@ -143,6 +146,7 @@ class DpiModelSerializerTestCase(TestCase):
             "last_name": "",
             "birthdate": "",
             "address": "",
+            "email": "",
             "emergency_contact_name": "",
             "emergency_contact_phone": "",
             "emergency_contact_relationship": "",

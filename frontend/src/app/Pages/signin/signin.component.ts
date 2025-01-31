@@ -46,7 +46,7 @@ export class SigninComponent {
         } else if (role === 'LabTechnician') {
           this.router.navigate(['/tests-list']);
         } else {
-          console.error('Unknown role:', role);
+          this.router.navigate(['/dpi-patient/', response.staff.id]);
           
         }
       },

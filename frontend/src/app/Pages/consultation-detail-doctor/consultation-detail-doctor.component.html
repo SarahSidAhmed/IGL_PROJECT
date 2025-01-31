@@ -111,7 +111,7 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
                   <div class="bg-white p-6 rounded-lg max-w-md w-full">
                     <h3 class="text-lg font-bold text-[#10217D] mb-4">Exam Result</h3>
                     <div *ngIf="item.image">
-                      <img [src]="item.image" alt="Exam Image" class="mt-4 max-w-full h-auto rounded-lg">
+                      <img [src]="'http://127.0.0.1:8000' + item.image" alt="Exam Image" class="mt-4 max-w-full h-auto rounded-lg">
                     </div>
                     <div *ngIf="item.parameters && item.parameters.length > 0" class="mt-4">
                       <h4 class="font-semibold text-[#10217D]">Résultats du bilan:</h4>
@@ -146,7 +146,7 @@ class="fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shad
                   <div class="bg-white p-6 rounded-lg max-w-md w-full">
                     <h3 class="text-lg font-bold text-[#10217D] mb-4">Exam Result</h3>
                     <div *ngIf="item.image">
-                      <img [src]="item.image" alt="Exam Image" class="mt-4 max-w-full h-auto rounded-lg">
+                      <img [src]="'http://127.0.0.1:8000' + item.image" alt="Exam Image" class="mt-4 max-w-full h-auto rounded-lg">
                     </div>
                     <div *ngIf="item.parameters && item.parameters.length > 0" class="mt-4">
                       <h4 class="font-semibold text-[#10217D]">Résultats du bilan:</h4>
