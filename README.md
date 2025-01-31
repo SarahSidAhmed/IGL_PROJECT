@@ -4,6 +4,8 @@
 
 This project aims to develop a web application for managing Electronic Patient Records (EPRs). The application will centralize patient information, including medical history, treatments, and test results, to improve healthcare delivery and communication among healthcare providers.
 
+To look for the general design of the platform check the figma file below: https://www.figma.com/design/bKyKgPaAst5N7JZXGkuWfO/DPI-Web-Design?node-id=0-1&t=K0roA3wBmCunomeo-1
+
 ## Technologies Used
 * **Frontend:** Angular, TypeScript
 * **Backend:** Django, Python
